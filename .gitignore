@@ -1,0 +1,14 @@
+# Add virtual environment .venv directory
+.venv/
+node_modules
+
+# API keys and Credential files
+.env
+credentials.json
+token.json
+
+# Results and logs
+results.txt
+
+# Cache files
+__pycache__/
