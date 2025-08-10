@@ -21,11 +21,11 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
     if (!dateStr) return 'No expiry date';
     try {
       const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { 
+      return date.toLocaleDateString('en-US', {
         weekday: 'short',
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
       });
     } catch {
       return dateStr;
@@ -86,8 +86,8 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                   styles.modalDaysLeft,
                   daysLeft <= 3 ? styles.urgentText : styles.normalText
                 ]}>
-                  {daysLeft > 0 ? `${daysLeft} days left` : 
-                   daysLeft === 0 ? 'Expires today!' : 'Expired'}
+                  {daysLeft > 0 ? `${daysLeft} days left` :
+                    daysLeft === 0 ? 'Expires today!' : 'Expired'}
                 </Text>
               )}
             </View>
@@ -114,7 +114,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
           {/* Action Buttons */}
           <View style={styles.modalActions}>
             {coupon.website_url && (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.actionButton, styles.primaryButton]}
                 onPress={() => handleLinkPress(coupon.website_url, 'website')}
               >
@@ -122,9 +122,9 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                 <Text style={styles.primaryButtonText}>Visit Store</Text>
               </TouchableOpacity>
             )}
-            
+
             {coupon.offer_url && (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.actionButton, styles.secondaryButton]}
                 onPress={() => handleLinkPress(coupon.offer_url, 'offer')}
               >
@@ -132,6 +132,15 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                 <Text style={styles.secondaryButtonText}>View Offer</Text>
               </TouchableOpacity>
             )}
+
+            {/* Go to Email Button */}
+            <TouchableOpacity
+              style={[styles.actionButton, { backgroundColor: '#34a853', flexDirection: 'row', alignItems: 'center', marginTop: 10 }]}
+              onPress={() => {}}
+            >
+              <Ionicons name="mail-outline" size={20} color="white" style={{ marginRight: 8 }} />
+              <Text style={[styles.primaryButtonText, { color: 'white' }]}>Go to Email</Text>
+            </TouchableOpacity>
 
             {!coupon.website_url && !coupon.offer_url && (
               <Text style={styles.noLinksText}>
