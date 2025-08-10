@@ -22,7 +22,8 @@
     "react-native": "0.79.5",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "^5.4.0",
-    "react-native-screens": "~4.11.1"
+    "react-native-screens": "~4.11.1",
+    "react-native-webview": "^13.15.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

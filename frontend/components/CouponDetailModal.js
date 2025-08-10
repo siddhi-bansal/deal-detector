@@ -1,5 +1,6 @@
-import React from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, Alert, ActivityIndicator } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useFavorites } from '../context/FavoritesContext';
@@ -7,6 +8,9 @@ import { styles } from '../styles/styles';
 
 export const CouponDetailModal = ({ visible, coupon, onClose }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
+  const [emailModalVisible, setEmailModalVisible] = useState(false);
+  const [emailHtml, setEmailHtml] = useState('');
+  const [loadingEmail, setLoadingEmail] = useState(false);
   if (!coupon) return null;
 
   const handleLinkPress = (url, linkType) => {
@@ -52,6 +56,48 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
 
   const handleFavoritePress = () => {
     toggleFavorite(coupon);
+  };
+
+  const fetchEmailHtml = async (messageId) => {
+    try {
+      setLoadingEmail(true);
+      const response = await fetch(`http://192.168.86.32:8000/api/email/${messageId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success && data.html_content) {
+        setEmailHtml(data.html_content);
+        setEmailModalVisible(true);
+      } else {
+        throw new Error(data.error || 'No HTML content found');
+      }
+    } catch (error) {
+      console.error('Error fetching email HTML:', error);
+      Alert.alert(
+        'Error', 
+        'Failed to load email content. Please try again later.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setLoadingEmail(false);
+    }
+  };
+
+  const handleGoToEmail = () => {
+    if (!coupon.message_id) {
+      Alert.alert(
+        'No Email Available', 
+        'No email link is available for this coupon.',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    
+    fetchEmailHtml(coupon.message_id);
   };
 
   return (
@@ -173,10 +219,17 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
             >
               <TouchableOpacity
                 style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
-                onPress={() => {}}
+                onPress={handleGoToEmail}
+                disabled={loadingEmail}
               >
-                <Ionicons name="mail-outline" size={22} color="white" />
-                <Text style={[styles.primaryButtonText, { color: 'white' }]}>Go to Email</Text>
+                {loadingEmail ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Ionicons name="mail-outline" size={22} color="white" />
+                )}
+                <Text style={[styles.primaryButtonText, { color: 'white' }]}>
+                  {loadingEmail ? 'Loading...' : 'Go to Email'}
+                </Text>
               </TouchableOpacity>
             </LinearGradient>
 
@@ -188,6 +241,46 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
           </View>
         </View>
       </View>
+
+      {/* Email HTML Modal */}
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={emailModalVisible}
+        onRequestClose={() => setEmailModalVisible(false)}
+      >
+        <View style={styles.emailModalContainer}>
+          {/* Email Modal Header */}
+          <View style={styles.emailModalHeader}>
+            <Text style={styles.emailModalTitle}>Original Email</Text>
+            <TouchableOpacity 
+              onPress={() => setEmailModalVisible(false)}
+              style={styles.emailCloseButton}
+            >
+              <Ionicons name="close" size={28} color="#333" />
+            </TouchableOpacity>
+          </View>
+          
+          {/* WebView for Email Content */}
+          <WebView
+            source={{ html: emailHtml }}
+            style={styles.emailWebView}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            startInLoadingState={true}
+            renderLoading={() => (
+              <View style={styles.emailLoadingContainer}>
+                <ActivityIndicator size="large" color="#6366f1" />
+                <Text style={styles.emailLoadingText}>Loading email...</Text>
+              </View>
+            )}
+            onError={(error) => {
+              console.error('WebView error:', error);
+              Alert.alert('Error', 'Failed to load email content');
+            }}
+          />
+        </View>
+      </Modal>
     </Modal>
   );
 };

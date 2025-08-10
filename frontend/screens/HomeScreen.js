@@ -41,7 +41,7 @@ export const HomeScreen = () => {
             couponGroup.offers.forEach((offer, index) => {
               allOffers.push({ 
                 ...offer, 
-                id: `${couponGroup.message_id || 'coupon'}_${index}`,
+                message_id: couponGroup.message_id,
                 isFavorite: false 
               });
             });
