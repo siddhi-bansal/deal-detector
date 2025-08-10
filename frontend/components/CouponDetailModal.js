@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../styles/styles';
 
@@ -11,7 +12,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
       Alert.alert('No Link Available', `No ${linkType} link is available for this coupon.`);
       return;
     }
-    
+
     Linking.openURL(url).catch(() => {
       Alert.alert('Error', `Unable to open ${linkType} link.`);
     });
@@ -64,17 +65,22 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
+          <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={true}>
             {/* Discount Badge */}
-            <View style={styles.modalDiscountBadge}>
+            <LinearGradient
+              colors={['#ec4899', '#ef4444']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.modalDiscountBadge}
+            >
               <Text style={styles.modalDiscountText}>{coupon.discount_amount}</Text>
               <Text style={styles.modalDiscountType}>{coupon.discount_type}</Text>
-            </View>
+            </LinearGradient>
 
             {/* Offer Details */}
             <View style={styles.modalSection}>
               <Text style={styles.modalSectionTitle}>Offer Details</Text>
-              <Text style={styles.modalOfferText}>{coupon.offer}</Text>
+              <Text style={styles.modalOfferText}>{coupon.offer_description}</Text>
             </View>
 
             {/* Expiry Information */}
@@ -114,13 +120,20 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
           {/* Action Buttons */}
           <View style={styles.modalActions}>
             {coupon.website_url && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.primaryButton]}
-                onPress={() => handleLinkPress(coupon.website_url, 'website')}
+              <LinearGradient
+                colors={['#6366f1', '#8b5cf6']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.actionButton]}
               >
-                <Ionicons name="storefront-outline" size={20} color="white" />
-                <Text style={styles.primaryButtonText}>Visit Store</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
+                  onPress={() => handleLinkPress(coupon.website_url, 'website')}
+                >
+                  <Ionicons name="storefront-outline" size={20} color="white" />
+                  <Text style={styles.primaryButtonText}>Visit Store</Text>
+                </TouchableOpacity>
+              </LinearGradient>
             )}
 
             {coupon.offer_url && (
@@ -128,19 +141,26 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                 style={[styles.actionButton, styles.secondaryButton]}
                 onPress={() => handleLinkPress(coupon.offer_url, 'offer')}
               >
-                <Ionicons name="pricetag-outline" size={20} color="#007AFF" />
+                <Ionicons name="pricetag-outline" size={20} color="#6366f1" />
                 <Text style={styles.secondaryButtonText}>View Offer</Text>
               </TouchableOpacity>
             )}
 
             {/* Go to Email Button */}
-            <TouchableOpacity
-              style={[styles.actionButton, { backgroundColor: '#34a853', flexDirection: 'row', alignItems: 'center', marginTop: 10 }]}
-              onPress={() => {}}
+            <LinearGradient
+              colors={['#10b981', '#059669']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.actionButton]}
             >
-              <Ionicons name="mail-outline" size={20} color="white" style={{ marginRight: 8 }} />
-              <Text style={[styles.primaryButtonText, { color: 'white' }]}>Go to Email</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
+                onPress={() => {}}
+              >
+                <Ionicons name="mail-outline" size={22} color="white" />
+                <Text style={[styles.primaryButtonText, { color: 'white' }]}>Go to Email</Text>
+              </TouchableOpacity>
+            </LinearGradient>
 
             {!coupon.website_url && !coupon.offer_url && (
               <Text style={styles.noLinksText}>

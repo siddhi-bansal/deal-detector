@@ -1,21 +1,22 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../styles/styles';
 
 export const CouponCard = ({ coupon, onPress }) => {
-  const getDiscountColor = (discountType) => {
+  const getDiscountGradient = (discountType) => {
     switch (discountType) {
       case 'percentage':
-        return '#4CAF50'; // Green
+        return ['#22c55e', '#16a34a']; // Green gradient
       case 'fixed_amount':
-        return '#2196F3'; // Blue
+        return ['#3b82f6', '#1d4ed8']; // Blue gradient
       case 'free_shipping':
-        return '#FF9800'; // Orange
+        return ['#f59e0b', '#d97706']; // Orange gradient
       case 'other':
-        return '#9C27B0'; // Purple
+        return ['#a855f7', '#7c3aed']; // Purple gradient
       default:
-        return '#757575'; // Gray
+        return ['#6b7280', '#4b5563']; // Gray gradient
     }
   };
 
@@ -97,15 +98,20 @@ export const CouponCard = ({ coupon, onPress }) => {
         <View style={styles.companyRow}>
           <Ionicons 
             name={getOfferTypeIcon(coupon.offer_type)} 
-            size={20} 
-            color={getDiscountColor(coupon.discount_type)} 
+            size={22} 
+            color={getDiscountGradient(coupon.discount_type)[0]} 
           />
           <Text style={styles.companyName}>{coupon.company}</Text>
         </View>
         {coupon.discount_amount && (
-          <View style={[styles.discountBadge, { backgroundColor: getDiscountColor(coupon.discount_type) }]}>
+          <LinearGradient
+            colors={getDiscountGradient(coupon.discount_type)}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.discountBadge}
+          >
             <Text style={styles.discountText}>{coupon.discount_amount}</Text>
-          </View>
+          </LinearGradient>
         )}
       </View>
 
@@ -154,12 +160,17 @@ export const CouponCard = ({ coupon, onPress }) => {
       </View>
 
       {isUrgent && (
-        <View style={styles.urgencyBadge}>
+        <LinearGradient
+          colors={['#ef4444', '#dc2626']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.urgencyBadge}
+        >
           <Ionicons name="flash" size={12} color="#fff" />
           <Text style={styles.urgencyText}>
             {coupon.urgency_indicators[0]}
           </Text>
-        </View>
+        </LinearGradient>
       )}
 
       <View style={styles.cardFooter}>

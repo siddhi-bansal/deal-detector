@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import sampleData from './assets/sample_api_output.json';
 import { CouponCard } from './components/CouponCard';
@@ -121,53 +122,66 @@ export default function App() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+      <LinearGradient
+        colors={['#f0f3ff', '#e0e7ff']}
+        style={styles.loadingContainer}
+      >
+        <ActivityIndicator size="large" color="#6366f1" />
         <Text style={styles.loadingText}>Loading coupons...</Text>
-      </View>
+      </LinearGradient>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Coupons</Text>
-      </View>
+    <LinearGradient
+      colors={['#f0f3ff', '#e0e7ff']}
+      style={styles.container}
+    >
+      <SafeAreaView style={{ flex: 1 }}>
+        <LinearGradient
+          colors={['#6366f1', '#8b5cf6', '#ec4899']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.header}
+        >
+          <Text style={styles.headerTitle}>My Coupons</Text>
+        </LinearGradient>
 
-      <SearchAndSort
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        resultsCount={filteredCoupons.length}
-      />
-
-      {filteredCoupons.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Ionicons name="receipt-outline" size={64} color="#ccc" />
-          <Text style={styles.emptyText}>
-            {searchQuery.trim() ? 'No coupons match your search' : 'No coupons available'}
-          </Text>
-          <Text style={styles.emptySubtext}>
-            {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredCoupons}
-          renderItem={renderCouponCard}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.cardList}
-          showsVerticalScrollIndicator={false}
+        <SearchAndSort
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          resultsCount={filteredCoupons.length}
         />
-      )}
 
-      <CouponDetailModal
-        visible={modalVisible}
-        coupon={selectedCoupon}
-        onClose={() => setModalVisible(false)}
-      />
-    </SafeAreaView>
+        {filteredCoupons.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Ionicons name="receipt-outline" size={64} color="#ccc" />
+            <Text style={styles.emptyText}>
+              {searchQuery.trim() ? 'No coupons match your search' : 'No coupons available'}
+            </Text>
+            <Text style={styles.emptySubtext}>
+              {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredCoupons}
+            renderItem={renderCouponCard}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={styles.cardList}
+            showsVerticalScrollIndicator={true}
+          />
+        )}
+
+        <CouponDetailModal
+          visible={modalVisible}
+          coupon={selectedCoupon}
+          onClose={() => setModalVisible(false)}
+        />
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
