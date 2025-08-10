@@ -7,9 +7,11 @@ This is an enhanced version of the coupon filtering system that automatically ex
 - **Gmail Integration**: Automatically fetches promotional emails using Gmail API
 - **OCR Processing**: Extracts text from images in emails using Google Gemini
 - **AI Analysis**: Uses Gemini AI to classify and extract coupon information
+- **Email HTML Viewing**: View original email content in WebView for full context
 - **FastAPI Backend**: RESTful API with automatic documentation
-- **React Native Frontend**: Mobile app for displaying coupons
+- **React Native Frontend**: Mobile app with tab navigation and favorites
 - **Multi-Email Processing**: Analyzes multiple emails and filters for coupon content
+- **Favorites System**: Save and manage favorite coupons with persistent storage
 
 ## 🏗️ Architecture
 
@@ -63,6 +65,7 @@ Processes all promotional emails and returns coupon information.
 {
   "all_coupons": [
     {
+      "message_id": "18f2a1b2c3d4e5f6",
       "has_coupon": true,
       "offers": [
         {
@@ -81,6 +84,24 @@ Processes all promotional emails and returns coupon information.
   "emails_with_coupons": 3
 }
 ```
+
+#### `GET /api/email/{message_id}`
+Fetches the original HTML content of a specific email by message ID.
+
+**Parameters:**
+- `message_id` (string): The Gmail message ID
+
+**Response:**
+```json
+{
+  "success": true,
+  "message_id": "18f2a1b2c3d4e5f6",
+  "html_content": "<html><body>Original email HTML content...</body></html>",
+  "error": null
+}
+```
+
+**Use Case:** Allows users to view the original email content in a WebView for full context.
 
 #### `GET /api/health`
 Health check endpoint.
@@ -149,11 +170,15 @@ expo start
 
 ## 📱 Mobile App Features
 
-- View all extracted coupons
-- Filter by company or offer type
-- Search functionality
-- Expiry date tracking
-- Direct links to offers
+- **Tab Navigation**: Home, Add Coupon, Favorites, and Profile tabs
+- **Coupon Display**: View all extracted coupons with rich formatting
+- **Search & Filter**: Filter by company, offer type, or search terms
+- **Favorites System**: Heart button to save/unsave coupons with persistent storage
+- **Email Viewing**: "Go to Email" button to view original HTML email content
+- **Expiry Tracking**: Visual indicators for expiring coupons
+- **Manual Entry**: Add custom coupons manually
+- **Profile Stats**: View total coupons, favorites count, and app statistics
+- **Direct Links**: Quick access to store websites and offers
 
 ## 🚀 Deployment
 
