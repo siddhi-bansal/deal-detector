@@ -4,8 +4,9 @@ import base64
 from bs4 import BeautifulSoup
 from PIL import Image
 from io import BytesIO
-import google.generativeai as genai
+from datetime import datetime
 
+import google.generativeai as genai
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -20,12 +21,11 @@ load_dotenv()
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
-def get_email_text_and_html(service, message_id):
+def get_email_text_and_html(message):
     """Returns plain text and HTML from a Gmail message.
     If HTML is missing, returns empty string for HTML.
     If plain text is missing, falls back to stripping HTML.
     """
-    message = service.users().messages().get(userId='me', id=message_id, format='full').execute()
     payload = message.get("payload", {})
     mime_type = payload.get("mimeType", "")
     parts = payload.get("parts", [])
@@ -188,7 +188,40 @@ def get_text_from_images(img_links):
             text += " " + img_text
     return text.strip()
 
-def get_text_from_email():
+def get_email_sender(service, message_id):
+    """Fetch the email sender from the Gmail API."""
+    try:
+        message = service.users().messages().get(userId="me", id=message_id).execute()
+        return message.get("payload", {}).get("headers", [{}])[0].get("value", "")
+    except Exception as e:
+        print(f"Error fetching email sender: {e}")
+        return ""
+
+def get_email_sender(message):
+    """Fetch the email sender from the Gmail API."""
+    headers = message.get("payload", {}).get("headers", [])
+    for header in headers:
+        if header.get("name", "").lower() == "from":
+            return header.get("value", "")
+    return ""
+
+def get_email_subject(message):
+    """Fetch the email subject from the Gmail API."""
+    headers = message.get("payload", {}).get("headers", [])
+    for header in headers:
+        if header.get("name", "").lower() == "subject":
+            return header.get("value", "")
+    return ""
+
+def get_email_timestamp(message):
+    """Fetch the email timestamp from the Gmail API."""
+    # Gmail API returns internalDate as a string of milliseconds since epoch
+    timestamp_ms = message.get("internalDate")
+    if timestamp_ms:
+        return datetime.fromtimestamp(int(timestamp_ms) / 1000)
+    return ""
+
+def get_emails_info():
     """Reads first email from Gmail and extracts text and from plain text and images."""
 
     creds = run_authorization_server()
@@ -200,13 +233,15 @@ def get_text_from_email():
             service.users().messages().list(userId="me", labelIds=["CATEGORY_PROMOTIONS"]).execute()
         )
         messages = results.get("messages", [])
-        all_emails_text = {}
+        emails_info = {}
 
         for message in messages[0:1]:
             message_id = message["id"]
 
+            message_object = service.users().messages().get(userId="me", id=message_id).execute()
+
             # Get both plain text and html
-            plain_text, html_text = get_email_text_and_html(service, message_id)
+            plain_text, html_text = get_email_text_and_html(message_object)
 
             # remove extra spaces and newlines from outside and within the text
             plain_text = preprocess_plain_text(plain_text)
@@ -222,9 +257,13 @@ def get_text_from_email():
                 plain_text += "\n" + img_text
 
             all_text = "Plain Text: " + plain_text.strip() + "\n Image Text:" + img_text.strip()
-            all_emails_text[message_id] = all_text
+            # sender, email_subject, timestamp
+            email_sender = get_email_sender(message_object)
+            email_subject = get_email_subject(message_object)
+            email_timestamp = get_email_timestamp(message_object)
+            emails_info[message_id] = {"email_text": all_text, "email_sender": email_sender, "email_subject": email_subject, "email_timestamp": email_timestamp}
 
-        return all_emails_text
+        return emails_info
 
     except Exception as error:
         print(f"An error occurred: {error}")

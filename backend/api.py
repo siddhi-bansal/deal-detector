@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 import logging
 
-from get_all_text_from_email import get_text_from_email, get_html_from_message_id, run_authorization_server
+from get_all_text_from_email import get_emails_info, get_html_from_message_id, run_authorization_server
 from get_coupon_info_from_email import get_coupon_info_from_email
 from googleapiclient.discovery import build
 
@@ -76,7 +76,7 @@ async def get_coupons():
         logger.info("Starting email processing...")
         
         # Get email texts (same as main.py)
-        email_texts = get_text_from_email()
+        email_texts = get_emails_info()
         
         if not email_texts:
             raise HTTPException(
@@ -91,7 +91,7 @@ async def get_coupons():
         for i, id in enumerate(email_texts):
             logger.info(f"Processing email {i+1}/{len(email_texts)}")
             
-            email_text = email_texts[id]
+            email_text = email_texts[id]["email_text"]
             
             if not email_text or not email_text.strip():
                 continue
@@ -103,10 +103,17 @@ async def get_coupons():
                 continue
                 
             if coupons_json.get("has_coupon", False):
-                # Insert message_id as the first key in the dict
+                # Insert timestampe, subject, sender, and message_id in dict
+                coupons_json = {"timestamp": email_texts[id]["email_timestamp"], **coupons_json}
+                coupons_json = {"subject": email_texts[id]["email_subject"], **coupons_json}
+                coupons_json = {"sender": email_texts[id]["email_sender"], **coupons_json}
                 coupons_json = {"message_id": id, **coupons_json}
-
+                
+                # has_coupon will always be True, no need to include in backend JSON
+                coupons_json.pop("has_coupon", None) 
+                
                 all_coupons.append(coupons_json)
+                
                 logger.info(f"Found coupons in email {i+1}")
         
         logger.info(f"Total coupons found: {len(all_coupons)} out of {len(email_texts)} emails")

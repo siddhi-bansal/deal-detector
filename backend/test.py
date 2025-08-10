@@ -52,3 +52,39 @@ all_emails_text = {}
 
 for message in messages[0:1]:
     print(message["id"])
+
+
+from get_all_text_from_email import get_email_text_and_html, get_img_links_from_html, get_text_from_images, preprocess_plain_text, get_email_sender, get_email_subject, get_email_timestamp
+
+emails_info = {}
+
+for message in messages[0:1]:
+    print(message.get("payload", {}))
+    message_id = message["id"]
+
+    message_object = service.users().messages().get(userId="me", id=message_id).execute()
+
+    # Get both plain text and html
+    plain_text, html_text = get_email_text_and_html(message_object)
+
+    # remove extra spaces and newlines from outside and within the text
+    plain_text = preprocess_plain_text(plain_text)
+
+    # Extract img src links
+    img_links = get_img_links_from_html(html_text)
+
+    img_text = ""
+    # Get text from images using OCR
+    # if img_links:
+    #     img_text = get_text_from_images(img_links)
+    #     # Append the image text to the plain text
+    #     plain_text += "\n" + img_text
+
+    all_text = "Plain Text: " + plain_text.strip() + "\n Image Text:" + img_text.strip()
+    # sender, email_subject, timestamp
+    email_sender = get_email_sender(message_object)
+    email_subject = get_email_subject(message_object)
+    email_timestamp = get_email_timestamp(message_object)
+    emails_info[message_id] = {"email_sender": email_sender, "email_subject": email_subject, "email_timestamp": email_timestamp}
+
+print(emails_info)
