@@ -2,9 +2,11 @@ import React from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useFavorites } from '../context/FavoritesContext';
 import { styles } from '../styles/styles';
 
 export const CouponDetailModal = ({ visible, coupon, onClose }) => {
+  const { toggleFavorite, isFavorite } = useFavorites();
   if (!coupon) return null;
 
   const handleLinkPress = (url, linkType) => {
@@ -48,6 +50,10 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
 
   const daysLeft = getDaysUntilExpiry(coupon.expiry_date);
 
+  const handleFavoritePress = () => {
+    toggleFavorite(coupon);
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -60,9 +66,21 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
           {/* Header */}
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>{coupon.company}</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#333" />
-            </TouchableOpacity>
+            <View style={styles.modalHeaderButtons}>
+              <TouchableOpacity 
+                onPress={handleFavoritePress} 
+                style={[styles.closeButton, { marginRight: 10 }]}
+              >
+                <Ionicons 
+                  name={isFavorite(coupon.id) ? 'heart' : 'heart-outline'} 
+                  size={24} 
+                  color={isFavorite(coupon.id) ? '#ef4444' : '#9ca3af'} 
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Ionicons name="close" size={24} color="#333" />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={true}>

@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useFavorites } from '../context/FavoritesContext';
 import { styles } from '../styles/styles';
 
 export const CouponCard = ({ coupon, onPress }) => {
+  const { toggleFavorite, isFavorite } = useFavorites();
   const getDiscountGradient = (discountType) => {
     switch (discountType) {
       case 'percentage':
@@ -88,12 +90,30 @@ export const CouponCard = ({ coupon, onPress }) => {
     onPress(coupon);
   };
 
+  const handleFavoritePress = (e) => {
+    e.stopPropagation(); // Prevent card press when tapping heart
+    toggleFavorite(coupon);
+  };
+
   return (
     <TouchableOpacity 
       style={[styles.card, expiringSoon && styles.urgentCard]}
       onPress={handleCardPress}
       activeOpacity={0.7}
     >
+      {/* Favorite Heart Button */}
+      <TouchableOpacity 
+        style={styles.favoriteButton}
+        onPress={handleFavoritePress}
+        activeOpacity={0.7}
+      >
+        <Ionicons 
+          name={isFavorite(coupon.id) ? 'heart' : 'heart-outline'} 
+          size={24} 
+          color={isFavorite(coupon.id) ? '#ef4444' : '#9ca3af'} 
+        />
+      </TouchableOpacity>
+
       <View style={styles.cardHeader}>
         <View style={styles.companyRow}>
           <Ionicons 

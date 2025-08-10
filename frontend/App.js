@@ -1,187 +1,152 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  SafeAreaView,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import React from 'react';
+import { Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import sampleData from './assets/sample_api_output.json';
-import { CouponCard } from './components/CouponCard';
-import { CouponDetailModal } from './components/CouponDetailModal';
-import { SearchAndSort } from './components/SearchAndSort';
+import { useRoute } from '@react-navigation/native';
+
+// Import context
+import { FavoritesProvider } from './context/FavoritesContext';
+
+// Import screens
+import { HomeScreen } from './screens/HomeScreen';
+import { AddCouponScreen } from './screens/AddCouponScreen';
+import { FavoritesScreen } from './screens/FavoritesScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
+
 import { styles } from './styles/styles';
 
-export default function App() {
-  const [coupons, setCoupons] = useState([]);
-  const [filteredCoupons, setFilteredCoupons] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCoupon, setSelectedCoupon] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('company');
+const Tab = createBottomTabNavigator();
 
-  useEffect(() => {
-    loadCoupons();
-  }, []);
-
-  useEffect(() => {
-    filterAndSortCoupons();
-  }, [coupons, searchQuery, sortBy]);
-
-  const loadCoupons = async () => {
-    try {
-      // Flatten all offers from the sample data structure
-      const allOffers = [];
-      if (sampleData?.all_coupons) {
-        sampleData.all_coupons.forEach((couponGroup) => {
-          if (couponGroup.offers) {
-            couponGroup.offers.forEach((offer) => {
-              allOffers.push(offer);
-            });
-          }
-        });
-      }
-      setCoupons(allOffers);
-    } catch (error) {
-      console.error('Error loading coupons:', error);
-      Alert.alert('Error', 'Failed to load coupons');
-    } finally {
-      setLoading(false);
+const CustomHeader = ({ routeName }) => {
+  const getTitle = (name) => {
+    switch (name) {
+      case 'Home':
+        return 'My Coupons';
+      case 'Add':
+        return 'Add Coupon';
+      case 'Favorites':
+        return 'Favorites';
+      case 'Profile':
+        return 'Profile';
+      default:
+        return 'Deal Detector';
     }
   };
-
-  const filterAndSortCoupons = () => {
-    let filtered = coupons;
-
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
-      filtered = coupons.filter(coupon => 
-        coupon.company?.toLowerCase().includes(query) ||
-        coupon.offer_title?.toLowerCase().includes(query) ||
-        coupon.offer_description?.toLowerCase().includes(query) ||
-        coupon.discount_amount?.toLowerCase().includes(query) ||
-        coupon.discount_type?.toLowerCase().includes(query) ||
-        coupon.terms_conditions?.toLowerCase().includes(query) ||
-        coupon.coupon_code?.toLowerCase().includes(query) ||
-        coupon.offer_type?.toLowerCase().includes(query) ||
-        coupon.product_category?.toLowerCase().includes(query) ||
-        (coupon.urgency_indicators && coupon.urgency_indicators.some(indicator => 
-          indicator.toLowerCase().includes(query)
-        )) ||
-        (coupon.additional_benefits && coupon.additional_benefits.some(benefit => 
-          benefit.toLowerCase().includes(query)
-        ))
-      );
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'company':
-          return (a.company || '').localeCompare(b.company || '');
-        
-        case 'discount':
-          // Extract numeric value from discount amount for comparison
-          const getDiscountValue = (discount) => {
-            const match = discount?.match(/(\d+)/);
-            return match ? parseInt(match[1]) : 0;
-          };
-          return getDiscountValue(b.discount_amount) - getDiscountValue(a.discount_amount);
-        
-        case 'expiry':
-          const getDate = (dateStr) => {
-            if (!dateStr) return new Date('2099-12-31'); // Far future for items without expiry
-            return new Date(dateStr);
-          };
-          return getDate(a.expiry_date) - getDate(b.expiry_date);
-        
-        case 'type':
-          return (a.offer_type || '').localeCompare(b.offer_type || '');
-        
-        default:
-          return 0;
-      }
-    });
-
-    setFilteredCoupons(filtered);
-  };
-
-  const handleCardPress = (coupon) => {
-    setSelectedCoupon(coupon);
-    setModalVisible(true);
-  };
-
-  const renderCouponCard = ({ item }) => (
-    <CouponCard coupon={item} onPress={() => handleCardPress(item)} />
-  );
-
-  if (loading) {
-    return (
-      <LinearGradient
-        colors={['#f0f3ff', '#e0e7ff']}
-        style={styles.loadingContainer}
-      >
-        <ActivityIndicator size="large" color="#6366f1" />
-        <Text style={styles.loadingText}>Loading coupons...</Text>
-      </LinearGradient>
-    );
-  }
 
   return (
     <LinearGradient
-      colors={['#f0f3ff', '#e0e7ff']}
-      style={styles.container}
+      colors={['#6366f1', '#8b5cf6', '#ec4899']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.header}
     >
-      <SafeAreaView style={{ flex: 1 }}>
-        <LinearGradient
-          colors={['#6366f1', '#8b5cf6', '#ec4899']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.header}
-        >
-          <Text style={styles.headerTitle}>My Coupons</Text>
-        </LinearGradient>
-
-        <SearchAndSort
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          resultsCount={filteredCoupons.length}
-        />
-
-        {filteredCoupons.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Ionicons name="receipt-outline" size={64} color="#ccc" />
-            <Text style={styles.emptyText}>
-              {searchQuery.trim() ? 'No coupons match your search' : 'No coupons available'}
-            </Text>
-            <Text style={styles.emptySubtext}>
-              {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
-            </Text>
-          </View>
-        ) : (
-          <FlatList
-            data={filteredCoupons}
-            renderItem={renderCouponCard}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={styles.cardList}
-            showsVerticalScrollIndicator={true}
-          />
-        )}
-
-        <CouponDetailModal
-          visible={modalVisible}
-          coupon={selectedCoupon}
-          onClose={() => setModalVisible(false)}
-        />
-      </SafeAreaView>
+      <Text style={styles.headerTitle}>{getTitle(routeName)}</Text>
     </LinearGradient>
+  );
+};
+
+function TabNavigator() {
+  const [currentRoute, setCurrentRoute] = React.useState('Home');
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#f0f3ff' }}>
+      <CustomHeader routeName={currentRoute} />
+      
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Add') {
+              iconName = focused ? 'add-circle' : 'add-circle-outline';
+            } else if (route.name === 'Favorites') {
+              iconName = focused ? 'heart' : 'heart-outline';
+            } else if (route.name === 'Profile') {
+              iconName = focused ? 'person' : 'person-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#6366f1',
+          tabBarInactiveTintColor: '#9ca3af',
+          tabBarStyle: {
+            backgroundColor: '#ffffff',
+            borderTopWidth: 1,
+            borderTopColor: '#e5e7eb',
+            paddingBottom: 5,
+            paddingTop: 5,
+            height: 60,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: -2,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 8,
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: '600',
+            marginTop: 2,
+          },
+        })}
+        screenListeners={{
+          tabPress: (e) => {
+            setCurrentRoute(e.target.split('-')[0]);
+          },
+        }}
+      >
+        <Tab.Screen 
+          name="Home" 
+          component={HomeScreen}
+          options={{ title: 'Home' }}
+          listeners={{
+            focus: () => setCurrentRoute('Home'),
+          }}
+        />
+        <Tab.Screen 
+          name="Add" 
+          component={AddCouponScreen}
+          options={{ title: 'Add Coupon' }}
+          listeners={{
+            focus: () => setCurrentRoute('Add'),
+          }}
+        />
+        <Tab.Screen 
+          name="Favorites" 
+          component={FavoritesScreen}
+          options={{ title: 'Favorites' }}
+          listeners={{
+            focus: () => setCurrentRoute('Favorites'),
+          }}
+        />
+        <Tab.Screen 
+          name="Profile" 
+          component={ProfileScreen}
+          options={{ title: 'Profile' }}
+          listeners={{
+            focus: () => setCurrentRoute('Profile'),
+          }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
+  );
+}
+
+export default function App() {
+  return (
+    <FavoritesProvider>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </FavoritesProvider>
   );
 }
 
