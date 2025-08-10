@@ -9,10 +9,12 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useFavorites } from '../context/FavoritesContext';
+import { getTotalCouponsCount } from '../utils/couponUtils';
 import { styles } from '../styles/styles';
 
 export const ProfileScreen = () => {
   const { getFavoritesCount } = useFavorites();
+  const totalCoupons = getTotalCouponsCount();
   const handleSettingPress = (setting) => {
     Alert.alert('Coming Soon', `${setting} feature will be available in future updates.`);
   };
@@ -71,8 +73,8 @@ export const ProfileScreen = () => {
         <View style={styles.statsContainer}>
           <StatCard 
             icon="pricetag" 
-            value="24" 
-            label="Total Coupons" 
+            value={totalCoupons.toString()} 
+            label="Coupons" 
             color="#6366f1" 
           />
           <StatCard 

@@ -149,10 +149,6 @@ export const styles = StyleSheet.create({
     position: 'relative',
   },
   favoriteButton: {
-    position: 'absolute',
-    top: 15,
-    right: 15,
-    zIndex: 10,
     backgroundColor: '#ffffff',
     borderRadius: 20,
     padding: 8,
@@ -164,6 +160,13 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 3,
+  },
+  favoriteRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 4,
   },
   urgentCard: {
     borderLeftWidth: 5,

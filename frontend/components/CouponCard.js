@@ -101,19 +101,6 @@ export const CouponCard = ({ coupon, onPress }) => {
       onPress={handleCardPress}
       activeOpacity={0.7}
     >
-      {/* Favorite Heart Button */}
-      <TouchableOpacity 
-        style={styles.favoriteButton}
-        onPress={handleFavoritePress}
-        activeOpacity={0.7}
-      >
-        <Ionicons 
-          name={isFavorite(coupon.id) ? 'heart' : 'heart-outline'} 
-          size={24} 
-          color={isFavorite(coupon.id) ? '#ef4444' : '#9ca3af'} 
-        />
-      </TouchableOpacity>
-
       <View style={styles.cardHeader}>
         <View style={styles.companyRow}>
           <Ionicons 
@@ -192,6 +179,21 @@ export const CouponCard = ({ coupon, onPress }) => {
           </Text>
         </LinearGradient>
       )}
+
+      {/* Favorite Heart Button Row */}
+      <View style={styles.favoriteRow}>
+        <TouchableOpacity 
+          style={styles.favoriteButton}
+          onPress={handleFavoritePress}
+          activeOpacity={0.7}
+        >
+          <Ionicons 
+            name={isFavorite(coupon.id) ? 'heart' : 'heart-outline'} 
+            size={24} 
+            color={isFavorite(coupon.id) ? '#ef4444' : '#9ca3af'} 
+          />
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.cardFooter}>
         <Text style={styles.tapForMore}>Tap for details</Text>
