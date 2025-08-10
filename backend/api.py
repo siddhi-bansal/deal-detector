@@ -4,8 +4,9 @@ from pydantic import BaseModel
 from typing import List, Optional
 import logging
 
-from get_all_text_from_email import get_text_from_email
+from get_all_text_from_email import get_text_from_email, get_html_from_message_id, run_authorization_server
 from get_coupon_info_from_email import get_coupon_info_from_email
+from googleapiclient.discovery import build
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -48,6 +49,12 @@ class CouponResponse(BaseModel):
     all_coupons: List[dict] = []
     total_emails_processed: int = 0
     emails_with_coupons: int = 0
+
+class EmailHtmlResponse(BaseModel):
+    success: bool
+    message_id: str
+    html_content: str
+    error: Optional[str] = None
 
 @app.get("/")
 async def root():
@@ -118,6 +125,44 @@ async def get_coupons():
         raise HTTPException(
             status_code=500,
             detail=f"Internal server error: {str(e)}"
+        )
+
+@app.get("/api/email/{message_id}", response_model=EmailHtmlResponse)
+async def get_email_html(message_id: str):
+    """
+    Get HTML content from a specific Gmail message by message ID.
+    """
+    try:
+        logger.info(f"Fetching HTML content for message ID: {message_id}")
+        
+        # Get Gmail service credentials
+        creds = run_authorization_server()
+        service = build("gmail", "v1", credentials=creds)
+        
+        # Get HTML content using the existing function
+        html_content = get_html_from_message_id(service, message_id)
+        
+        if not html_content:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No HTML content found for message ID: {message_id}"
+            )
+        
+        logger.info(f"Successfully retrieved HTML content for message ID: {message_id}")
+        
+        return EmailHtmlResponse(
+            success=True,
+            message_id=message_id,
+            html_content=html_content
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching HTML for message {message_id}: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch email HTML: {str(e)}"
         )
 
 @app.get("/api/health")

@@ -61,6 +61,37 @@ def get_email_text_and_html(service, message_id):
     return plain_text, html_text
 
 
+def get_html_from_message_id(service, message_id):
+    """Returns plain text and HTML from a Gmail message.
+    If HTML is missing, returns empty string for HTML.
+    If plain text is missing, falls back to stripping HTML.
+    """
+    message = service.users().messages().get(userId='me', id=message_id, format='full').execute()
+    payload = message.get("payload", {})
+    mime_type = payload.get("mimeType", "")
+    parts = payload.get("parts", [])
+
+    html_text = ""
+
+    # HTML only
+    if mime_type == "text/html":
+        data = payload.get("body", {}).get("data", "")
+        html_text = base64.urlsafe_b64decode(data).decode("utf-8")
+
+    # Multipart email
+    elif mime_type.startswith("multipart/"):
+        for part in parts:
+            part_type = part.get("mimeType", "")
+            data = part.get("body", {}).get("data", "")
+            if part_type == "text/html" and data:
+                html_text = base64.urlsafe_b64decode(data).decode("utf-8")
+    
+    if not html_text:
+        html_text = "<html><body><p>Message cannot be displayed.</p></body></html>"
+    
+    return html_text
+
+
 def get_img_links_from_html(html):
     """Extracts all image src links from an HTML string."""
     soup = BeautifulSoup(html, "html.parser")
