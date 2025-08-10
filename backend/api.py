@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from typing import List, Optional
 import logging
 
-from extended_version.backend.get_all_text_from_email import get_text_from_email
-from extended_version.backend.get_coupon_info_from_email import get_coupon_info_from_email
+from get_all_text_from_email import get_text_from_email
+from get_coupon_info_from_email import get_coupon_info_from_email
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -96,6 +96,9 @@ async def get_coupons():
                 continue
                 
             if coupons_json.get("has_coupon", False):
+                # Insert message_id as the first key in the dict
+                coupons_json = {"message_id": id, **coupons_json}
+
                 all_coupons.append(coupons_json)
                 logger.info(f"Found coupons in email {i+1}")
         

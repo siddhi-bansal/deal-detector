@@ -171,7 +171,7 @@ def get_text_from_email():
         messages = results.get("messages", [])
         all_emails_text = {}
 
-        for message in messages:
+        for message in messages[0:1]:
             message_id = message["id"]
 
             # Get both plain text and html
