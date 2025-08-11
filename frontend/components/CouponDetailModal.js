@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, Alert, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, Alert, ActivityIndicator, Image } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +11,36 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [emailHtml, setEmailHtml] = useState('');
   const [loadingEmail, setLoadingEmail] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(null);
+  const [logoLoading, setLogoLoading] = useState(true);
+
+  // Fetch company logo when modal opens
+  useEffect(() => {
+    const fetchLogo = async () => {
+      if (!coupon?.email_sender || !visible) {
+        setLogoLoading(false);
+        return;
+      }
+
+      try {
+        setLogoLoading(true);
+        setLogoUrl(null); // Reset logo when modal opens
+        const response = await fetch(`http://192.168.86.32:8000/api/logo/${encodeURIComponent(coupon.email_sender)}`);
+        const data = await response.json();
+        
+        if (data.success && data.logo_url) {
+          setLogoUrl(data.logo_url);
+        }
+      } catch (error) {
+        console.log('Error fetching logo:', error);
+      } finally {
+        setLogoLoading(false);
+      }
+    };
+
+    fetchLogo();
+  }, [coupon?.email_sender, visible]);
+
   if (!coupon) return null;
 
   const handleLinkPress = (url, linkType) => {
@@ -111,7 +141,26 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
         <View style={styles.modalContent}>
           {/* Header */}
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>{coupon.company}</Text>
+            <View style={styles.modalTitleContainer}>
+              <View style={styles.modalLogoContainer}>
+                {logoUrl && !logoLoading ? (
+                  <Image
+                    source={{ uri: logoUrl }}
+                    style={styles.modalCompanyLogo}
+                    onError={() => setLogoUrl(null)}
+                  />
+                ) : (
+                  <View style={styles.modalLogoPlaceholder}>
+                    {logoLoading ? (
+                      <View style={styles.modalLogoSkeleton} />
+                    ) : (
+                      <Ionicons name="business" size={32} color="#9ca3af" />
+                    )}
+                  </View>
+                )}
+              </View>
+              <Text style={styles.modalTitle}>{coupon.company}</Text>
+            </View>
             <View style={styles.modalHeaderButtons}>
               <TouchableOpacity 
                 onPress={handleFavoritePress} 

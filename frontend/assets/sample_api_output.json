@@ -3,6 +3,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Nutcracker Market <noreply@nutcrackermarket.com>",
       "offers": [
         {
           "company": "Nutcracker Market",
@@ -47,6 +48,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "LendingTree <offers@lendingtree.com>",
       "offers": [
         {
           "company": "LendingTree",
@@ -89,6 +91,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "LendingTree <offers@lendingtree.com>",
       "offers": [
         {
           "company": "LendingTree",
@@ -101,7 +104,7 @@
           "product_category": "personal loans",
           "offer_title": "Get personal loan offers in minutes",
           "offer_description": "Use a personal loan to pay off credit card debt faster. Borrow up to $50,000. Get your money in as little as 24 hours. Secure a lower interest rate than credit cards. Make one monthly payment instead of several.",
-          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree’s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
+          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree\u2019s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
           "urgency_indicators": [],
           "call_to_action": "Calculate Payment",
           "additional_benefits": []
@@ -131,9 +134,10 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Sea-Doo <promotions@sea-doo.com>",
       "offers": [
         {
-          "company": "SEA-DOO®",
+          "company": "SEA-DOO\u00ae",
           "offer_type": "promotion",
           "discount_amount": null,
           "discount_type": "other",
@@ -153,6 +157,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Fat Straws <hello@fatstraws.com>",
       "offers": [
         {
           "company": "Fat Straws",
@@ -195,6 +200,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Nike <offers@nike.com>",
       "offers": [
         {
           "company": "Nike",
@@ -268,6 +274,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "GHC <noreply@ghc.com>",
       "offers": [
         {
           "company": "GHC",
@@ -315,6 +322,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Velvet Taco <noreply@velvettaco.com>",
       "offers": [
         {
           "company": "Velvet Taco",
@@ -325,7 +333,7 @@
           "expiry_date": "August 7, 2025",
           "minimum_purchase": "$10",
           "product_category": "Cake",
-          "offer_title": "FREE RED VELVET CAKE REWARD®",
+          "offer_title": "FREE RED VELVET CAKE REWARD\u00ae",
           "offer_description": "A free slice of cake for loyalty members on National Velvet Day.",
           "terms_conditions": "Must be a member of The Velvet Room. Offer valid on August 7, 2025, only. All loyalty members are eligible to receive one (1) Free Slice of Cake reward. A minimum $10 basket is required to redeem the Free Slice of Cake Reward. Offer available in-app, online, and at participating locations. Not valid at food hall or non-traditional locations. Cannot be combined with any other offers or discounts. Available while supplies last.",
           "urgency_indicators": [
@@ -359,6 +367,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -447,6 +456,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "PayPal Rewards <noreply@paypalrewards.com>",
       "offers": [
         {
           "company": "PayPal Rewards",
@@ -458,7 +468,7 @@
           "minimum_purchase": null,
           "product_category": "general",
           "offer_title": "PayPal Rewards Balance",
-          "offer_description": "Get ready for the new school year with editors’ picks under $100 plus plenty of cash-back* offers.",
+          "offer_description": "Get ready for the new school year with editors\u2019 picks under $100 plus plenty of cash-back* offers.",
           "terms_conditions": "Eligible items only. Redeem points for cash back or other options. PayPal may earn a commission for these offers. Terms and merchant exclusions apply.",
           "urgency_indicators": [],
           "call_to_action": "Redeem points",
@@ -588,7 +598,7 @@
           "minimum_purchase": null,
           "product_category": "coupons",
           "offer_title": "Automatic Coupon Searches",
-          "offer_description": "PayPal Honey looks for coupons at over 30,000 stores – we got you",
+          "offer_description": "PayPal Honey looks for coupons at over 30,000 stores \u2013 we got you",
           "terms_conditions": null,
           "urgency_indicators": [],
           "call_to_action": "Explore",
@@ -619,7 +629,7 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": "McAfee",
-          "offer_title": "15% Cash Back McAfee™",
+          "offer_title": "15% Cash Back McAfee\u2122",
           "offer_description": null,
           "terms_conditions": null,
           "urgency_indicators": [],
@@ -695,6 +705,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Foyer <noreply@foyer.com>",
       "offers": [
         {
           "company": "Foyer",
@@ -707,7 +718,7 @@
           "product_category": "home buyer savings account",
           "offer_title": "Help make home a reality with Foyer",
           "offer_description": "The first-time home buyer savings account with up to a 6% match on your deposits.",
-          "terms_conditions": "Terms apply. See Foyer’s Rewards Agreement for details. Foyer is a financial technology company, not a bank. Banking services by Pacific West Bank, Member FDIC.",
+          "terms_conditions": "Terms apply. See Foyer\u2019s Rewards Agreement for details. Foyer is a financial technology company, not a bank. Banking services by Pacific West Bank, Member FDIC.",
           "urgency_indicators": [],
           "call_to_action": "Learn more",
           "additional_benefits": []
@@ -717,6 +728,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Topgolf <noreply@topgolf.com>",
       "offers": [
         {
           "company": "Topgolf",
@@ -739,6 +751,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Overstock <noreply@overstock.com>",
       "offers": [
         {
           "company": "Overstock",
@@ -860,6 +873,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Vivid Seats <noreply@vividseats.com>",
       "offers": [
         {
           "company": "Vivid Seats",
@@ -902,6 +916,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -994,8 +1009,8 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": null,
-          "offer_title": "From 15¢",
-          "offer_description": "Items available starting from 15¢.",
+          "offer_title": "From 15\u00a2",
+          "offer_description": "Items available starting from 15\u00a2.",
           "terms_conditions": "Pricing may vary by location and online.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1010,8 +1025,8 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": null,
-          "offer_title": "From 35¢",
-          "offer_description": "Items available starting from 35¢.",
+          "offer_title": "From 35\u00a2",
+          "offer_description": "Items available starting from 35\u00a2.",
           "terms_conditions": "Pricing may vary by location and online.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1026,8 +1041,8 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": null,
-          "offer_title": "From 39¢",
-          "offer_description": "Items available starting from 39¢.",
+          "offer_title": "From 39\u00a2",
+          "offer_description": "Items available starting from 39\u00a2.",
           "terms_conditions": "Pricing may vary by location and online.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1042,8 +1057,8 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": null,
-          "offer_title": "From 99¢",
-          "offer_description": "Items available starting from 99¢.",
+          "offer_title": "From 99\u00a2",
+          "offer_description": "Items available starting from 99\u00a2.",
           "terms_conditions": "Pricing may vary by location and online.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1054,6 +1069,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Torchy's Tacos <noreply@torchystacos.com>",
       "offers": [
         {
           "company": "Torchy's Tacos",
@@ -1066,7 +1082,7 @@
           "product_category": "Appetizers and Mocktails",
           "offer_title": "Hooky Hour",
           "offer_description": "Try NEW appetizers and mocktails fresh from the test kitchen. Specifically for Austin, TX guests at the Mueller location.",
-          "terms_conditions": "Valid for dine-in only at Torchy’s Tacos – Mueller (1801 E 51st St Building D, Austin, TX 78723). Mention 'working remotely'. Some dishes or drinks may appear different at time of order including but not limited to: garnishes, sides, size, sauces, dips, etc.",
+          "terms_conditions": "Valid for dine-in only at Torchy\u2019s Tacos \u2013 Mueller (1801 E 51st St Building D, Austin, TX 78723). Mention 'working remotely'. Some dishes or drinks may appear different at time of order including but not limited to: garnishes, sides, size, sauces, dips, etc.",
           "urgency_indicators": [
             "limited time"
           ],
@@ -1078,6 +1094,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Lulus <noreply@lulus.com>",
       "offers": [
         {
           "company": "Lulus",
@@ -1089,8 +1106,8 @@
           "minimum_purchase": null,
           "product_category": "Cocktail Dresses",
           "offer_title": "20% Off Cocktail Dresses",
-          "offer_description": "Get 20% off items in the “Cocktail Dresses” category with code GETGLAM.",
-          "terms_conditions": "Valid only on purchases made on Lulus.com (or the Lulus app for U.S. customers only) in the “Cocktail Dresses” category. Not valid on previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code. Not valid for cash or cash equivalent. Offer subject to change at any time.",
+          "offer_description": "Get 20% off items in the \u201cCocktail Dresses\u201d category with code GETGLAM.",
+          "terms_conditions": "Valid only on purchases made on Lulus.com (or the Lulus app for U.S. customers only) in the \u201cCocktail Dresses\u201d category. Not valid on previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code. Not valid for cash or cash equivalent. Offer subject to change at any time.",
           "urgency_indicators": [],
           "call_to_action": "Shop Now",
           "additional_benefits": []
@@ -1134,6 +1151,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Starbucks <promotions@starbucks.com>",
       "offers": [
         {
           "company": "Starbucks",
@@ -1158,6 +1176,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Bloomberg.com <noreply@bloombergcom.com>",
       "offers": [
         {
           "company": "Bloomberg.com",
@@ -1210,6 +1229,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -1314,6 +1334,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "North Italia <noreply@northitalia.com>",
       "offers": [
         {
           "company": "North Italia",
@@ -1338,6 +1359,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "LendingTree <offers@lendingtree.com>",
       "offers": [
         {
           "company": "LendingTree",
@@ -1350,7 +1372,7 @@
           "product_category": "credit cards",
           "offer_title": "Best Card Offers",
           "offer_description": "Compare cash back, balance transfer, and 0% interest cards from LendingTree's partners.",
-          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree’s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
+          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree\u2019s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
           "urgency_indicators": [],
           "call_to_action": "Compare Top Cards",
           "additional_benefits": [
@@ -1370,7 +1392,7 @@
           "product_category": "credit card",
           "offer_title": "0% Credit Card Offers",
           "offer_description": "Offers 0% on credit card products.",
-          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree’s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
+          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree\u2019s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
           "urgency_indicators": [],
           "call_to_action": "Compare Top Cards",
           "additional_benefits": []
@@ -1380,6 +1402,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -1484,6 +1507,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Texas Exes <noreply@texasexes.com>",
       "offers": [
         {
           "company": "Texas Exes",
@@ -1540,6 +1564,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "North Italia <noreply@northitalia.com>",
       "offers": [
         {
           "company": "North Italia",
@@ -1555,7 +1580,7 @@
           "terms_conditions": "Offer valid 8/4/2025 through 8/31/2025 at all participating North Italia locations in Dallas (Dallas Galleria and Uptown). Must be 21 and older to order and pickup/receive orders that include alcohol. Only where permitted by applicable state and local law. Available at participating North Italia restaurants in the United States of America while supplies last. Offer cannot be combined with any other promotions or discounts. Promotions and availability may vary by geographic region.",
           "urgency_indicators": [
             "limited-time",
-            "Now – Aug 31st"
+            "Now \u2013 Aug 31st"
           ],
           "call_to_action": "Make a reservation",
           "additional_benefits": []
@@ -1574,7 +1599,7 @@
           "terms_conditions": "Offer valid 8/4/2025 through 8/31/2025 at all participating North Italia locations in Dallas (Dallas Galleria and Uptown). Must be 21 and older to order and pickup/receive orders that include alcohol. Only where permitted by applicable state and local law. Available at participating North Italia restaurants in the United States of America while supplies last. Offer cannot be combined with any other promotions or discounts. Promotions and availability may vary by geographic region.",
           "urgency_indicators": [
             "limited-time",
-            "Now – Aug 31st"
+            "Now \u2013 Aug 31st"
           ],
           "call_to_action": "Make a reservation",
           "additional_benefits": []
@@ -1593,7 +1618,7 @@
           "terms_conditions": "Offer valid 8/4/2025 through 8/31/2025 at all participating North Italia locations in Dallas (Dallas Galleria and Uptown). Must be 21 and older to order and pickup/receive orders that include alcohol. Only where permitted by applicable state and local law. Available at participating North Italia restaurants in the United States of America while supplies last. Offer cannot be combined with any other promotions or discounts. Promotions and availability may vary by geographic region.",
           "urgency_indicators": [
             "limited-time",
-            "Now – Aug 31st"
+            "Now \u2013 Aug 31st"
           ],
           "call_to_action": "Make a reservation",
           "additional_benefits": []
@@ -1612,7 +1637,7 @@
           "terms_conditions": "Offer valid 8/4/2025 through 8/31/2025 at all participating North Italia locations in Dallas (Dallas Galleria and Uptown). Must be 21 and older to order and pickup/receive orders that include alcohol. Only where permitted by applicable state and local law. Available at participating North Italia restaurants in the United States of America while supplies last. Offer cannot be combined with any other promotions or discounts. Promotions and availability may vary by geographic region.",
           "urgency_indicators": [
             "limited-time",
-            "Now – Aug 31st"
+            "Now \u2013 Aug 31st"
           ],
           "call_to_action": "Make a reservation",
           "additional_benefits": []
@@ -1640,6 +1665,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Vivid Seats <noreply@vividseats.com>",
       "offers": [
         {
           "company": "Vivid Seats",
@@ -1664,6 +1690,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Topgolf <noreply@topgolf.com>",
       "offers": [
         {
           "company": "Topgolf",
@@ -1709,6 +1736,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Vivid Seats <noreply@vividseats.com>",
       "offers": [
         {
           "company": "Vivid Seats",
@@ -1817,6 +1845,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "ASICS <noreply@asics.com>",
       "offers": [
         {
           "company": "ASICS",
@@ -1857,6 +1886,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -1898,9 +1928,9 @@
           "coupon_code": null,
           "expiry_date": "09/13",
           "minimum_purchase": null,
-          "product_category": "Target Circle 360™ membership",
-          "offer_title": "Student Discount on Target Circle 360™",
-          "offer_description": "Students can save 50% on Target Circle 360™ and get same-day delivery from Target for move-in day.",
+          "product_category": "Target Circle 360\u2122 membership",
+          "offer_title": "Student Discount on Target Circle 360\u2122",
+          "offer_description": "Students can save 50% on Target Circle 360\u2122 and get same-day delivery from Target for move-in day.",
           "terms_conditions": "Excludes trials. Restrictions apply.",
           "urgency_indicators": [],
           "call_to_action": "Learn more",
@@ -1917,9 +1947,9 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": "purchases paid with Target Circle Card (debit, credit, and reloadable) at Target stores and Target.com",
-          "offer_title": "Target Circle™ Card Discount",
+          "offer_title": "Target Circle\u2122 Card Discount",
           "offer_description": "Receive 5% off eligible purchases when paid with a Target Circle Card.",
-          "terms_conditions": "Excludes prescriptions and other CVS pharmacy products; Target GiftCards; Visa, Mastercard and American Express prepaid cards; Game On, DraftKings and other sports betting gift cards; Starbucks gift cards purchased at Starbucks locations within Target stores; previous purchases; clinic services at Target; Target Optical eye exams and protection plans; Target Circle 360™ memberships; Shipt memberships; alcohol purchases in IN; some independent businesses in Target stores; wireless protection programs and mobile carrier deposits; gift wrapping services; and taxes, shipping, delivery, handling and all other fees or charges. 5% discount applies to eligible purchases minus any other discounts and the value of any promotional Target GiftCards received in the transaction. New cards subject to application approval. Additional restrictions apply. See full program rules in store or at Target.com/CircleCard for details.",
+          "terms_conditions": "Excludes prescriptions and other CVS pharmacy products; Target GiftCards; Visa, Mastercard and American Express prepaid cards; Game On, DraftKings and other sports betting gift cards; Starbucks gift cards purchased at Starbucks locations within Target stores; previous purchases; clinic services at Target; Target Optical eye exams and protection plans; Target Circle 360\u2122 memberships; Shipt memberships; alcohol purchases in IN; some independent businesses in Target stores; wireless protection programs and mobile carrier deposits; gift wrapping services; and taxes, shipping, delivery, handling and all other fees or charges. 5% discount applies to eligible purchases minus any other discounts and the value of any promotional Target GiftCards received in the transaction. New cards subject to application approval. Additional restrictions apply. See full program rules in store or at Target.com/CircleCard for details.",
           "urgency_indicators": [],
           "call_to_action": null,
           "additional_benefits": []
@@ -1934,7 +1964,7 @@
           "minimum_purchase": null,
           "product_category": "most items from Target.com",
           "offer_title": "Free Standard and 2-Day Shipping",
-          "offer_description": "Receive free standard shipping on most items and free 2-day shipping on eligible items from Target.com when you pay with your Target Circle™ Card or are a Target Circle 360™ member.",
+          "offer_description": "Receive free standard shipping on most items and free 2-day shipping on eligible items from Target.com when you pay with your Target Circle\u2122 Card or are a Target Circle 360\u2122 member.",
           "terms_conditions": "Hundreds of thousands of items qualify for 2-day shipping. See for general delivery guidelines.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1950,9 +1980,9 @@
           "coupon_code": null,
           "expiry_date": "December 2026",
           "minimum_purchase": null,
-          "product_category": "Target Circle 360™",
-          "offer_title": "No Markups on Target Circle 360™",
-          "offer_description": "Target Circle 360™ members have no markups on product prices, meaning prices are generally the same as in-store (except for alcohol).",
+          "product_category": "Target Circle 360\u2122",
+          "offer_title": "No Markups on Target Circle 360\u2122",
+          "offer_description": "Target Circle 360\u2122 members have no markups on product prices, meaning prices are generally the same as in-store (except for alcohol).",
           "terms_conditions": "Offer valid for Target Circle 360 members only. Now through December 2026. Pricing is generally based on information from retailers, including alcohol pricing. \"No Markups\" means product prices are generally the same as in-store, except alcohol. Alcohol prices, and prices on non-alcohol items where alcohol is predominantly sold, are generally not the same as in-store. Pricing and availability is subject to change without notice, delays, data limitations, adjustments, and/or errors. In-store deals may not apply.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1966,9 +1996,9 @@
           "coupon_code": null,
           "expiry_date": null,
           "minimum_purchase": "$35",
-          "product_category": "Target Circle 360™ membership",
+          "product_category": "Target Circle 360\u2122 membership",
           "offer_title": "Unlimited Same-Day Delivery",
-          "offer_description": "Target Circle 360™ members receive unlimited same-day delivery on orders over $35.",
+          "offer_description": "Target Circle 360\u2122 members receive unlimited same-day delivery on orders over $35.",
           "terms_conditions": "Membership required. Terms and conditions apply. Unlimited Same-Day Delivery applies to orders over $35. Fastest delivery is based on the Same-Day Delivery benefit and is subject to geographic availability. See for details.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1984,9 +2014,9 @@
           "coupon_code": null,
           "expiry_date": null,
           "minimum_purchase": null,
-          "product_category": "purchases made with Target Circle™ Card or Target Circle 360™ membership",
+          "product_category": "purchases made with Target Circle\u2122 Card or Target Circle 360\u2122 membership",
           "offer_title": "Extended Returns Program",
-          "offer_description": "Get 30 additional days to return purchases beyond the standard return policy when paying with your Target Circle™ Card or are a Target Circle 360™ member.",
+          "offer_description": "Get 30 additional days to return purchases beyond the standard return policy when paying with your Target Circle\u2122 Card or are a Target Circle 360\u2122 member.",
           "terms_conditions": "Extended returns do not apply to: Target Optical products, contract mobile phones; non-returnable items and online purchases of SNAP eligible items using EBT and a Target Circle Card.",
           "urgency_indicators": [],
           "call_to_action": null,
@@ -1999,6 +2029,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Fat Straws <hello@fatstraws.com>",
       "offers": [
         {
           "company": "Fat Straws",
@@ -2024,6 +2055,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Mindvalley <noreply@mindvalley.com>",
       "offers": [
         {
           "company": "Mindvalley",
@@ -2051,6 +2083,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -2105,6 +2138,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Mindvalley <noreply@mindvalley.com>",
       "offers": [
         {
           "company": "Mindvalley",
@@ -2131,6 +2165,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "DoorDash <noreply@doordash.com>",
       "offers": [
         {
           "company": "DoorDash",
@@ -2206,7 +2241,7 @@
           "minimum_purchase": null,
           "product_category": "local favorites and new spots",
           "offer_title": "GET 'EM WHILE THEY'RE HOT",
-          "offer_description": "Get a deal on a local favorite or that new spot you've been hearing about — plus save even more for being a DashPass member. This is your sign to try that spot everyone's talking about — and save a little extra just for being a DashPass member. Save on a local fave or that popular new spot — dig in before these deals disappear. This is your sign to try that spot everyone's talking about — and save a little, too.",
+          "offer_description": "Get a deal on a local favorite or that new spot you've been hearing about \u2014 plus save even more for being a DashPass member. This is your sign to try that spot everyone's talking about \u2014 and save a little extra just for being a DashPass member. Save on a local fave or that popular new spot \u2014 dig in before these deals disappear. This is your sign to try that spot everyone's talking about \u2014 and save a little, too.",
           "terms_conditions": "Terms apply.",
           "urgency_indicators": [],
           "call_to_action": "Explore deals",
@@ -2236,6 +2271,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -2306,6 +2342,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "LendingTree <offers@lendingtree.com>",
       "offers": [
         {
           "company": "LendingTree",
@@ -2318,7 +2355,7 @@
           "product_category": "personal loans",
           "offer_title": "Control your credit card debt with a personal loan",
           "offer_description": "Compare offers from trusted lenders to find your best loan today.",
-          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree’s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
+          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree\u2019s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
           "urgency_indicators": [],
           "call_to_action": "Compare offers",
           "additional_benefits": []
@@ -2348,6 +2385,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -2457,6 +2495,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "paypal@paypal.com",
       "offers": [
         {
           "company": "PayPal Honey",
@@ -2468,7 +2507,7 @@
           "minimum_purchase": null,
           "product_category": "headphones, airbuds, and speakers",
           "offer_title": "PayPal Rewards Balance 100 points",
-          "offer_description": "Browse our editors’ picks of headphones, airbuds, and speakers from top brands starting at just $50. Then check out our cash back* offers for rewards.",
+          "offer_description": "Browse our editors\u2019 picks of headphones, airbuds, and speakers from top brands starting at just $50. Then check out our cash back* offers for rewards.",
           "terms_conditions": "Eligible items only. Redeem points for cash back or other options. PayPal may earn a commission for these offers. Terms and merchant exclusions apply.",
           "urgency_indicators": [],
           "call_to_action": "Browse",
@@ -2477,7 +2516,7 @@
           ]
         },
         {
-          "company": "Walmart, Macy’s, and Kohl’s",
+          "company": "Walmart, Macy\u2019s, and Kohl\u2019s",
           "offer_type": "sale",
           "discount_amount": "under $100",
           "discount_type": "fixed_amount",
@@ -2486,7 +2525,7 @@
           "minimum_purchase": null,
           "product_category": "dining and patio finds",
           "offer_title": "Outdoor dinner party picks",
-          "offer_description": "Discover dining and patio finds from Walmart, Macy’s, and Kohl’s all under $100.",
+          "offer_description": "Discover dining and patio finds from Walmart, Macy\u2019s, and Kohl\u2019s all under $100.",
           "terms_conditions": null,
           "urgency_indicators": [],
           "call_to_action": "Discover",
@@ -2509,7 +2548,7 @@
           "additional_benefits": []
         },
         {
-          "company": null,
+          "company": "null",
           "offer_type": "sale",
           "discount_amount": "start at $10",
           "discount_type": "fixed_amount",
@@ -2630,7 +2669,7 @@
           "minimum_purchase": null,
           "product_category": null,
           "offer_title": "Automatic Coupon Searches",
-          "offer_description": "PayPal Honey looks for coupons at over 30,000 stores – we got you",
+          "offer_description": "PayPal Honey looks for coupons at over 30,000 stores \u2013 we got you",
           "terms_conditions": null,
           "urgency_indicators": [],
           "call_to_action": "Explore",
@@ -2781,7 +2820,7 @@
           "additional_benefits": []
         },
         {
-          "company": "LIFEBOOST™ coffee",
+          "company": "LIFEBOOST\u2122 coffee",
           "offer_type": "cashback",
           "discount_amount": "7.5%",
           "discount_type": "percentage",
@@ -2789,7 +2828,7 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": null,
-          "offer_title": "LIFEBOOST™ coffee 7.5% Cash Back",
+          "offer_title": "LIFEBOOST\u2122 coffee 7.5% Cash Back",
           "offer_description": null,
           "terms_conditions": null,
           "urgency_indicators": [],
@@ -2797,7 +2836,7 @@
           "additional_benefits": []
         },
         {
-          "company": "jtv jewelry♡love",
+          "company": "jtv jewelry\u2661love",
           "offer_type": "cashback",
           "discount_amount": "3.5%",
           "discount_type": "percentage",
@@ -2805,7 +2844,7 @@
           "expiry_date": null,
           "minimum_purchase": null,
           "product_category": null,
-          "offer_title": "jtv jewelry♡love 3.5% Cash Back",
+          "offer_title": "jtv jewelry\u2661love 3.5% Cash Back",
           "offer_description": null,
           "terms_conditions": null,
           "urgency_indicators": [],
@@ -2897,6 +2936,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Velvet Taco <noreply@velvettaco.com>",
       "offers": [
         {
           "company": "Velvet Taco",
@@ -2922,6 +2962,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Lulus <noreply@lulus.com>",
       "offers": [
         {
           "company": "Lulus",
@@ -2933,8 +2974,8 @@
           "minimum_purchase": null,
           "product_category": "The Fancy Shop",
           "offer_title": "20% Off The Fancy Shop",
-          "offer_description": "Get 20% off items in the “The Fancy Shop” category with code FANCY20.",
-          "terms_conditions": "Valid only on purchases made on Lulus.com (or the Lulus app for U.S. customers only) in the “The Fancy Shop” category. Not valid on previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code. Not valid for cash or cash equivalent. Offer subject to change at any time.",
+          "offer_description": "Get 20% off items in the \u201cThe Fancy Shop\u201d category with code FANCY20.",
+          "terms_conditions": "Valid only on purchases made on Lulus.com (or the Lulus app for U.S. customers only) in the \u201cThe Fancy Shop\u201d category. Not valid on previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code. Not valid for cash or cash equivalent. Offer subject to change at any time.",
           "urgency_indicators": [],
           "call_to_action": "Shop Now",
           "additional_benefits": []
@@ -2992,6 +3033,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Topgolf <noreply@topgolf.com>",
       "offers": [
         {
           "company": "Topgolf",
@@ -3014,6 +3056,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Target <offers@target.com>",
       "offers": [
         {
           "company": "Target",
@@ -3118,6 +3161,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Vivid Seats <noreply@vividseats.com>",
       "offers": [
         {
           "company": "Vivid Seats",
@@ -3156,6 +3200,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "LendingTree <offers@lendingtree.com>",
       "offers": [
         {
           "company": "LendingTree",
@@ -3168,7 +3213,7 @@
           "product_category": "personal loans for credit card debt consolidation",
           "offer_title": "Get personal loan offers in minutes.",
           "offer_description": "Consolidate your credit card debt with a personal loan. Borrow up to $50,000, potentially secure a lower interest rate than your credit cards, and make one monthly payment instead of several. Funds could be available in as little as 24 hours.",
-          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree’s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
+          "terms_conditions": "Any advertised rates and terms are based on recent conditional loan offers made by LendingTree\u2019s Network Partners to consumers nationwide and are not guaranteed. Not all consumers may qualify. Terms and Conditions apply.",
           "urgency_indicators": [],
           "call_to_action": "Calculate Payment",
           "additional_benefits": [
@@ -3222,6 +3267,7 @@
     {
       "has_coupon": true,
       "message_id": "198919893cd441eb",
+      "email_sender": "Fat Straws <hello@fatstraws.com>",
       "offers": [
         {
           "company": "Fat Straws",

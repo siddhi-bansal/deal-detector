@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useFavorites } from '../context/FavoritesContext';
@@ -7,6 +7,34 @@ import { styles } from '../styles/styles';
 
 export const CouponCard = ({ coupon, onPress }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
+  const [logoUrl, setLogoUrl] = useState(null);
+  const [logoLoading, setLogoLoading] = useState(true);
+
+  // Fetch company logo when component mounts
+  useEffect(() => {
+    const fetchLogo = async () => {
+      if (!coupon.email_sender) {
+        setLogoLoading(false);
+        return;
+      }
+
+      try {
+        // Replace with your actual IP address
+        const response = await fetch(`http://192.168.86.32:8000/api/logo/${encodeURIComponent(coupon.email_sender)}`);
+        const data = await response.json();
+        
+        if (data.success && data.logo_url) {
+          setLogoUrl(data.logo_url);
+        }
+      } catch (error) {
+        console.log('Error fetching logo:', error);
+      } finally {
+        setLogoLoading(false);
+      }
+    };
+
+    fetchLogo();
+  }, [coupon.email_sender]);
   const getDiscountGradient = (discountType) => {
     switch (discountType) {
       case 'percentage':
@@ -103,11 +131,36 @@ export const CouponCard = ({ coupon, onPress }) => {
     >
       <View style={styles.cardHeader}>
         <View style={styles.companyRow}>
-          <Ionicons 
-            name={getOfferTypeIcon(coupon.offer_type)} 
-            size={22} 
-            color={getDiscountGradient(coupon.discount_type)[0]} 
-          />
+          <View style={styles.logoContainer}>
+            {logoUrl && !logoLoading ? (
+              <>
+                <Image
+                  source={{ uri: logoUrl }}
+                  style={styles.companyLogo}
+                  onError={() => setLogoUrl(null)} // Fallback on error
+                />
+                <View style={styles.offerTypeBadge}>
+                  <Ionicons 
+                    name={getOfferTypeIcon(coupon.offer_type)} 
+                    size={12} 
+                    color="#fff" 
+                  />
+                </View>
+              </>
+            ) : (
+              <View style={styles.fallbackIconContainer}>
+                {logoLoading ? (
+                  <View style={styles.logoSkeleton} />
+                ) : (
+                  <Ionicons 
+                    name={getOfferTypeIcon(coupon.offer_type)} 
+                    size={22} 
+                    color={getDiscountGradient(coupon.discount_type)[0]} 
+                  />
+                )}
+              </View>
+            )}
+          </View>
           <Text style={styles.companyName}>{coupon.company}</Text>
         </View>
         {coupon.discount_amount && (
