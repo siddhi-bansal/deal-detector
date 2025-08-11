@@ -54,7 +54,7 @@ for message in messages[0:1]:
     print(message["id"])
 
 
-from get_all_text_from_email import get_email_text_and_html, get_img_links_from_html, get_text_from_images, preprocess_plain_text, get_email_sender, get_email_subject, get_email_timestamp
+from get_emails_info import get_email_text_and_html, get_img_links_from_html, get_text_from_images, preprocess_plain_text, get_email_sender, get_email_subject, get_email_timestamp
 
 emails_info = {}
 

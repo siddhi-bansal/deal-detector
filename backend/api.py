@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 import logging
 
-from get_all_text_from_email import get_emails_info, get_html_from_message_id, run_authorization_server
+from get_emails_info import get_emails_info, get_html_from_message_id, run_authorization_server
 from get_coupon_info_from_email import get_coupon_info_from_email
 from googleapiclient.discovery import build
 
@@ -76,37 +76,40 @@ async def get_coupons():
         logger.info("Starting email processing...")
         
         # Get email texts (same as main.py)
-        email_texts = get_emails_info()
+        emails_info = get_emails_info()
         
-        if not email_texts:
+        if not emails_info:
             raise HTTPException(
                 status_code=404,
                 detail="No email content found"
             )
         
-        logger.info(f"Processing {len(email_texts)} emails")
+        logger.info(f"Processing {len(emails_info)} emails")
         
         # Process each email (same as main.py)
         all_coupons = []
-        for i, id in enumerate(email_texts):
-            logger.info(f"Processing email {i+1}/{len(email_texts)}")
+        for i, id in enumerate(emails_info):
+            logger.info(f"Processing email {i+1}/{len(emails_info)}")
             
-            email_text = email_texts[id]["email_text"]
-            
+            email_text = emails_info[id]["email_text"]
+            email_timestamp = emails_info[id]["email_timestamp"]
+            email_subject = emails_info[id]["email_subject"]
+            email_sender = emails_info[id]["email_sender"]
+
             if not email_text or not email_text.strip():
                 continue
                 
-            coupons_json = get_coupon_info_from_email(email_text)
+            coupons_json = get_coupon_info_from_email(email_text, email_subject, email_sender)
             
             if "error" in coupons_json:
                 logger.warning(f"Error processing email {i+1}: {coupons_json['error']}")
                 continue
                 
             if coupons_json.get("has_coupon", False):
-                # Insert timestampe, subject, sender, and message_id in dict
-                coupons_json = {"timestamp": email_texts[id]["email_timestamp"], **coupons_json}
-                coupons_json = {"subject": email_texts[id]["email_subject"], **coupons_json}
-                coupons_json = {"sender": email_texts[id]["email_sender"], **coupons_json}
+                # Insert timestamp, subject, sender, and message_id in dict
+                coupons_json = {"timestamp": email_timestamp, **coupons_json}
+                coupons_json = {"subject": email_subject, **coupons_json}
+                coupons_json = {"sender": email_sender, **coupons_json}
                 coupons_json = {"message_id": id, **coupons_json}
                 
                 # has_coupon will always be True, no need to include in backend JSON
@@ -116,12 +119,12 @@ async def get_coupons():
                 
                 logger.info(f"Found coupons in email {i+1}")
         
-        logger.info(f"Total coupons found: {len(all_coupons)} out of {len(email_texts)} emails")
+        logger.info(f"Total coupons found: {len(all_coupons)} out of {len(emails_info)} emails")
         
         return CouponResponse(
             all_coupons=all_coupons,
             total_num_coupons=len(all_coupons),
-            total_emails_processed=len(email_texts),
+            total_emails_processed=len(emails_info),
             emails_with_coupons=len(all_coupons)
         )
         

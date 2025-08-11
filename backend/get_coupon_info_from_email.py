@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-def get_coupon_info_from_email(email_text):
+def get_coupon_info_from_email(email_text, email_subject, email_sender):
     """
     Extracts comprehensive coupon information from email text using Gemini AI.
     """
@@ -21,6 +21,8 @@ def get_coupon_info_from_email(email_text):
         prompt = f"""
         Analyze this email text and extract ALL coupon/promotional offer information.
 
+        Email Sender: {email_sender}
+        Email Subject: {email_subject}
         Email text:
         {email_text}
 
@@ -40,15 +42,13 @@ def get_coupon_info_from_email(email_text):
                     "discount_amount": "percentage or dollar amount (e.g., '20%', '$10', 'Buy 1 Get 1')",
                     "discount_type": "percentage/fixed_amount/BOGO/free_shipping/other",
                     "coupon_code": "promotional code if present",
-                    "expiry_date": "expiration date if mentioned",
-                    "minimum_purchase": "minimum spend requirement if specified",
-                    "product_category": "what products/services the offer applies to",
+                    "expiry_date": "expiration date if mentioned, can also be inferred using context",
                     "offer_title": "main headline or title of the offer",
                     "offer_description": "brief description of the promotion",
-                    "terms_conditions": "any important restrictions or conditions",
-                    "urgency_indicators": ["limited time", "today only", "while supplies last", etc.],
+                    "terms_conditions": "any important restrictions or conditions, like minimum purchase, expiration date, etc.",
                     "call_to_action": "what action the email wants you to take",
-                    "additional_benefits": ["free shipping", "free returns", "gift with purchase", etc.]
+                    "additional_benefits": ["free shipping", "free returns", "gift with purchase", etc.],
+                    "link": "URL to the offer or product page. if no offer page exists, link to the company's homepage"
                 }}
             ]
         }}
