@@ -179,53 +179,110 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
           </View>
 
           <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={true}>
-            {/* Discount Badge */}
-            <LinearGradient
-              colors={['#ec4899', '#ef4444']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.modalDiscountBadge}
-            >
-              <Text style={styles.modalDiscountText}>{coupon.discount_amount}</Text>
-              <Text style={styles.modalDiscountType}>{coupon.discount_type}</Text>
-            </LinearGradient>
-
-            {/* Offer Details */}
+            {/* Main Offer Section */}
             <View style={styles.modalSection}>
-              <Text style={styles.modalSectionTitle}>Offer Details</Text>
-              <Text style={styles.modalOfferText}>{coupon.offer_description}</Text>
+              <Text style={styles.modalOfferTitle}>{coupon.offer_title}</Text>
+              <Text style={styles.modalOfferDescription}>{coupon.offer_description}</Text>
+              
+              {/* Discount Badge */}
+              {coupon.discount_amount && (
+                <View style={styles.modalDiscountContainer}>
+                  <LinearGradient
+                    colors={['#ec4899', '#ef4444']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.modalDiscountBadge}
+                  >
+                    <Text style={styles.modalDiscountText}>{coupon.discount_amount}</Text>
+                  </LinearGradient>
+                  <View style={styles.offerTypeTag}>
+                    <Text style={styles.offerTypeText}>
+                      {coupon.offer_type?.replace('_', ' ')?.toUpperCase() || 'OFFER'}
+                    </Text>
+                  </View>
+                </View>
+              )}
             </View>
+
+            {/* Coupon Code Section */}
+            {coupon.coupon_code && (
+              <View style={styles.modalSection}>
+                <View style={styles.sectionHeader}>
+                  <Ionicons name="ticket" size={20} color="#4CAF50" />
+                  <Text style={styles.modalSectionTitle}>Coupon Code</Text>
+                </View>
+                <View style={styles.couponCodeContainer}>
+                  <Text style={styles.couponCodeText}>{coupon.coupon_code}</Text>
+                  <TouchableOpacity style={styles.copyCodeButton}>
+                    <Ionicons name="copy" size={16} color="#4CAF50" />
+                    <Text style={styles.copyCodeText}>Copy</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
 
             {/* Expiry Information */}
             <View style={styles.modalSection}>
-              <Text style={styles.modalSectionTitle}>Expiry Information</Text>
-              <Text style={styles.modalExpiryDate}>{formatDate(coupon.expiry_date)}</Text>
-              {daysLeft !== null && (
-                <Text style={[
-                  styles.modalDaysLeft,
-                  daysLeft <= 3 ? styles.urgentText : styles.normalText
-                ]}>
-                  {daysLeft > 0 ? `${daysLeft} days left` :
-                    daysLeft === 0 ? 'Expires today!' : 'Expired'}
-                </Text>
-              )}
+              <View style={styles.sectionHeader}>
+                <Ionicons name="time" size={20} color="#f59e0b" />
+                <Text style={styles.modalSectionTitle}>Expiry Information</Text>
+              </View>
+              <View style={styles.expiryInfoContainer}>
+                <Text style={styles.modalExpiryDate}>{formatDate(coupon.expiry_date)}</Text>
+                {daysLeft !== null && (
+                  <View style={[
+                    styles.daysLeftBadge,
+                    daysLeft <= 3 ? styles.urgentBadge : 
+                    daysLeft <= 7 ? styles.soonBadge : styles.normalBadge
+                  ]}>
+                    <Text style={[
+                      styles.daysLeftText,
+                      daysLeft <= 3 ? styles.urgentText : styles.normalText
+                    ]}>
+                      {daysLeft > 0 ? `${daysLeft} days left` :
+                        daysLeft === 0 ? 'Expires today!' : 'Expired'}
+                    </Text>
+                  </View>
+                )}
+              </View>
             </View>
 
             {/* Terms and Conditions */}
             {coupon.terms_and_conditions && (
               <View style={styles.modalSection}>
-                <Text style={styles.modalSectionTitle}>Terms & Conditions</Text>
+                <View style={styles.sectionHeader}>
+                  <Ionicons name="document-text" size={20} color="#6b7280" />
+                  <Text style={styles.modalSectionTitle}>Terms & Conditions</Text>
+                </View>
                 <Text style={styles.modalTermsText}>{coupon.terms_and_conditions}</Text>
               </View>
             )}
 
-            {/* Coupon Code */}
-            {coupon.coupon_code && (
+            {/* Email Information */}
+            {(coupon.email_sender || coupon.email_subject) && (
               <View style={styles.modalSection}>
-                <Text style={styles.modalSectionTitle}>Coupon Code</Text>
-                <View style={styles.couponCodeContainer}>
-                  <Text style={styles.couponCodeText}>{coupon.coupon_code}</Text>
+                <View style={styles.sectionHeader}>
+                  <Ionicons name="mail" size={20} color="#10b981" />
+                  <Text style={styles.modalSectionTitle}>Email Details</Text>
                 </View>
+                {coupon.email_sender && (
+                  <View style={styles.emailRow}>
+                    <Text style={styles.emailLabel}>From:</Text>
+                    <Text style={styles.emailValue}>{coupon.email_sender}</Text>
+                  </View>
+                )}
+                {coupon.email_subject && (
+                  <View style={styles.emailRow}>
+                    <Text style={styles.emailLabel}>Subject:</Text>
+                    <Text style={styles.emailValue}>{coupon.email_subject}</Text>
+                  </View>
+                )}
+                {coupon.email_timestamp && (
+                  <View style={styles.emailRow}>
+                    <Text style={styles.emailLabel}>Received:</Text>
+                    <Text style={styles.emailValue}>{formatDate(coupon.email_timestamp)}</Text>
+                  </View>
+                )}
               </View>
             )}
           </ScrollView>

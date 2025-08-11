@@ -47,8 +47,7 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
                     "offer_description": "brief description of the promotion",
                     "terms_conditions": "any important restrictions or conditions, like minimum purchase, expiration date, etc.",
                     "call_to_action": "what action the email wants you to take",
-                    "additional_benefits": ["free shipping", "free returns", "gift with purchase", etc.],
-                    "link": "URL to the offer or product page. if no offer page exists, link to the company's homepage"
+                    "additional_benefits": ["free shipping", "free returns", "gift with purchase", etc.]
                 }}
             ]
         }}

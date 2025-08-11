@@ -44,7 +44,7 @@ export const HomeScreen = () => {
                 message_id: couponGroup.message_id,
                 email_sender: couponGroup.email_sender,
                 email_subject: couponGroup.email_subject,
-                email_timestamp: couponGroup.timestamp,
+                email_timestamp: couponGroup.email_timestamp,
 
                 isFavorite: false 
               });
@@ -76,10 +76,6 @@ export const HomeScreen = () => {
         coupon.terms_conditions?.toLowerCase().includes(query) ||
         coupon.coupon_code?.toLowerCase().includes(query) ||
         coupon.offer_type?.toLowerCase().includes(query) ||
-        coupon.product_category?.toLowerCase().includes(query) ||
-        (coupon.urgency_indicators && coupon.urgency_indicators.some(indicator => 
-          indicator.toLowerCase().includes(query)
-        )) ||
         (coupon.additional_benefits && coupon.additional_benefits.some(benefit => 
           benefit.toLowerCase().includes(query)
         ))

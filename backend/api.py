@@ -38,7 +38,6 @@ class CouponOffer(BaseModel):
     coupon_code: Optional[str] = None
     expiry_date: Optional[str] = None
     minimum_purchase: Optional[str] = None
-    product_category: Optional[str] = None
     offer_title: Optional[str] = None
     offer_description: Optional[str] = None
     terms_conditions: Optional[str] = None

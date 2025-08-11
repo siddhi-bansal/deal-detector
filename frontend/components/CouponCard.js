@@ -110,7 +110,6 @@ export const CouponCard = ({ coupon, onPress }) => {
     }
   };
 
-  const isUrgent = coupon.urgency_indicators && coupon.urgency_indicators.length > 0;
   const expiringSoon = isExpiringSoon(coupon.expiry_date);
   const daysLeft = getDaysUntilExpiry(coupon.expiry_date);
 
@@ -129,128 +128,89 @@ export const CouponCard = ({ coupon, onPress }) => {
       onPress={handleCardPress}
       activeOpacity={0.7}
     >
+      {/* Header with Company Logo and Name */}
       <View style={styles.cardHeader}>
         <View style={styles.companyRow}>
           <View style={styles.logoContainer}>
             {logoUrl && !logoLoading ? (
-              <>
-                <Image
-                  source={{ uri: logoUrl }}
-                  style={styles.companyLogo}
-                  onError={() => setLogoUrl(null)} // Fallback on error
-                />
-                <View style={styles.offerTypeBadge}>
-                  <Ionicons 
-                    name={getOfferTypeIcon(coupon.offer_type)} 
-                    size={12} 
-                    color="#fff" 
-                  />
-                </View>
-              </>
+              <Image
+                source={{ uri: logoUrl }}
+                style={styles.companyLogo}
+                onError={() => setLogoUrl(null)}
+              />
             ) : (
               <View style={styles.fallbackIconContainer}>
                 {logoLoading ? (
                   <View style={styles.logoSkeleton} />
                 ) : (
                   <Ionicons 
-                    name={getOfferTypeIcon(coupon.offer_type)} 
-                    size={22} 
-                    color={getDiscountGradient(coupon.discount_type)[0]} 
+                    name="business" 
+                    size={24} 
+                    color="#9ca3af" 
                   />
                 )}
               </View>
             )}
           </View>
-          <Text style={styles.companyName}>{coupon.company}</Text>
-        </View>
-        {coupon.discount_amount && (
-          <LinearGradient
-            colors={getDiscountGradient(coupon.discount_type)}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.discountBadge}
-          >
-            <Text style={styles.discountText}>{coupon.discount_amount}</Text>
-          </LinearGradient>
-        )}
-      </View>
-
-      <Text style={styles.offerTitle}>{coupon.offer_title}</Text>
-      <Text style={styles.offerDescription} numberOfLines={2}>
-        {coupon.offer_description}
-      </Text>
-
-      {/* Show coupon code prominently on main card */}
-      {coupon.coupon_code && (
-        <View style={styles.mainCodeContainer}>
-          <Ionicons name="ticket" size={16} color="#4CAF50" />
-          <Text style={styles.mainCodeLabel}>Code:</Text>
-          <Text style={styles.mainCodeText}>{coupon.coupon_code}</Text>
-          <TouchableOpacity style={styles.copyButton}>
-            <Ionicons name="copy" size={14} color="#4CAF50" />
-          </TouchableOpacity>
-        </View>
-      )}
-
-      <View style={styles.cardDetails}>
-        {coupon.expiry_date && (
-          <View style={styles.expiryContainer}>
-            <Ionicons name="time" size={14} color="#666" />
-            <Text style={[styles.expiryText, expiringSoon && styles.urgentText]}>
-              Expires: {formatDate(coupon.expiry_date)}
-            </Text>
-            {daysLeft !== null && (
-              <Text style={[
-                styles.daysLeft,
-                daysLeft <= 3 ? styles.urgentExpiry : 
-                daysLeft <= 0 ? styles.expiredExpiry : styles.normalExpiry
-              ]}>
-                {daysLeft > 0 ? ` (${daysLeft} days left)` : 
-                 daysLeft === 0 ? ' (Expires today!)' : ' (Expired)'}
+          <View style={styles.companyInfo}>
+            <Text style={styles.companyName}>{coupon.company}</Text>
+            {/* Discount Type Tag */}
+            <View style={styles.discountTypeTag}>
+              <Text style={styles.discountTypeText}>
+                {coupon.offer_type?.replace('_', ' ')?.toUpperCase() || 'OFFER'}
               </Text>
-            )}
+            </View>
           </View>
-        )}
-
-        {coupon.minimum_purchase && (
-          <Text style={styles.minPurchase}>
-            Min purchase: {coupon.minimum_purchase}
-          </Text>
-        )}
-      </View>
-
-      {isUrgent && (
-        <LinearGradient
-          colors={['#ef4444', '#dc2626']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.urgencyBadge}
-        >
-          <Ionicons name="flash" size={12} color="#fff" />
-          <Text style={styles.urgencyText}>
-            {coupon.urgency_indicators[0]}
-          </Text>
-        </LinearGradient>
-      )}
-
-      {/* Favorite Heart Button Row */}
-      <View style={styles.favoriteRow}>
+        </View>
+        
+        {/* Favorite Button */}
         <TouchableOpacity 
-          style={styles.favoriteButton}
+          style={styles.favoriteButtonHeader}
           onPress={handleFavoritePress}
           activeOpacity={0.7}
         >
           <Ionicons 
             name={isFavorite(coupon.id) ? 'heart' : 'heart-outline'} 
-            size={24} 
+            size={20} 
             color={isFavorite(coupon.id) ? '#ef4444' : '#9ca3af'} 
           />
         </TouchableOpacity>
       </View>
 
+      {/* Main Content */}
+      <View style={styles.cardContent}>
+        {/* Discount Title */}
+        <Text style={styles.discountTitle} numberOfLines={2}>
+          {coupon.offer_title || coupon.offer_description || 'Special Offer'}
+        </Text>
+        
+        {/* Discount Amount Badge */}
+        {coupon.discount_amount && (
+          <View style={styles.discountAmountContainer}>
+            <LinearGradient
+              colors={getDiscountGradient(coupon.discount_type)}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.discountBadge}
+            >
+              <Text style={styles.discountText}>{coupon.discount_amount}</Text>
+            </LinearGradient>
+          </View>
+        )}
+      </View>
+
+      {/* Footer with Expiry */}
       <View style={styles.cardFooter}>
-        <Text style={styles.tapForMore}>Tap for details</Text>
-        <Ionicons name="chevron-forward" size={16} color="#666" />
+        <View style={styles.expiryInfo}>
+          <Ionicons name="time-outline" size={14} color="#666" />
+          <Text style={[styles.expiryText, expiringSoon && styles.urgentText]}>
+            {coupon.expiry_date ? formatDate(coupon.expiry_date) : 'No expiry'}
+          </Text>
+          {daysLeft !== null && daysLeft <= 7 && (
+            <View style={[styles.urgencyDot, expiringSoon && styles.urgentDot]} />
+          )}
+        </View>
+        <Ionicons name="chevron-forward" size={16} color="#9ca3af" />
       </View>
     </TouchableOpacity>
   );
