@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,34 +7,11 @@ import { styles } from '../styles/styles';
 
 export const CouponCard = ({ coupon, onPress }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
-  const [logoUrl, setLogoUrl] = useState(null);
-  const [logoLoading, setLogoLoading] = useState(true);
+  const [logoError, setLogoError] = useState(false);
 
-  // Fetch company logo when component mounts
-  useEffect(() => {
-    const fetchLogo = async () => {
-      if (!coupon.email_sender) {
-        setLogoLoading(false);
-        return;
-      }
-
-      try {
-        // Replace with your actual IP address
-        const response = await fetch(`http://192.168.86.32:8000/api/logo/${encodeURIComponent(coupon.sender)}`);
-        const data = await response.json();
-        
-        if (data.success && data.logo_url) {
-          setLogoUrl(data.logo_url);
-        }
-      } catch (error) {
-        console.log('Error fetching logo:', error);
-      } finally {
-        setLogoLoading(false);
-      }
-    };
-
-    fetchLogo();
-  }, [coupon.email_sender]);
+  // Use logo data directly from coupon response - no need to fetch
+  const logoUrl = coupon.company_logo_url;
+  const logoLoading = false; // No loading needed since data comes with coupon
   const getDiscountGradient = (discountType) => {
     switch (discountType) {
       case 'percentage':
@@ -132,23 +109,19 @@ export const CouponCard = ({ coupon, onPress }) => {
       <View style={styles.cardHeader}>
         <View style={styles.companyRow}>
           <View style={styles.logoContainer}>
-            {logoUrl && !logoLoading ? (
+            {logoUrl && !logoError ? (
               <Image
                 source={{ uri: logoUrl }}
                 style={styles.companyLogo}
-                onError={() => setLogoUrl(null)}
+                onError={() => setLogoError(true)}
               />
             ) : (
               <View style={styles.fallbackIconContainer}>
-                {logoLoading ? (
-                  <View style={styles.logoSkeleton} />
-                ) : (
-                  <Ionicons 
-                    name="business" 
-                    size={24} 
-                    color="#9ca3af" 
-                  />
-                )}
+                <Ionicons 
+                  name="business" 
+                  size={24} 
+                  color="#9ca3af" 
+                />
               </View>
             )}
           </View>

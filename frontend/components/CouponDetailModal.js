@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, ScrollView, Linking, Alert, ActivityIndicator, Image } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,41 +11,12 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
   const [emailModalVisible, setEmailModalVisible] = useState(false);
   const [emailHtml, setEmailHtml] = useState('');
   const [loadingEmail, setLoadingEmail] = useState(false);
-  const [logoUrl, setLogoUrl] = useState(null);
-  const [logoLoading, setLogoLoading] = useState(true);
-  const [companyDomain, setCompanyDomain] = useState(null);
+  const [logoError, setLogoError] = useState(false);
 
-  // Fetch company logo when modal opens
-  useEffect(() => {
-    const fetchLogo = async () => {
-      if (!coupon?.email_sender || !visible) {
-        setLogoLoading(false);
-        return;
-      }
-
-      try {
-        setLogoLoading(true);
-        setLogoUrl(null); // Reset logo when modal opens
-        const response = await fetch(`http://192.168.86.32:8000/api/logo/${encodeURIComponent(coupon.email_sender)}`);
-        const data = await response.json();
-        
-        if (data.success && data.logo_url) {
-          setLogoUrl(data.logo_url);
-        }
-        
-        // Store company domain for website link
-        if (data.domain) {
-          setCompanyDomain(data.domain);
-        }
-      } catch (error) {
-        console.log('Error fetching logo:', error);
-      } finally {
-        setLogoLoading(false);
-      }
-    };
-
-    fetchLogo();
-  }, [coupon?.email_sender, visible]);
+  // Use logo and domain data directly from coupon response - no need to fetch
+  const logoUrl = coupon?.company_logo_url;
+  const logoLoading = false; // No loading needed since data comes with coupon
+  const companyDomain = coupon?.company_domain;
 
   if (!coupon) return null;
 
@@ -149,19 +120,15 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
           <View style={styles.modalHeader}>
             <View style={styles.modalTitleContainer}>
               <View style={styles.modalLogoContainer}>
-                {logoUrl && !logoLoading ? (
+                {logoUrl && !logoError ? (
                   <Image
                     source={{ uri: logoUrl }}
                     style={styles.modalCompanyLogo}
-                    onError={() => setLogoUrl(null)}
+                    onError={() => setLogoError(true)}
                   />
                 ) : (
                   <View style={styles.modalLogoPlaceholder}>
-                    {logoLoading ? (
-                      <View style={styles.modalLogoSkeleton} />
-                    ) : (
-                      <Ionicons name="business" size={32} color="#9ca3af" />
-                    )}
+                    <Ionicons name="business" size={32} color="#9ca3af" />
                   </View>
                 )}
               </View>

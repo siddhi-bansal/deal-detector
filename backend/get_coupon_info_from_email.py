@@ -35,16 +35,16 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         For emails WITH offers:
         {{
             "has_coupon": true,
+            "company": "company or brand name, should be derived from sender",
             "offers": [
                 {{
-                    "company": "company or brand name",
                     "offer_type": "coupon/sale/promotion/free_shipping/BOGO/cashback/loyalty_points",
                     "discount_amount": "percentage or dollar amount (e.g., '20%', '$10', 'Buy 1 Get 1')",
                     "discount_type": "percentage/fixed_amount/BOGO/free_shipping/other",
                     "coupon_code": "promotional code if present",
                     "expiry_date": "expiration date if mentioned, can also be inferred using context",
                     "offer_title": "main headline or title of the offer",
-                    "offer_description": "brief description of the promotion",
+                    "offer_description": "brief description of the promotion, including if it's for a specific product or category",
                     "terms_conditions": "any important restrictions or conditions, like minimum purchase, expiration date, etc.",
                     "call_to_action": "what action the email wants you to take",
                     "additional_benefits": ["free shipping", "free returns", "gift with purchase", etc.]

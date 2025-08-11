@@ -45,7 +45,9 @@ export const HomeScreen = () => {
                 email_sender: couponGroup.sender,
                 email_subject: couponGroup.subject,
                 email_timestamp: couponGroup.timestamp,
-
+                company: couponGroup.company,
+                company_domain: couponGroup.company_domain,
+                company_logo_url: couponGroup.company_logo_url,
                 isFavorite: false 
               });
             });

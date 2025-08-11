@@ -56,13 +56,6 @@ class EmailHtmlResponse(BaseModel):
     html_content: str
     error: Optional[str] = None
 
-class CompanyLogoResponse(BaseModel):
-    success: bool
-    company_name: str
-    logo_url: Optional[str] = None
-    domain: Optional[str] = None
-    error: Optional[str] = None
-
 @app.get("/")
 async def root():
     """Health check endpoint"""
@@ -113,12 +106,17 @@ async def get_coupons():
                 continue
                 
             if coupons_json.get("has_coupon", False):
+                # Get company logo and domain info
+                logo_info = get_company_logo_info(email_sender)
+                
                 # Insert timestamp, subject, sender, and message_id in dict
                 coupons_json = {"timestamp": email_timestamp, **coupons_json}
                 coupons_json = {"subject": email_subject, **coupons_json}
                 coupons_json = {"sender": email_sender, **coupons_json}
                 coupons_json = {"message_id": id, **coupons_json}
-                
+                coupons_json = {"company_domain": logo_info.get("domain"), **coupons_json}
+                coupons_json = {"company_logo_url": logo_info.get("logo_url"), **coupons_json}
+
                 # has_coupon will always be True, no need to include in backend JSON
                 coupons_json.pop("has_coupon", None) 
                 
@@ -180,30 +178,6 @@ async def get_email_html(message_id: str):
         raise HTTPException(
             status_code=500,
             detail=f"Failed to fetch email HTML: {str(e)}"
-        )
-
-@app.get("/api/logo/{sender_email}", response_model=CompanyLogoResponse)
-async def get_company_logo(sender_email: str):
-    """
-    Get company logo from sender email domain.
-    Extracts domain from email and tries multiple logo sources.
-    """
-    try:
-        logger.info(f"Getting logo for sender: {sender_email}")
-        
-        # Use the dedicated function from get_company_logo module
-        logo_info = get_company_logo_info(sender_email)
-        
-        if not logo_info["success"]:
-            logger.warning(f"No logo found for: {sender_email}")
-        
-        return CompanyLogoResponse(**logo_info)
-        
-    except Exception as e:
-        logger.error(f"Error getting logo for {sender_email}: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to get company logo: {str(e)}"
         )
 
 @app.get("/api/health")
