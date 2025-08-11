@@ -56,11 +56,6 @@ class EmailHtmlResponse(BaseModel):
     html_content: str
     error: Optional[str] = None
 
-@app.get("/")
-async def root():
-    """Health check endpoint"""
-    return {"message": "Coupon Filtering API is running!"}
-
 @app.get("/api/coupons", response_model=CouponResponse)
 async def get_coupons():
     """
