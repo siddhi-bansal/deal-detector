@@ -13,6 +13,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [logoUrl, setLogoUrl] = useState(null);
   const [logoLoading, setLogoLoading] = useState(true);
+  const [companyDomain, setCompanyDomain] = useState(null);
 
   // Fetch company logo when modal opens
   useEffect(() => {
@@ -30,6 +31,11 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
         
         if (data.success && data.logo_url) {
           setLogoUrl(data.logo_url);
+        }
+        
+        // Store company domain for website link
+        if (data.domain) {
+          setCompanyDomain(data.domain);
         }
       } catch (error) {
         console.log('Error fetching logo:', error);
@@ -289,6 +295,47 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
 
           {/* Action Buttons */}
           <View style={styles.modalActions}>
+            {/* Go to Email Button */}
+            <LinearGradient
+              colors={['#10b981', '#059669']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.actionButton]}
+            >
+              <TouchableOpacity
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
+                onPress={handleGoToEmail}
+                disabled={loadingEmail}
+              >
+                {loadingEmail ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Ionicons name="mail-outline" size={22} color="white" />
+                )}
+                <Text style={[styles.primaryButtonText, { color: 'white' }]}>
+                  {loadingEmail ? 'Loading...' : 'Go to Email'}
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
+
+            {/* Company Website Button */}
+            {companyDomain && (
+              <LinearGradient
+                colors={['#8b5cf6', '#a855f7']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.actionButton]}
+              >
+                <TouchableOpacity
+                  style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
+                  onPress={() => handleLinkPress(`https://${companyDomain}`, 'company website')}
+                >
+                  <Ionicons name="globe-outline" size={20} color="white" />
+                  <Text style={styles.primaryButtonText}>Visit {companyDomain}</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            )}
+
             {coupon.website_url && (
               <LinearGradient
                 colors={['#6366f1', '#8b5cf6']}
@@ -316,30 +363,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
               </TouchableOpacity>
             )}
 
-            {/* Go to Email Button */}
-            <LinearGradient
-              colors={['#10b981', '#059669']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.actionButton]}
-            >
-              <TouchableOpacity
-                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
-                onPress={handleGoToEmail}
-                disabled={loadingEmail}
-              >
-                {loadingEmail ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  <Ionicons name="mail-outline" size={22} color="white" />
-                )}
-                <Text style={[styles.primaryButtonText, { color: 'white' }]}>
-                  {loadingEmail ? 'Loading...' : 'Go to Email'}
-                </Text>
-              </TouchableOpacity>
-            </LinearGradient>
-
-            {!coupon.website_url && !coupon.offer_url && (
+            {!companyDomain && !coupon.website_url && !coupon.offer_url && (
               <Text style={styles.noLinksText}>
                 No direct links available for this coupon
               </Text>
