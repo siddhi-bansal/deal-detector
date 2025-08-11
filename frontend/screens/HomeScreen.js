@@ -42,9 +42,9 @@ export const HomeScreen = () => {
               allOffers.push({ 
                 ...offer, 
                 message_id: couponGroup.message_id,
-                email_sender: couponGroup.email_sender,
-                email_subject: couponGroup.email_subject,
-                email_timestamp: couponGroup.email_timestamp,
+                email_sender: couponGroup.sender,
+                email_subject: couponGroup.subject,
+                email_timestamp: couponGroup.timestamp,
 
                 isFavorite: false 
               });

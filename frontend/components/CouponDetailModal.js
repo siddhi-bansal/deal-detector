@@ -295,29 +295,6 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
 
           {/* Action Buttons */}
           <View style={styles.modalActions}>
-            {/* Go to Email Button */}
-            <LinearGradient
-              colors={['#10b981', '#059669']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.actionButton]}
-            >
-              <TouchableOpacity
-                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
-                onPress={handleGoToEmail}
-                disabled={loadingEmail}
-              >
-                {loadingEmail ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  <Ionicons name="mail-outline" size={22} color="white" />
-                )}
-                <Text style={[styles.primaryButtonText, { color: 'white' }]}>
-                  {loadingEmail ? 'Loading...' : 'Go to Email'}
-                </Text>
-              </TouchableOpacity>
-            </LinearGradient>
-
             {/* Company Website Button */}
             {companyDomain && (
               <LinearGradient
@@ -362,6 +339,29 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                 <Text style={styles.secondaryButtonText}>View Offer</Text>
               </TouchableOpacity>
             )}
+
+            {/* Go to Email Button */}
+            <LinearGradient
+              colors={['#10b981', '#059669']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.actionButton]}
+            >
+              <TouchableOpacity
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, flex: 1 }}
+                onPress={handleGoToEmail}
+                disabled={loadingEmail}
+              >
+                {loadingEmail ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Ionicons name="mail-outline" size={22} color="white" />
+                )}
+                <Text style={[styles.primaryButtonText, { color: 'white' }]}>
+                  {loadingEmail ? 'Loading...' : 'Go to Email'}
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
 
             {!companyDomain && !coupon.website_url && !coupon.offer_url && (
               <Text style={styles.noLinksText}>

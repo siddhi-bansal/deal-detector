@@ -20,7 +20,7 @@ export const CouponCard = ({ coupon, onPress }) => {
 
       try {
         // Replace with your actual IP address
-        const response = await fetch(`http://192.168.86.32:8000/api/logo/${encodeURIComponent(coupon.email_sender)}`);
+        const response = await fetch(`http://192.168.86.32:8000/api/logo/${encodeURIComponent(coupon.sender)}`);
         const data = await response.json();
         
         if (data.success && data.logo_url) {
