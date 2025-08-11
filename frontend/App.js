@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native';
@@ -21,30 +21,44 @@ import { styles } from './styles/styles';
 const Tab = createBottomTabNavigator();
 
 const CustomHeader = ({ routeName }) => {
-  const getTitle = (name) => {
-    switch (name) {
-      case 'Home':
-        return 'My Coupons';
+  const getHeaderContent = (routeName) => {
+    if (routeName === 'Home') {
+      return (
+        <View style={styles.logoContainer}>
+          <View style={styles.logoIcon}>
+            <Ionicons name="receipt-outline" size={24} color="#ffffff" />
+          </View>
+          <Text style={styles.logoText}>Deal Detector</Text>
+        </View>
+      );
+    }
+    
+    // For other screens, return null to hide the title completely
+    switch (routeName) {
       case 'Add':
-        return 'Add Coupon';
       case 'Favorites':
-        return 'Favorites';
       case 'Profile':
-        return 'Profile';
+        return null;
       default:
         return 'Deal Detector';
     }
   };
 
+  const headerContent = getHeaderContent(routeName);
+
+  // If no header content, return null to hide the header completely
+  if (!headerContent) {
+    return null;
+  }
+
   return (
-    <LinearGradient
-      colors={['#6366f1', '#8b5cf6', '#ec4899']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.header}
-    >
-      <Text style={styles.headerTitle}>{getTitle(routeName)}</Text>
-    </LinearGradient>
+    <View style={styles.header}>
+      {typeof headerContent === 'string' ? (
+        <Text style={styles.headerTitle}>{headerContent}</Text>
+      ) : (
+        headerContent
+      )}
+    </View>
   );
 };
 
@@ -52,7 +66,7 @@ function TabNavigator() {
   const [currentRoute, setCurrentRoute] = React.useState('Home');
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#f0f3ff' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#ecfdf5' }}>
       <CustomHeader routeName={currentRoute} />
       
       <Tab.Navigator
@@ -73,7 +87,7 @@ function TabNavigator() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: '#6366f1',
+          tabBarActiveTintColor: '#10b981',
           tabBarInactiveTintColor: '#9ca3af',
           tabBarStyle: {
             backgroundColor: '#ffffff',

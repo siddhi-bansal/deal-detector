@@ -32,7 +32,7 @@ export const FavoritesScreen = ({ navigation }) => {
 
   return (
     <LinearGradient
-      colors={['#f0f3ff', '#e0e7ff']}
+      colors={['#ecfdf5', '#d1fae5']}
       style={styles.container}
     >
       <View style={{ flex: 1 }}>
@@ -54,7 +54,7 @@ export const FavoritesScreen = ({ navigation }) => {
             <View style={styles.favoriteHintContainer}>
               <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <LinearGradient
-                  colors={['#6366f1', '#8b5cf6']}
+                  colors={['#10b981', '#059669']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.favoriteHintBadge}

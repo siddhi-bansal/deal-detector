@@ -5,13 +5,14 @@ import {
   FlatList,
   ActivityIndicator,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import sampleData from '../assets/sample_api_output.json';
 import { CouponCard } from '../components/CouponCard';
 import { CouponDetailModal } from '../components/CouponDetailModal';
-import { SearchAndSort } from '../components/SearchAndSort';
+import { SearchModal } from '../components/SearchModal';
 import { styles } from '../styles/styles';
 
 export const HomeScreen = () => {
@@ -20,6 +21,7 @@ export const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('company');
 
@@ -128,10 +130,10 @@ export const HomeScreen = () => {
   if (loading) {
     return (
       <LinearGradient
-        colors={['#f0f3ff', '#e0e7ff']}
+        colors={['#ecfdf5', '#d1fae5']}
         style={styles.loadingContainer}
       >
-        <ActivityIndicator size="large" color="#6366f1" />
+        <ActivityIndicator size="large" color="#10b981" />
         <Text style={styles.loadingText}>Loading coupons...</Text>
       </LinearGradient>
     );
@@ -139,17 +141,17 @@ export const HomeScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#f0f3ff', '#e0e7ff']}
+      colors={['#ecfdf5', '#d1fae5']}
       style={styles.container}
     >
       <View style={{ flex: 1 }}>
-        <SearchAndSort
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          resultsCount={filteredCoupons.length}
-        />
+        {/* Floating Search Button */}
+        <TouchableOpacity 
+          style={styles.floatingSearchButton}
+          onPress={() => setSearchModalVisible(true)}
+        >
+          <Ionicons name="search" size={20} color="#10b981" />
+        </TouchableOpacity>
 
         {filteredCoupons.length === 0 ? (
           <View style={styles.emptyContainer}>
@@ -175,6 +177,16 @@ export const HomeScreen = () => {
           visible={modalVisible}
           coupon={selectedCoupon}
           onClose={() => setModalVisible(false)}
+        />
+
+        <SearchModal
+          visible={searchModalVisible}
+          onClose={() => setSearchModalVisible(false)}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          resultsCount={filteredCoupons.length}
         />
       </View>
     </LinearGradient>

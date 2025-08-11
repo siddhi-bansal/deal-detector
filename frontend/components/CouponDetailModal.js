@@ -265,7 +265,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
             {/* Company Website Button */}
             {companyDomain && (
               <LinearGradient
-                colors={['#8b5cf6', '#a855f7']}
+                colors={['#059669', '#047857']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={[styles.actionButton]}
@@ -282,7 +282,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
 
             {coupon.website_url && (
               <LinearGradient
-                colors={['#6366f1', '#8b5cf6']}
+                colors={['#10b981', '#059669']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={[styles.actionButton]}
@@ -302,7 +302,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                 style={[styles.actionButton, styles.secondaryButton]}
                 onPress={() => handleLinkPress(coupon.offer_url, 'offer')}
               >
-                <Ionicons name="pricetag-outline" size={20} color="#6366f1" />
+                <Ionicons name="pricetag-outline" size={20} color="#10b981" />
                 <Text style={styles.secondaryButtonText}>View Offer</Text>
               </TouchableOpacity>
             )}
@@ -367,7 +367,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
             startInLoadingState={true}
             renderLoading={() => (
               <View style={styles.emailLoadingContainer}>
-                <ActivityIndicator size="large" color="#6366f1" />
+                <ActivityIndicator size="large" color="#10b981" />
                 <Text style={styles.emailLoadingText}>Loading email...</Text>
               </View>
             )}

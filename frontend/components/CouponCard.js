@@ -21,7 +21,7 @@ export const CouponCard = ({ coupon, onPress }) => {
       case 'free_shipping':
         return ['#f59e0b', '#d97706']; // Orange gradient
       case 'other':
-        return ['#a855f7', '#7c3aed']; // Purple gradient
+        return ['#10b981', '#059669']; // Emerald gradient
       default:
         return ['#6b7280', '#4b5563']; // Gray gradient
     }

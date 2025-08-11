@@ -90,7 +90,7 @@ export const AddCouponScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#f0f3ff', '#e0e7ff']}
+      colors={['#ecfdf5', '#d1fae5']}
       style={styles.container}
     >
       <KeyboardAvoidingView
@@ -99,7 +99,7 @@ export const AddCouponScreen = () => {
       >
         <ScrollView style={styles.addCouponContainer} showsVerticalScrollIndicator={true}>
           <View style={styles.addCouponHeader}>
-            <Ionicons name="add-circle" size={32} color="#6366f1" />
+            <Ionicons name="add-circle" size={32} color="#10b981" />
             <Text style={styles.addCouponTitle}>Add New Coupon</Text>
           </View>
 
@@ -244,12 +244,12 @@ export const AddCouponScreen = () => {
               style={[styles.actionButton, styles.secondaryButton]}
               onPress={resetForm}
             >
-              <Ionicons name="refresh-outline" size={20} color="#6366f1" />
+              <Ionicons name="refresh-outline" size={20} color="#10b981" />
               <Text style={styles.secondaryButtonText}>Reset</Text>
             </TouchableOpacity>
 
             <LinearGradient
-              colors={['#6366f1', '#8b5cf6']}
+              colors={['#10b981', '#059669']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={[styles.actionButton, { flex: 1, marginLeft: 15 }]}

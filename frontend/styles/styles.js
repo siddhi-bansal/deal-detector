@@ -3,32 +3,19 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    backgroundColor: '#f0f3ff',
+    backgroundColor: '#ecfdf5',
   },
   header: {
-    backgroundColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    backgroundColor: '#6366f1',
-    paddingTop: 60,
-    paddingBottom: 25,
+    paddingTop: 30,
+    paddingBottom: 10,
     paddingHorizontal: 20,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 8,
   },
   headerTitle: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#10b981',
     textAlign: 'center',
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
   
   // Search and Sort Styles
@@ -40,7 +27,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 20,
     paddingHorizontal: 18,
-    shadowColor: '#6366f1',
+    shadowColor: '#10b981',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -88,7 +75,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 25,
     marginRight: 12,
-    shadowColor: '#6366f1',
+    shadowColor: '#10b981',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -100,8 +87,8 @@ export const styles = StyleSheet.create({
     borderColor: '#e5e7eb',
   },
   sortButtonActive: {
-    backgroundColor: '#6366f1',
-    borderColor: '#6366f1',
+    backgroundColor: '#10b981',
+    borderColor: '#10b981',
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
@@ -135,7 +122,7 @@ export const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     marginBottom: 16,
-    shadowColor: '#6366f1',
+    shadowColor: '#10b981',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -201,7 +188,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   discountTypeTag: {
-    backgroundColor: '#e0e7ff',
+    backgroundColor: '#d1fae5',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
@@ -210,7 +197,7 @@ export const styles = StyleSheet.create({
   discountTypeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#6366f1',
+    color: '#059669',
     letterSpacing: 0.5,
   },
   logoContainer: {
@@ -497,7 +484,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   offerTypeTag: {
-    backgroundColor: '#e0e7ff',
+    backgroundColor: '#d1fae5',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 10,
@@ -505,7 +492,7 @@ export const styles = StyleSheet.create({
   offerTypeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#6366f1',
+    color: '#059669',
     letterSpacing: 0.5,
   },
   couponCodeContainer: {
@@ -642,12 +629,12 @@ export const styles = StyleSheet.create({
     elevation: 4,
   },
   primaryButton: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#10b981',
   },
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: '#6366f1',
+    borderColor: '#10b981',
   },
   primaryButtonText: {
     color: '#ffffff',
@@ -656,7 +643,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   secondaryButtonText: {
-    color: '#6366f1',
+    color: '#10b981',
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.3,
@@ -675,7 +662,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f3ff',
+    backgroundColor: '#ecfdf5',
   },
   loadingText: {
     marginTop: 20,
@@ -688,7 +675,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 25,
-    backgroundColor: '#f0f3ff',
+    backgroundColor: '#ecfdf5',
   },
   errorText: {
     fontSize: 17,
@@ -699,11 +686,11 @@ export const styles = StyleSheet.create({
     lineHeight: 24,
   },
   retryButton: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#10b981',
     paddingHorizontal: 35,
     paddingVertical: 16,
     borderRadius: 16,
-    shadowColor: '#6366f1',
+    shadowColor: '#10b981',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -804,8 +791,8 @@ export const styles = StyleSheet.create({
     borderColor: '#e5e7eb',
   },
   discountTypeButtonActive: {
-    backgroundColor: '#6366f1',
-    borderColor: '#6366f1',
+    backgroundColor: '#10b981',
+    borderColor: '#10b981',
   },
   discountTypeText: {
     fontSize: 12,
@@ -1058,5 +1045,168 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6b7280',
     fontWeight: '500',
+  },
+
+  // Search Modal Styles
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  searchModalContainer: {
+    backgroundColor: '#ffffff',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    maxHeight: '85%',
+    paddingHorizontal: 20,
+    paddingTop: 30,
+    paddingBottom: 40,
+  },
+  searchModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 25,
+    paddingTop: 10,
+  },
+  searchModalTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#111827',
+    paddingLeft: 15,
+  },
+  closeButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#f3f4f6',
+  },
+  searchModalInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f9fafb',
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    marginBottom: 25,
+    borderWidth: 2,
+    borderColor: '#e5e7eb',
+  },
+  searchModalIcon: {
+    marginRight: 10,
+  },
+  searchModalInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#111827',
+  },
+  searchModalClearButton: {
+    padding: 4,
+  },
+  searchModalSortSection: {
+    marginBottom: 25,
+    backgroundColor: '#f9fafb',
+    padding: 15,
+    borderRadius: 12,
+  },
+  searchModalSortTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 15,
+  },
+  searchModalSortGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  searchModalSortOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#f3f4f6',
+    borderWidth: 2,
+    borderColor: '#e5e7eb',
+    width: '48%',
+    marginBottom: 10,
+  },
+  searchModalSortOptionActive: {
+    backgroundColor: '#10b981',
+    borderColor: '#10b981',
+  },
+  searchModalSortText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  searchModalSortTextActive: {
+    color: '#ffffff',
+  },
+  searchModalResults: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginBottom: 25,
+    paddingVertical: 12,
+    backgroundColor: '#f9fafb',
+    borderRadius: 10,
+  },
+  searchModalResultsText: {
+    fontSize: 14,
+    color: '#6b7280',
+    fontWeight: '500',
+  },
+  searchModalApplyButton: {
+    backgroundColor: '#10b981',
+    paddingVertical: 16,
+    borderRadius: 15,
+    alignItems: 'center',
+  },
+  searchModalApplyText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+
+  // Logo Styles
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  logoIcon: {
+    backgroundColor: '#10b981',
+    borderRadius: 12,
+    padding: 8,
+  },
+  logoText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#10b981',
+    letterSpacing: 0.5,
+  },
+
+  // Floating Search Button
+  floatingSearchButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: '#ffffff',
+    borderRadius: 25,
+    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 8,
+    zIndex: 1000,
+    borderWidth: 2,
+    borderColor: '#10b981',
   },
 });

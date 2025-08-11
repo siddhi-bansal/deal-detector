@@ -23,7 +23,7 @@ export const ProfileScreen = () => {
     <TouchableOpacity style={styles.profileOption} onPress={onPress}>
       <View style={styles.profileOptionLeft}>
         <View style={styles.profileOptionIcon}>
-          <Ionicons name={icon} size={24} color="#6366f1" />
+          <Ionicons name={icon} size={24} color="#10b981" />
         </View>
         <View style={styles.profileOptionText}>
           <Text style={styles.profileOptionTitle}>{title}</Text>
@@ -51,14 +51,14 @@ export const ProfileScreen = () => {
 
   return (
     <LinearGradient
-      colors={['#f0f3ff', '#e0e7ff']}
+      colors={['#ecfdf5', '#d1fae5']}
       style={styles.container}
     >
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={true}>
         {/* Profile Header */}
         <View style={styles.profileHeader}>
           <LinearGradient
-            colors={['#6366f1', '#8b5cf6']}
+            colors={['#10b981', '#059669']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.profileAvatar}
@@ -75,7 +75,7 @@ export const ProfileScreen = () => {
             icon="pricetag" 
             value={totalCoupons.toString()} 
             label="Coupons" 
-            color="#6366f1" 
+            color="#10b981" 
           />
           <StatCard 
             icon="heart" 
