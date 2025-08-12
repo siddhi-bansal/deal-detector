@@ -57,47 +57,46 @@ export const TypeFilter = ({ selectedType, onTypeChange, coupons }) => {
   };
 
   return (
-    <View style={styles.typeFilterContainer}>
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.typeFilterScrollContent}
-      >
-        {types.map((type) => (
-          <TouchableOpacity
-            key={type}
-            style={[
-              styles.typeFilterButton,
-              selectedType === type && styles.typeFilterButtonActive
-            ]}
-            onPress={() => onTypeChange(type)}
-          >
-            <Ionicons 
-              name={getTypeIcon(type)} 
-              size={16} 
-              color={selectedType === type ? '#ffffff' : '#10b981'} 
-              style={styles.typeFilterIcon}
-            />
+    <ScrollView 
+      horizontal 
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.typeFilterScrollContent}
+    >
+      {types.map((type) => (
+        <TouchableOpacity
+          key={type}
+          style={[
+            styles.typeFilterButton,
+            selectedType === type && styles.typeFilterButtonActive
+          ]}
+          onPress={() => onTypeChange(type)}
+        >
+          <Ionicons 
+            name={getTypeIcon(type)} 
+            size={16} 
+            color={selectedType === type ? '#ffffff' : '#10b981'} 
+            style={{ marginRight: 6 }}
+          />
+          <Text style={[
+            styles.typeFilterText,
+            selectedType === type && styles.typeFilterTextActive,
+            { marginRight: 6 }
+          ]}>
+            {getTypeLabel(type)}
+          </Text>
+          <View style={[
+            styles.typeFilterBadge,
+            selectedType === type && styles.typeFilterBadgeActive
+          ]}>
             <Text style={[
-              styles.typeFilterText,
-              selectedType === type && styles.typeFilterTextActive
+              styles.typeFilterBadgeText,
+              selectedType === type && styles.typeFilterBadgeTextActive
             ]}>
-              {getTypeLabel(type)}
+              {getTypeCount(type)}
             </Text>
-            <View style={[
-              styles.typeFilterBadge,
-              selectedType === type && styles.typeFilterBadgeActive
-            ]}>
-              <Text style={[
-                styles.typeFilterBadgeText,
-                selectedType === type && styles.typeFilterBadgeTextActive
-              ]}>
-                {getTypeCount(type)}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+          </View>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
   );
 };

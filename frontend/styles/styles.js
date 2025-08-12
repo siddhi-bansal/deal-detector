@@ -262,6 +262,9 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: 0.3,
   },
+  cardFooterContainer: {
+    paddingTop: 8,
+  },
   cardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1193,11 +1196,11 @@ export const styles = StyleSheet.create({
   // Floating Search Button
   floatingSearchButton: {
     position: 'absolute',
-    top: 20,
+    top: 70,
     right: 20,
     backgroundColor: '#ffffff',
-    borderRadius: 25,
-    padding: 15,
+    borderRadius: 20,
+    padding: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -1220,7 +1223,8 @@ export const styles = StyleSheet.create({
     borderBottomColor: '#d1fae5',
   },
   typeFilterScrollContent: {
-    paddingHorizontal: 15,
+    paddingLeft: 0,
+    paddingRight: 5,
   },
   typeFilterButton: {
     flexDirection: 'row',
@@ -1231,7 +1235,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
     borderWidth: 1.5,
     borderColor: '#e5e7eb',
-    marginRight: 10,
+    marginRight: 8,
   },
   typeFilterButtonActive: {
     backgroundColor: '#10b981',
@@ -1266,5 +1270,28 @@ export const styles = StyleSheet.create({
   },
   typeFilterBadgeTextActive: {
     color: '#ffffff',
+  },
+
+  // Filter and Search Row Styles
+  filterSearchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ecfdf5',
+    paddingVertical: 10,
+    paddingHorizontal: 11,
+    borderBottomWidth: 1,
+    borderBottomColor: '#d1fae5',
+  },
+  typeFilterWrapper: {
+    flex: 1,
+    marginRight: 8,
+  },
+  inlineSearchButton: {
+    backgroundColor: '#f9fafb',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1.5,
+    borderColor: '#e5e7eb',
   },
 });

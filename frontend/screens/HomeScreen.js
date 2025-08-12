@@ -152,20 +152,22 @@ export const HomeScreen = () => {
       style={styles.container}
     >
       <View style={{ flex: 1 }}>
-        {/* Type Filter */}
-        <TypeFilter 
-          selectedType={selectedType}
-          onTypeChange={setSelectedType}
-          coupons={coupons}
-        />
-
-        {/* Floating Search Button */}
-        <TouchableOpacity 
-          style={styles.floatingSearchButton}
-          onPress={() => setSearchModalVisible(true)}
-        >
-          <Ionicons name="search" size={20} color="#10b981" />
-        </TouchableOpacity>
+        {/* Filter and Search Row */}
+        <View style={styles.filterSearchRow}>
+          <View style={styles.typeFilterWrapper}>
+            <TypeFilter 
+              selectedType={selectedType}
+              onTypeChange={setSelectedType}
+              coupons={coupons}
+            />
+          </View>
+          <TouchableOpacity 
+            style={styles.inlineSearchButton}
+            onPress={() => setSearchModalVisible(true)}
+          >
+            <Ionicons name="search" size={20} color="#10b981" />
+          </TouchableOpacity>
+        </View>
 
         {filteredCoupons.length === 0 ? (
           <View style={styles.emptyContainer}>

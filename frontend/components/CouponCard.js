@@ -135,19 +135,6 @@ export const CouponCard = ({ coupon, onPress }) => {
             </View>
           </View>
         </View>
-        
-        {/* Favorite Button */}
-        <TouchableOpacity 
-          style={styles.favoriteButtonHeader}
-          onPress={handleFavoritePress}
-          activeOpacity={0.7}
-        >
-          <Ionicons 
-            name={isFavorite(coupon.id) ? 'heart' : 'heart-outline'} 
-            size={20} 
-            color={isFavorite(coupon.id) ? '#ef4444' : '#9ca3af'} 
-          />
-        </TouchableOpacity>
       </View>
 
       {/* Main Content */}
@@ -172,18 +159,36 @@ export const CouponCard = ({ coupon, onPress }) => {
         )}
       </View>
 
-      {/* Footer with Expiry */}
-      <View style={styles.cardFooter}>
-        <View style={styles.expiryInfo}>
-          <Ionicons name="time-outline" size={14} color="#666" />
-          <Text style={[styles.expiryText, expiringSoon && styles.urgentText]}>
-            {coupon.expiry_date ? formatDate(coupon.expiry_date) : 'No expiry'}
-          </Text>
-          {daysLeft !== null && daysLeft <= 7 && (
-            <View style={[styles.urgencyDot, expiringSoon && styles.urgentDot]} />
-          )}
+      {/* Footer with Favorite Button and Expiry */}
+      <View style={styles.cardFooterContainer}>
+        {/* Favorite Button Row */}
+        <View style={styles.favoriteRow}>
+          <TouchableOpacity 
+            style={styles.favoriteButton}
+            onPress={handleFavoritePress}
+            activeOpacity={0.7}
+          >
+            <Ionicons 
+              name={isFavorite(coupon.id) ? 'heart' : 'heart-outline'} 
+              size={20} 
+              color={isFavorite(coupon.id) ? '#ef4444' : '#9ca3af'} 
+            />
+          </TouchableOpacity>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#9ca3af" />
+        
+        {/* Expiry Info Row */}
+        <View style={styles.cardFooter}>
+          <View style={styles.expiryInfo}>
+            <Ionicons name="time-outline" size={14} color="#666" />
+            <Text style={[styles.expiryText, expiringSoon && styles.urgentText]}>
+              {coupon.expiry_date ? formatDate(coupon.expiry_date) : 'No expiry'}
+            </Text>
+            {daysLeft !== null && daysLeft <= 7 && (
+              <View style={[styles.urgencyDot, expiringSoon && styles.urgentDot]} />
+            )}
+          </View>
+          <Ionicons name="chevron-forward" size={16} color="#9ca3af" />
+        </View>
       </View>
     </TouchableOpacity>
   );
