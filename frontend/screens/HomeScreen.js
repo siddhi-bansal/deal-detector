@@ -13,6 +13,7 @@ import sampleData from '../assets/sample_api_output.json';
 import { CouponCard } from '../components/CouponCard';
 import { CouponDetailModal } from '../components/CouponDetailModal';
 import { SearchModal } from '../components/SearchModal';
+import { TypeFilter } from '../components/TypeFilter';
 import { styles } from '../styles/styles';
 
 export const HomeScreen = () => {
@@ -24,6 +25,7 @@ export const HomeScreen = () => {
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('company');
+  const [selectedType, setSelectedType] = useState('all');
 
   useEffect(() => {
     loadCoupons();
@@ -31,7 +33,7 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     filterAndSortCoupons();
-  }, [coupons, searchQuery, sortBy]);
+  }, [coupons, searchQuery, sortBy, selectedType]);
 
   const loadCoupons = async () => {
     try {
@@ -68,10 +70,15 @@ export const HomeScreen = () => {
   const filterAndSortCoupons = () => {
     let filtered = coupons;
 
+    // Apply type filter
+    if (selectedType !== 'all') {
+      filtered = filtered.filter(coupon => coupon.offer_type === selectedType);
+    }
+
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
-      filtered = coupons.filter(coupon => 
+      filtered = filtered.filter(coupon => 
         coupon.company?.toLowerCase().includes(query) ||
         coupon.offer_title?.toLowerCase().includes(query) ||
         coupon.offer_description?.toLowerCase().includes(query) ||
@@ -145,6 +152,13 @@ export const HomeScreen = () => {
       style={styles.container}
     >
       <View style={{ flex: 1 }}>
+        {/* Type Filter */}
+        <TypeFilter 
+          selectedType={selectedType}
+          onTypeChange={setSelectedType}
+          coupons={coupons}
+        />
+
         {/* Floating Search Button */}
         <TouchableOpacity 
           style={styles.floatingSearchButton}

@@ -6,9 +6,10 @@ export const styles = StyleSheet.create({
     backgroundColor: '#ecfdf5',
   },
   header: {
-    paddingTop: 30,
+    paddingTop: 8,
     paddingBottom: 10,
     paddingHorizontal: 20,
+    backgroundColor: '#ffffff'
   },
   headerTitle: {
     fontSize: 24,
@@ -1208,5 +1209,62 @@ export const styles = StyleSheet.create({
     zIndex: 1000,
     borderWidth: 2,
     borderColor: '#10b981',
+  },
+
+  // Type Filter Styles
+  typeFilterContainer: {
+    backgroundColor: '#ecfdf5',
+    paddingVertical: 12,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#d1fae5',
+  },
+  typeFilterScrollContent: {
+    paddingHorizontal: 15,
+  },
+  typeFilterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#f9fafb',
+    borderWidth: 1.5,
+    borderColor: '#e5e7eb',
+    marginRight: 10,
+  },
+  typeFilterButtonActive: {
+    backgroundColor: '#10b981',
+    borderColor: '#10b981',
+  },
+  typeFilterIcon: {
+    // No additional styles needed
+  },
+  typeFilterText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  typeFilterTextActive: {
+    color: '#ffffff',
+  },
+  typeFilterBadge: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    minWidth: 20,
+    alignItems: 'center',
+  },
+  typeFilterBadgeActive: {
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  typeFilterBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#6b7280',
+  },
+  typeFilterBadgeTextActive: {
+    color: '#ffffff',
   },
 });

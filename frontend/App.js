@@ -66,7 +66,7 @@ function TabNavigator() {
   const [currentRoute, setCurrentRoute] = React.useState('Home');
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#ecfdf5' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
       <CustomHeader routeName={currentRoute} />
       
       <Tab.Navigator
@@ -91,19 +91,12 @@ function TabNavigator() {
           tabBarInactiveTintColor: '#9ca3af',
           tabBarStyle: {
             backgroundColor: '#ffffff',
-            borderTopWidth: 1,
-            borderTopColor: '#e5e7eb',
-            paddingBottom: 5,
-            paddingTop: 5,
-            height: 60,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: -2,
-            },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 8,
+            borderTopWidth: 0,
+            paddingBottom: 2,
+            paddingTop: 2,
+            height: 45,
+            shadowOpacity: 0,
+            elevation: 0,
           },
           tabBarLabelStyle: {
             fontSize: 12,
