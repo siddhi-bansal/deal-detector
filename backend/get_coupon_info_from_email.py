@@ -30,24 +30,43 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         - If the email contains ANY promotional offers, coupons, sales, discounts, or deals, return a JSON with "has_coupon": true and "offers" as a list
         - If the email contains NO promotional offers whatsoever, return: {{"has_coupon": false}}
 
+        OFFER TYPE DEFINITIONS:
+        - discount: Percentage or dollar amount off (20% off, $10 off, buy 2 get 15% off)
+        - sale: General sales events, seasonal sales, store-wide sales
+        - coupon: Specific promotional codes or printable coupons
+        - free_shipping: Free shipping, free delivery, free returns
+        - bogo: Buy one get one free/half off, buy X get Y free
+        - bundle: Multi-item packages, bundle deals, combo offers
+        - cashback: Money back, rebates, cash rewards
+        - loyalty_points: Points, stars, rewards program benefits, loyalty signups
+        - free_gift: Gift with purchase, free samples, free trials, freebies
+        - subscription: Discounts on subscriptions, membership pricing, service plans
+        - clearance: End of season, last chance, clearance items
+        - flash_sale: Time-limited offers, flash sales, limited-time deals
+        - new_customer: First-time buyer discounts, welcome offers
+        - event: Conference tickets, webinar access, event registration
+        - other: Unique offers that don't fit other categories
+
         Return a JSON response with this structure:
 
         For emails WITH offers:
         {{
             "has_coupon": true,
-            "company": "company or brand name, should be derived from sender",
+            "email_sender_company": "actual company sending the email (extracted from sender)",
             "offers": [
                 {{
-                    "offer_type": "coupon/sale/promotion/free_shipping/BOGO/cashback/loyalty_points",
-                    "discount_amount": "percentage or dollar amount (e.g., '20%', '$10', 'Buy 1 Get 1')",
-                    "discount_type": "percentage/fixed_amount/BOGO/free_shipping/other",
-                    "coupon_code": "promotional code if present",
-                    "expiry_date": "expiration date if mentioned, can also be inferred using context",
-                    "offer_title": "main headline or title of the offer",
-                    "offer_description": "brief description of the promotion, including if it's for a specific product or category",
-                    "terms_conditions": "any important restrictions or conditions, like minimum purchase, expiration date, etc.",
-                    "call_to_action": "what action the email wants you to take",
-                    "additional_benefits": ["free shipping", "free returns", "gift with purchase", etc.]
+                    "offer_brand": "brand/company this specific offer is for (may be same as sender or different for aggregators)",
+                    "offer_type": "Choose MOST SPECIFIC from: discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other",
+                    "discount_amount": "specific amount only (e.g., '20%', '$10', '50% off', 'Free'). For BOGO use 'BOGO', for unclear amounts use null",
+                    "coupon_code": "exact promotional code if present, null if none",
+                    "expiry_date": "date in YYYY-MM-DD format if mentioned, null if not specified",
+                    "offer_title": "main headline or title of the offer (keep concise)",
+                    "offer_description": "brief description of what's being offered and any product/category specifics",
+                    "minimum_purchase": "minimum spend requirement if any (e.g., '$50', null if none)",
+                    "terms_conditions": "important restrictions only (member-only, first-time customers, etc.)",
+                    "call_to_action": "primary action requested (Shop Now, Use Code, Sign Up, etc.)",
+                    "product_category": "what type of products this applies to (electronics, clothing, all products, etc.)",
+                    "additional_benefits": ["list any extra perks like free shipping, free returns, gift with purchase"]
                 }}
             ]
         }}
