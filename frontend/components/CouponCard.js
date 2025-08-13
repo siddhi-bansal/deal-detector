@@ -9,13 +9,31 @@ export const CouponCard = ({ coupon, onPress }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const [logoError, setLogoError] = useState(false);
 
+  const getOfferTypeLabel = (offerType) => {
+    switch (offerType) {
+      case 'discount':
+        return 'Discount';
+      case 'coupon':
+        return 'Coupon';
+      case 'free_shipping':
+        return 'Free Ship';
+      case 'bogo':
+        return 'BOGO';
+      case 'free_gift':
+        return 'Free Gift';
+      case 'loyalty_points':
+        return 'Points';
+      default:
+        return offerType?.replace('_', ' ')?.toUpperCase() || 'OFFER';
+    }
+  };
+
   // Use logo data directly from coupon response - no need to fetch
   const logoUrl = coupon.company_logo_url;
   const logoLoading = false; // No loading needed since data comes with coupon
   const getDiscountGradient = (offerType) => {
     switch (offerType) {
       case 'discount':
-      case 'sale':
         return ['#22c55e', '#16a34a']; // Green gradient
       case 'coupon':
         return ['#3b82f6', '#1d4ed8']; // Blue gradient
@@ -23,12 +41,10 @@ export const CouponCard = ({ coupon, onPress }) => {
         return ['#f59e0b', '#d97706']; // Orange gradient
       case 'bogo':
         return ['#ec4899', '#dc2626']; // Pink gradient
-      case 'flash_sale':
-        return ['#ef4444', '#dc2626']; // Red gradient
-      case 'cashback':
-        return ['#8b5cf6', '#7c3aed']; // Purple gradient
-      case 'subscription':
+      case 'free_gift':
         return ['#06b6d4', '#0891b2']; // Cyan gradient
+      case 'loyalty_points':
+        return ['#ef4444', '#dc2626']; // Red gradient
       default:
         return ['#10b981', '#059669']; // Emerald gradient
     }
@@ -36,18 +52,18 @@ export const CouponCard = ({ coupon, onPress }) => {
 
   const getOfferTypeIcon = (offerType) => {
     switch (offerType) {
-      case 'sale':
+      case 'discount':
         return 'pricetag';
       case 'coupon':
         return 'ticket';
       case 'free_shipping':
         return 'car';
+      case 'bogo':
+        return 'copy';
+      case 'free_gift':
+        return 'gift';
       case 'loyalty_points':
         return 'star';
-      case 'free_item':
-        return 'gift';
-      case 'free_account':
-        return 'person-add';
       default:
         return 'pricetag';
     }
@@ -144,7 +160,7 @@ export const CouponCard = ({ coupon, onPress }) => {
             {/* Discount Type Tag */}
             <View style={styles.discountTypeTag}>
               <Text style={styles.discountTypeText}>
-                {coupon.offer_type?.replace('_', ' ')?.toUpperCase() || 'OFFER'}
+                {getOfferTypeLabel(coupon.offer_type)}
               </Text>
             </View>
             {/* Product Category Tag */}

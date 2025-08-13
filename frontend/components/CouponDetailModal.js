@@ -13,6 +13,25 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [logoError, setLogoError] = useState(false);
 
+  const getOfferTypeLabel = (offerType) => {
+    switch (offerType) {
+      case 'discount':
+        return 'Discount';
+      case 'coupon':
+        return 'Coupon';
+      case 'free_shipping':
+        return 'Free Ship';
+      case 'bogo':
+        return 'BOGO';
+      case 'free_gift':
+        return 'Free Gift';
+      case 'loyalty_points':
+        return 'Points';
+      default:
+        return offerType?.replace('_', ' ')?.toUpperCase() || 'OFFER';
+    }
+  };
+
   // Use logo and domain data directly from coupon response - no need to fetch
   const logoUrl = coupon?.company_logo_url;
   const logoLoading = false; // No loading needed since data comes with coupon
@@ -170,7 +189,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                   </LinearGradient>
                   <View style={styles.offerTypeTag}>
                     <Text style={styles.offerTypeText}>
-                      {coupon.offer_type?.replace('_', ' ')?.toUpperCase() || 'OFFER'}
+                      {getOfferTypeLabel(coupon.offer_type)}
                     </Text>
                   </View>
                   {/* Product Category Tag */}

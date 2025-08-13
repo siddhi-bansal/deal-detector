@@ -21,16 +21,20 @@ export const TypeFilter = ({ selectedType, onTypeChange, coupons }) => {
     switch (type) {
       case 'all':
         return 'All';
-      case 'sale':
-        return 'Sale';
-      case 'promotion':
-        return 'Promo';
       case 'discount':
         return 'Discount';
       case 'coupon':
         return 'Coupon';
+      case 'free_shipping':
+        return 'Free Ship';
+      case 'bogo':
+        return 'BOGO';
+      case 'free_gift':
+        return 'Free Gift';
+      case 'loyalty_points':
+        return 'Points';
       default:
-        return type.charAt(0).toUpperCase() + type.slice(1);
+        return type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
   };
 
@@ -38,14 +42,18 @@ export const TypeFilter = ({ selectedType, onTypeChange, coupons }) => {
     switch (type) {
       case 'all':
         return 'apps-outline';
-      case 'sale':
-        return 'pricetag-outline';
-      case 'promotion':
-        return 'gift-outline';
       case 'discount':
         return 'trending-down-outline';
       case 'coupon':
         return 'ticket-outline';
+      case 'free_shipping':
+        return 'car-outline';
+      case 'bogo':
+        return 'copy-outline';
+      case 'free_gift':
+        return 'gift-outline';
+      case 'loyalty_points':
+        return 'star-outline';
       default:
         return 'bookmark-outline';
     }
