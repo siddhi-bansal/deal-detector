@@ -24,6 +24,9 @@ This file tracks potential features, improvements, and technical debt to address
 - [ ] Personalized recommendations based on user preferences
 - [ ] Duplicate coupon detection across emails
 
+### Online vs. In-Store
+- [ ] Online vs In-store offer classification (online only, in-store only, both, not specified)
+
 ### User Experience
 - [ ] Push notifications for new high-value coupons
 - [ ] Dark mode support
@@ -113,4 +116,4 @@ This file tracks potential features, improvements, and technical debt to address
 
 ---
 
-*Last updated: August 10, 2025*
+*Last updated: August 12, 2025*
