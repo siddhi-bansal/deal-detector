@@ -39,6 +39,7 @@ This file tracks potential features, improvements, and technical debt to address
 - [ ] Background job processing for email analysis
 - [ ] Error recovery and retry mechanisms
 - [ ] API response caching
+- [ ] API response is really slow right now for /api/coupons
 
 ### Security & Privacy
 - [ ] User authentication and personal coupon lists
