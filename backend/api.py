@@ -29,22 +29,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic models for response
-class CouponOffer(BaseModel):
-    company: Optional[str] = None
-    offer_type: Optional[str] = None
-    discount_amount: Optional[str] = None
-    discount_type: Optional[str] = None
-    coupon_code: Optional[str] = None
-    expiry_date: Optional[str] = None
-    minimum_purchase: Optional[str] = None
-    offer_title: Optional[str] = None
-    offer_description: Optional[str] = None
-    terms_conditions: Optional[str] = None
-    urgency_indicators: Optional[List[str]] = None
-    call_to_action: Optional[str] = None
-    additional_benefits: Optional[List[str]] = None
-
 class CouponResponse(BaseModel):
     all_coupons: List[dict] = []
     total_emails_processed: int = 0
@@ -120,6 +104,27 @@ async def get_coupons():
                 logger.info(f"Found coupons in email {i+1}")
         
         logger.info(f"Total coupons found: {len(all_coupons)} out of {len(emails_info)} emails")
+        
+        # Save response to file immediately
+        response_data = {
+            "all_coupons": all_coupons,
+            "total_num_coupons": len(all_coupons),
+            "total_emails_processed": len(emails_info),
+            "emails_with_coupons": len(all_coupons)
+        }
+        
+        # Save to file with timestamp
+        import datetime
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"api_response_{timestamp}.json"
+        
+        try:
+            import json
+            with open(filename, 'w') as f:
+                json.dump(response_data, f, indent=2, default=str)
+            logger.info(f"Response saved to {filename}")
+        except Exception as e:
+            logger.warning(f"Failed to save response to file: {e}")
         
         return CouponResponse(
             all_coupons=all_coupons,
