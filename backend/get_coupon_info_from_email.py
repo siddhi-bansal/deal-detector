@@ -26,26 +26,36 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         Email text:
         {email_text}
 
-        IMPORTANT INSTRUCTIONS:
-        - If the email contains ANY promotional offers, coupons, sales, discounts, or deals, return a JSON with "has_coupon": true and "offers" as a list
-        - If the email contains NO promotional offers whatsoever, return: {{"has_coupon": false}}
+        OFFER TYPES, REQUIRED FIELDS & CALL-TO-ACTIONS:
+        These are the ONLY 6 offer types to use. Each must have required actionable data:
 
-        OFFER TYPE DEFINITIONS:
-        - discount: Percentage or dollar amount off (20% off, $10 off, buy 2 get 15% off)
-        - sale: General sales events, seasonal sales, store-wide sales
-        - coupon: Specific promotional codes or printable coupons
-        - free_shipping: Free shipping, free delivery, free returns
-        - bogo: Buy one get one free/half off, buy X get Y free
-        - bundle: Multi-item packages, bundle deals, combo offers
-        - cashback: Money back, rebates, cash rewards
-        - loyalty_points: Points, stars, rewards program benefits, loyalty signups
-        - free_gift: Gift with purchase, free samples, free trials, freebies
-        - subscription: Discounts on subscriptions, membership pricing, service plans
-        - clearance: End of season, last chance, clearance items
-        - flash_sale: Time-limited offers, flash sales, limited-time deals
-        - new_customer: First-time buyer discounts, welcome offers
-        - event: Conference tickets, webinar access, event registration
-        - other: Unique offers that don't fit other categories
+        - discount: Percentage/dollar off (includes flash sales, seasonal sales, clearance)
+          Required: discount_amount AND website_url OR clear shopping instructions
+          Call-to-action: "Shop Now", "Get Discount", "Save Now", "Shop Sale"
+
+        - coupon: Promotional codes that provide savings
+          Required: coupon_code
+          Call-to-action: "Use Code", "Apply Code", "Enter Code", "Redeem Code"
+
+        - free_shipping: Shipping cost savings
+          Required: minimum_purchase OR coupon_code OR clear terms
+          Call-to-action: "Shop Now", "Get Free Shipping", "Order Now", "Free Delivery"
+
+        - bogo: Buy one get one deals
+          Required: clear BOGO terms AND website_url OR shopping instructions
+          Call-to-action: "Shop BOGO", "Get Deal", "Shop Now", "Buy One Get One"
+
+        - free_gift: Free items with purchase
+          Required: specific free item AND purchase requirement
+          Call-to-action: "Get Free Gift", "Claim Gift", "Shop Now", "Free Sample"
+
+        - loyalty_points: Points/rewards that convert to savings
+          Required: points value OR redemption details OR clear benefit
+          Call-to-action: "Earn Points", "Join Rewards", "Sign Up", "Get Points"
+
+        COUPON EMAIL CRITERIA:
+        Only classify as "has_coupon": true if the email contains actionable offers with the required fields above.
+        Skip pure informational emails, newsletters without offers, account notifications, or announcements without immediate savings.
 
         EXPIRY DATE INFERENCE RULES:
         - If explicit date mentioned: extract exact date in YYYY-MM-DD format
@@ -68,7 +78,7 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
             "offers": [
                 {{
                     "offer_brand": "brand/company this specific offer is for (may be same as sender or different for aggregators)",
-                    "offer_type": "Choose MOST SPECIFIC from: discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other",
+                    "offer_type": "Choose MOST SPECIFIC from: discount, coupon, free_shipping, bogo, free_gift, loyalty_points",
                     "discount_amount": "specific amount only (e.g., '20%', '$10', '50% off', 'Free'). For BOGO use 'BOGO', for unclear amounts use null",
                     "coupon_code": "exact promotional code if present, null if none",
                     "expiry_date": "date in YYYY-MM-DD format. If explicitly mentioned, use that date. If not explicit but temporal hints exist, infer logically: 'Weekly Sale' → end of current week, 'Daily Deal' → end of today, 'Weekend Special' → end of weekend, holiday sales → end of holiday, 'Flash Sale' → within 24-48 hours. If no date or temporal hints, use null",
@@ -88,7 +98,9 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
             "has_coupon": false
         }}
 
-        Be thorough but accurate. Create separate offer objects for each distinct promotion. Only include information that is explicitly stated or clearly implied in the email.
+        Be thorough but accurate. Create separate offer objects for each distinct promotion. 
+        IMPORTANT: Only classify emails as coupons if they contain actionable offers with required fields.
+        Reject purely informational emails, newsletters without specific offers, or vague announcements.
         """
         
         # Generate content
@@ -108,7 +120,7 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
             else:
                 # Plain JSON
                 json_text = response_text
-            
+
             coupon_info = json.loads(json_text)
             return coupon_info
         except json.JSONDecodeError as e:
