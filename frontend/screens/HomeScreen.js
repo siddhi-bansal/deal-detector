@@ -49,6 +49,7 @@ export const HomeScreen = () => {
                 email_sender: couponGroup.sender,
                 email_subject: couponGroup.subject,
                 email_timestamp: couponGroup.timestamp,
+                email_sender_company: couponGroup.email_sender_company,
                 company: couponGroup.company,
                 company_domain: couponGroup.company_domain,
                 company_logo_url: couponGroup.company_logo_url,
@@ -79,14 +80,15 @@ export const HomeScreen = () => {
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter(coupon => 
-        coupon.company?.toLowerCase().includes(query) ||
+        (coupon.email_sender_company || coupon.company)?.toLowerCase().includes(query) ||
+        coupon.offer_brand?.toLowerCase().includes(query) ||
         coupon.offer_title?.toLowerCase().includes(query) ||
         coupon.offer_description?.toLowerCase().includes(query) ||
         coupon.discount_amount?.toLowerCase().includes(query) ||
-        coupon.discount_type?.toLowerCase().includes(query) ||
+        coupon.offer_type?.toLowerCase().includes(query) ||
         coupon.terms_conditions?.toLowerCase().includes(query) ||
         coupon.coupon_code?.toLowerCase().includes(query) ||
-        coupon.offer_type?.toLowerCase().includes(query) ||
+        coupon.product_category?.toLowerCase().includes(query) ||
         (coupon.additional_benefits && coupon.additional_benefits.some(benefit => 
           benefit.toLowerCase().includes(query)
         ))
@@ -97,7 +99,9 @@ export const HomeScreen = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'company':
-          return (a.company || '').localeCompare(b.company || '');
+          const companyA = a.email_sender_company || a.company || '';
+          const companyB = b.email_sender_company || b.company || '';
+          return companyA.localeCompare(companyB);
         
         case 'discount':
           // Extract numeric value from discount amount for comparison

@@ -132,7 +132,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                   </View>
                 )}
               </View>
-              <Text style={styles.modalTitle}>{coupon.company}</Text>
+              <Text style={styles.modalTitle}>{coupon.email_sender_company || coupon.offer_brand || coupon.company}</Text>
             </View>
             <View style={styles.modalHeaderButtons}>
               <TouchableOpacity 
@@ -173,6 +173,14 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                       {coupon.offer_type?.replace('_', ' ')?.toUpperCase() || 'OFFER'}
                     </Text>
                   </View>
+                  {/* Product Category Tag */}
+                  {coupon.product_category && (
+                    <View style={styles.productCategoryTag}>
+                      <Text style={styles.productCategoryText}>
+                        {coupon.product_category}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
             </View>

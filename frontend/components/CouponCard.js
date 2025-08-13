@@ -12,18 +12,25 @@ export const CouponCard = ({ coupon, onPress }) => {
   // Use logo data directly from coupon response - no need to fetch
   const logoUrl = coupon.company_logo_url;
   const logoLoading = false; // No loading needed since data comes with coupon
-  const getDiscountGradient = (discountType) => {
-    switch (discountType) {
-      case 'percentage':
+  const getDiscountGradient = (offerType) => {
+    switch (offerType) {
+      case 'discount':
+      case 'sale':
         return ['#22c55e', '#16a34a']; // Green gradient
-      case 'fixed_amount':
+      case 'coupon':
         return ['#3b82f6', '#1d4ed8']; // Blue gradient
       case 'free_shipping':
         return ['#f59e0b', '#d97706']; // Orange gradient
-      case 'other':
-        return ['#10b981', '#059669']; // Emerald gradient
+      case 'bogo':
+        return ['#ec4899', '#dc2626']; // Pink gradient
+      case 'flash_sale':
+        return ['#ef4444', '#dc2626']; // Red gradient
+      case 'cashback':
+        return ['#8b5cf6', '#7c3aed']; // Purple gradient
+      case 'subscription':
+        return ['#06b6d4', '#0891b2']; // Cyan gradient
       default:
-        return ['#6b7280', '#4b5563']; // Gray gradient
+        return ['#10b981', '#059669']; // Emerald gradient
     }
   };
 
@@ -126,13 +133,28 @@ export const CouponCard = ({ coupon, onPress }) => {
             )}
           </View>
           <View style={styles.companyInfo}>
-            <Text style={styles.companyName}>{coupon.company}</Text>
+            <Text style={styles.companyName}>
+              {coupon.email_sender_company || coupon.company}
+            </Text>
+            {coupon.offer_brand && coupon.offer_brand !== (coupon.email_sender_company || coupon.company) && (
+              <Text style={styles.offerBrandName}>
+                {coupon.offer_brand}
+              </Text>
+            )}
             {/* Discount Type Tag */}
             <View style={styles.discountTypeTag}>
               <Text style={styles.discountTypeText}>
                 {coupon.offer_type?.replace('_', ' ')?.toUpperCase() || 'OFFER'}
               </Text>
             </View>
+            {/* Product Category Tag */}
+            {coupon.product_category && (
+              <View style={styles.productCategoryTag}>
+                <Text style={styles.productCategoryText}>
+                  {coupon.product_category}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -148,7 +170,7 @@ export const CouponCard = ({ coupon, onPress }) => {
         {coupon.discount_amount && (
           <View style={styles.discountAmountContainer}>
             <LinearGradient
-              colors={getDiscountGradient(coupon.discount_type)}
+              colors={getDiscountGradient(coupon.offer_type)}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.discountBadge}
