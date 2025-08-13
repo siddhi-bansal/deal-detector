@@ -47,6 +47,18 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         - event: Conference tickets, webinar access, event registration
         - other: Unique offers that don't fit other categories
 
+        EXPIRY DATE INFERENCE RULES:
+        - If explicit date mentioned: extract exact date in YYYY-MM-DD format
+        - If temporal keywords in subject/content, infer logical expiry:
+          * "Daily Deal", "Today Only" → today's date
+          * "Weekly Sale", "This Week" → end of current week (Sunday)
+          * "Weekend Special", "Weekend Only" → end of weekend (Sunday)
+          * "Flash Sale" → 24-48 hours from email timestamp
+          * Holiday sales (Valentine's, Black Friday, etc.) → end of holiday/event
+          * "Limited Time" without specifics → 7 days from email date
+        - Consider email timestamp as reference point for relative dates
+        - If no date hints at all, use null
+
         Return a JSON response with this structure:
 
         For emails WITH offers:
@@ -59,7 +71,7 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
                     "offer_type": "Choose MOST SPECIFIC from: discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other",
                     "discount_amount": "specific amount only (e.g., '20%', '$10', '50% off', 'Free'). For BOGO use 'BOGO', for unclear amounts use null",
                     "coupon_code": "exact promotional code if present, null if none",
-                    "expiry_date": "date in YYYY-MM-DD format if mentioned, null if not specified",
+                    "expiry_date": "date in YYYY-MM-DD format. If explicitly mentioned, use that date. If not explicit but temporal hints exist, infer logically: 'Weekly Sale' → end of current week, 'Daily Deal' → end of today, 'Weekend Special' → end of weekend, holiday sales → end of holiday, 'Flash Sale' → within 24-48 hours. If no date or temporal hints, use null",
                     "offer_title": "main headline or title of the offer (keep concise)",
                     "offer_description": "brief description of what's being offered and any product/category specifics",
                     "minimum_purchase": "minimum spend requirement if any (e.g., '$50', null if none)",
