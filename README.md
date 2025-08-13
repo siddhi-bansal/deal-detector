@@ -6,12 +6,19 @@ This is an enhanced version of the coupon filtering system that automatically ex
 
 - **Gmail Integration**: Automatically fetches promotional emails using Gmail API
 - **OCR Processing**: Extracts text from images in emails using Google Gemini
-- **AI Analysis**: Uses Gemini AI to classify and extract coupon information
+- **Advanced AI Analysis**: Uses Gemini AI to classify and extract detailed coupon information including:
+  - **Smart Company Detection**: Distinguishes between email sender and offer brand (useful for aggregators)
+  - **15 Offer Type Classifications**: Precise categorization (discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other)
+  - **Intelligent Expiry Date Inference**: Automatically infers expiry dates from temporal keywords ("Weekly Sale" → end of week, "Flash Sale" → 24-48 hours, etc.)
+  - **Product Category Detection**: Identifies what type of products offers apply to
+  - **Comprehensive Offer Details**: Extracts discount amounts, coupon codes, terms, minimum purchase requirements, and additional benefits
+- **Company Logo Integration**: Automatically fetches and displays company logos
 - **Email HTML Viewing**: View original email content in WebView for full context
-- **FastAPI Backend**: RESTful API with automatic documentation
-- **React Native Frontend**: Mobile app with tab navigation and favorites
-- **Multi-Email Processing**: Analyzes multiple emails and filters for coupon content
-- **Favorites System**: Save and manage favorite coupons with persistent storage
+- **FastAPI Backend**: RESTful API with automatic documentation and file backup
+- **React Native Frontend**: Mobile app with enhanced search, filtering, and favorites
+- **Multi-Email Processing**: Analyzes 100+ emails efficiently with structured output
+- **Enhanced Search & Filter**: Search by company, offer type, product category, and more
+- **Persistent Favorites**: Save and manage favorite coupons with local storage
 
 ## 🏗️ Architecture
 
@@ -24,16 +31,17 @@ Gmail API → Email Text + Image OCR → Gemini AI Analysis → FastAPI → Reac
 1. **Email Fetching**: Uses Gmail API to retrieve promotional emails from CATEGORY_PROMOTIONS
 2. **Text Extraction**: Extracts plain text and HTML content from emails
 3. **Image OCR**: Uses Gemini AI to extract text from images within emails
-4. **AI Classification**: Gemini AI classifies emails as coupon/non-coupon and extracts:
-   - Company name
-   - Offer type (coupon/sale/BOGO/free shipping)
-   - Discount amount and type
-   - Coupon codes
-   - Expiry dates
-   - Terms and conditions
-   - And more...
-5. **API Response**: Returns structured JSON with all coupon information
-6. **Frontend Display**: React Native app displays coupons in an easy-to-read format
+4. **Advanced AI Classification**: Gemini AI analyzes emails and extracts:
+   - **Email sender company** vs **offer brand** (handles aggregator emails)
+   - **Offer type** from 15 specific categories (discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other)
+   - **Smart expiry date inference** from temporal keywords and email context
+   - **Product categories** that offers apply to
+   - **Discount amounts and coupon codes**
+   - **Terms, conditions, and minimum purchase requirements**
+   - **Call-to-action phrases and additional benefits**
+5. **Company Logo Integration**: Automatically fetches company logos using multiple sources
+6. **API Response & Backup**: Returns structured JSON and saves backup file locally
+7. **Frontend Display**: React Native app displays coupons with enhanced search, filtering, and visual hierarchy
 
 ## 🛠️ Tech Stack
 
@@ -65,25 +73,44 @@ Processes all promotional emails and returns coupon information.
 {
   "all_coupons": [
     {
-      "message_id": "18f2a1b2c3d4e5f6",
-      "has_coupon": true,
+      "timestamp": "2025-08-12 19:31:40",
+      "subject": "🚨 Ends soon! 20% off move-in day faves with Target Circle.",
+      "sender": "Target <targetnews@em.target.com>",
+      "message_id": "123a1a1234ab1abc",
+      "company_domain": "target.com",
+      "company_logo_url": "https://logo.clearbit.com/target.com",
+      "email_sender_company": "Target",
       "offers": [
         {
-          "company": "Nike",
-          "offer_type": "sale",
-          "discount_amount": "40%",
-          "coupon_code": "FLASH40",
-          "expiry_date": "2024-12-15",
-          "offer_title": "Flash Sale",
-          // ... more fields
+          "offer_brand": "Target",
+          "offer_type": "discount",
+          "discount_amount": "20%",
+          "coupon_code": null,
+          "expiry_date": "2025-08-18",
+          "offer_title": "20% off move-in day faves",
+          "offer_description": "20% off move-in day favorites with Target Circle.",
+          "minimum_purchase": null,
+          "terms_conditions": "Requires Target Circle. Some restrictions apply.",
+          "call_to_action": "Shop Now",
+          "product_category": "move-in day faves",
+          "additional_benefits": []
         }
       ]
     }
   ],
-  "total_emails_processed": 10,
-  "emails_with_coupons": 3
+  "total_emails_processed": 100,
+  "emails_with_coupons": 61
 }
 ```
+
+**Key Fields:**
+- `email_sender_company`: The actual company sending the email
+- `offer_brand`: The brand/company the specific offer is for (may differ for aggregators)
+- `offer_type`: Specific classification (discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other)
+- `product_category`: What type of products the offer applies to
+- `expiry_date`: Automatically inferred from temporal keywords when not explicitly stated
+- `company_logo_url`: Automatically fetched company logo
+- `additional_benefits`: Array of extra perks like free shipping, returns, etc.
 
 #### `GET /api/email/{message_id}`
 Fetches the original HTML content of a specific email by message ID.
@@ -170,15 +197,21 @@ expo start
 
 ## 📱 Mobile App Features
 
-- **Tab Navigation**: Home, Add Coupon, Favorites, and Profile tabs
-- **Coupon Display**: View all extracted coupons with rich formatting
-- **Search & Filter**: Filter by company, offer type, or search terms
-- **Favorites System**: Heart button to save/unsave coupons with persistent storage
-- **Email Viewing**: "Go to Email" button to view original HTML email content
-- **Expiry Tracking**: Visual indicators for expiring coupons
-- **Manual Entry**: Add custom coupons manually
-- **Profile Stats**: View total coupons, favorites count, and app statistics
-- **Direct Links**: Quick access to store websites and offers
+- **Enhanced Tab Navigation**: Home, Add Coupon, Favorites, and Profile tabs
+- **Rich Coupon Display**: View all extracted coupons with company logos, offer types, and product categories
+- **Advanced Search & Filter**: 
+  - Search by company name, offer brand, product category, or any text
+  - Filter by 15 different offer types (discount, sale, coupon, free_shipping, bogo, bundle, etc.)
+  - Sort by company, discount amount, expiry date, or offer type
+- **Company Hierarchy Display**: Clear distinction between email sender and offer brand
+- **Smart Expiry Tracking**: Visual indicators for expiring coupons with inferred expiry dates
+- **Product Category Tags**: See what products each offer applies to
+- **Persistent Favorites**: Heart button to save/unsave coupons with local storage
+- **Original Email Viewing**: "Go to Email" button to view original HTML email content in WebView
+- **Manual Entry**: Add custom coupons manually with comprehensive form
+- **Profile Statistics**: View total coupons, favorites count, and detailed app analytics
+- **Direct Action Links**: Quick access to store websites, specific offers, and company domains
+- **Responsive Design**: Consistent emerald green theme with improved spacing and visual hierarchy
 
 ## 🚀 Deployment
 
