@@ -87,7 +87,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
   const fetchEmailHtml = async (messageId) => {
     try {
       setLoadingEmail(true);
-      const response = await fetch(`http://192.168.86.32:8000/api/email/${messageId}`);
+      const response = await fetch(`http://192.168.86.32:8000/api/email_html/${messageId}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
