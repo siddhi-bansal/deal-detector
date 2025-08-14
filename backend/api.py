@@ -142,7 +142,7 @@ async def get_coupons():
             detail=f"Internal server error: {str(e)}"
         )
 
-@app.get("/api/email/{message_id}", response_model=EmailHtmlResponse)
+@app.get("/api/email_html/{message_id}", response_model=EmailHtmlResponse)
 async def get_email_html(message_id: str):
     """
     Get HTML content from a specific Gmail message by message ID.

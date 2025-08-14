@@ -112,7 +112,7 @@ Processes all promotional emails and returns coupon information.
 - `company_logo_url`: Automatically fetched company logo
 - `additional_benefits`: Array of extra perks like free shipping, returns, etc.
 
-#### `GET /api/email/{message_id}`
+#### `GET /api/email_html/{message_id}`
 Fetches the original HTML content of a specific email by message ID.
 
 **Parameters:**
