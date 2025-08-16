@@ -17,90 +17,52 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         # Get the model
         model = genai.GenerativeModel('gemini-2.5-flash-lite')
         
-        # Comprehensive prompt for coupon extraction
+        # Focused prompt for coupon extraction
         prompt = f"""
-        Analyze this email text and extract ALL coupon/promotional offer information.
+        Extract actionable coupon offers from this email. ONLY classify as coupon if it provides immediate monetary savings.
 
-        Email Sender: {email_sender}
-        Email Subject: {email_subject}
-        Email text:
-        {email_text}
+        Email: {email_sender} | {email_subject}
+        Content: {email_text}
 
-        OFFER TYPES, REQUIRED FIELDS & CALL-TO-ACTIONS:
-        These are the ONLY 6 offer types to use. Each must have required actionable data:
+        STRICT CRITERIA FOR offer_type - Must have ALL required fields:
+        • discount: Specific % or $ off + shopping method (e.g., "20% off", "Shop Now")
+        • coupon: Promotional code (e.g., "SAVE20", "Use Code")  
+        • free_shipping: Free delivery terms (e.g., "Free shipping on $50+")
+        • bogo: Buy one get one + purchase method (e.g., "BOGO shoes", "Shop Now")
+        • free_gift: Free item with purchase (e.g., "Free sample with $25 order")
+        • loyalty_points: Specific points/cashback value (e.g., "5% cashback", "100 points")
 
-        - discount: Percentage/dollar off (includes flash sales, seasonal sales, clearance)
-          Required: discount_amount AND website_url OR clear shopping instructions
-          Call-to-action: "Shop Now", "Get Discount", "Save Now", "Shop Sale"
+        ONLY ACCEPT if email offers immediate monetary savings:
+        - Specific discounts with clear amounts or percentages
+        - Promotional codes for discounts
+        - Free shipping with clear terms
+        - Buy-one-get-one deals with purchase requirement
+        - Free items contingent on purchase
+        - Reward points/cashback with specific percentages or values
 
-        - coupon: Promotional codes that provide savings
-          Required: coupon_code
-          Call-to-action: "Use Code", "Apply Code", "Enter Code", "Redeem Code"
+        EXPIRY DATE RULES:
+        - Explicit dates: extract exact date (YYYY-MM-DD)
+        - Infer from keywords: "Daily Deal"→today, "Weekly Sale"→end of week, "Flash Sale"→2 days, "Weekend Special"→Sunday
+        - Mark inferred dates clearly for UI display
 
-        - free_shipping: Shipping cost savings
-          Required: minimum_purchase OR coupon_code OR clear terms
-          Call-to-action: "Shop Now", "Get Free Shipping", "Order Now", "Free Delivery"
+        JSON Response Structure:
+        {{"has_coupon": true/false, "email_sender_company": "Company Name", "offers": [...]}}
 
-        - bogo: Buy one get one deals
-          Required: clear BOGO terms AND website_url OR shopping instructions
-          Call-to-action: "Shop BOGO", "Get Deal", "Shop Now", "Buy One Get One"
-
-        - free_gift: Free items with purchase
-          Required: specific free item AND purchase requirement
-          Call-to-action: "Get Free Gift", "Claim Gift", "Shop Now", "Free Sample"
-
-        - loyalty_points: Points/rewards that convert to savings
-          Required: points value OR redemption details OR clear benefit
-          Call-to-action: "Earn Points", "Join Rewards", "Sign Up", "Get Points"
-
-        COUPON EMAIL CRITERIA:
-        Only classify as "has_coupon": true if the email contains actionable offers with the required fields above.
-        Skip pure informational emails, newsletters without offers, account notifications, or announcements without immediate savings.
-
-        EXPIRY DATE INFERENCE RULES:
-        - If explicit date mentioned: extract exact date in YYYY-MM-DD format
-        - If temporal keywords in subject/content, infer logical expiry:
-          * "Daily Deal", "Today Only" → today's date
-          * "Weekly Sale", "This Week" → end of current week (Sunday)
-          * "Weekend Special", "Weekend Only" → end of weekend (Sunday)
-          * "Flash Sale" → 24-48 hours from email timestamp
-          * Holiday sales (Valentine's, Black Friday, etc.) → end of holiday/event
-          * "Limited Time" without specifics → 7 days from email date
-        - Consider email timestamp as reference point for relative dates
-        - If no date hints at all, use null
-
-        Return a JSON response with this structure:
-
-        For emails WITH offers:
+        Each offer object must include:
         {{
-            "has_coupon": true,
-            "email_sender_company": "actual company sending the email (extracted from sender)",
-            "offers": [
-                {{
-                    "offer_brand": "brand/company this specific offer is for (may be same as sender or different for aggregators)",
-                    "offer_type": "Choose MOST SPECIFIC from: discount, coupon, free_shipping, bogo, free_gift, loyalty_points",
-                    "discount_amount": "specific amount only (e.g., '20%', '$10', '50% off', 'Free'). For BOGO use 'BOGO', for unclear amounts use null",
-                    "coupon_code": "exact promotional code if present, null if none",
-                    "expiry_date": "date in YYYY-MM-DD format. If explicitly mentioned, use that date. If not explicit but temporal hints exist, infer logically: 'Weekly Sale' → end of current week, 'Daily Deal' → end of today, 'Weekend Special' → end of weekend, holiday sales → end of holiday, 'Flash Sale' → within 24-48 hours. If no date or temporal hints, use null",
-                    "offer_title": "main headline or title of the offer (keep concise)",
-                    "offer_description": "brief description of what's being offered and any product/category specifics",
-                    "minimum_purchase": "minimum spend requirement if any (e.g., '$50', null if none)",
-                    "terms_conditions": "important restrictions only (member-only, first-time customers, etc.)",
-                    "call_to_action": "primary action requested (Shop Now, Use Code, Sign Up, etc.)",
-                    "product_category": "what type of products this applies to (electronics, clothing, all products, etc.)",
-                    "additional_benefits": ["list any extra perks like free shipping, free returns, gift with purchase"]
-                }}
-            ]
+            "offer_brand": "specific brand name, may be same as sender",
+            "offer_type": "discount|coupon|free_shipping|bogo|free_gift|loyalty_points", 
+            "discount_amount": "20%|$10|null",
+            "coupon_code": "CODE123|null",
+            "expiry_date": "2025-08-20|null",
+            "expiry_inferred": true/false,
+            "offer_title": "concise title",
+            "offer_description": "brief description", 
+            "minimum_purchase": "$50|null",
+            "terms_conditions": "key restrictions|null",
+            "call_to_action": "Shop Now|Use Code|etc",
+            "product_category": "clothing|electronics|all|etc"
         }}
-
-        For emails WITHOUT offers:
-        {{
-            "has_coupon": false
-        }}
-
-        Be thorough but accurate. Create separate offer objects for each distinct promotion. 
-        IMPORTANT: Only classify emails as coupons if they contain actionable offers with required fields.
-        Reject purely informational emails, newsletters without specific offers, or vague announcements.
         """
         
         # Generate content
