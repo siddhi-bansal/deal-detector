@@ -143,6 +143,7 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                   <Image
                     source={{ uri: logoUrl }}
                     style={styles.modalCompanyLogo}
+                    resizeMode="contain"
                     onError={() => setLogoError(true)}
                   />
                 ) : (

@@ -136,6 +136,7 @@ export const CouponCard = ({ coupon, onPress }) => {
               <Image
                 source={{ uri: logoUrl }}
                 style={styles.companyLogo}
+                resizeMode="contain"
                 onError={() => setLogoError(true)}
               />
             ) : (
