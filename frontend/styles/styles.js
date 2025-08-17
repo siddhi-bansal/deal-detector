@@ -374,8 +374,24 @@ export const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 16,
+  },
+  favoriteButtonTopRight: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 8,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
+    marginLeft: 12,
   },
   companyRow: {
     flexDirection: 'row',
@@ -385,6 +401,7 @@ export const styles = StyleSheet.create({
   companyInfo: {
     flex: 1,
     marginLeft: 12,
+    marginRight: 8,
   },
   companyName: {
     fontSize: 18,
@@ -456,14 +473,14 @@ export const styles = StyleSheet.create({
     backgroundColor: '#e5e7eb',
   },
   cardContent: {
-    marginBottom: 8,
+    marginBottom: 0,
   },
   discountTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1f2937',
     lineHeight: 22,
-    marginBottom: 6,
+    marginBottom: 10,
   },
   descriptionPreview: {
     fontSize: 14,
@@ -500,8 +517,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
   },
   expiryInfo: {
     flexDirection: 'row',
