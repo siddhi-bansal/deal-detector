@@ -12,7 +12,7 @@ import { useFavorites } from '../context/FavoritesContext';
 import { getTotalCouponsCount } from '../utils/couponUtils';
 import { styles } from '../styles/styles';
 
-export const ProfileScreen = () => {
+export const ProfileScreen = ({ navigation }) => {
   const { getFavoritesCount } = useFavorites();
   const totalCoupons = getTotalCouponsCount();
   const handleSettingPress = (setting) => {
@@ -36,18 +36,30 @@ export const ProfileScreen = () => {
     </TouchableOpacity>
   );
 
-  const StatCard = ({ icon, value, label, color }) => (
-    <LinearGradient
-      colors={[color, color + '80']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.statCard}
-    >
-      <Ionicons name={icon} size={28} color="white" />
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
-    </LinearGradient>
-  );
+  const StatCard = ({ icon, value, label, color, onPress }) => {
+    const CardContent = (
+      <LinearGradient
+        colors={[color, color + '80']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.statCard}
+      >
+        <Ionicons name={icon} size={28} color="white" />
+        <Text style={styles.statValue}>{value}</Text>
+        <Text style={styles.statLabel}>{label}</Text>
+      </LinearGradient>
+    );
+
+    if (onPress) {
+      return (
+        <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={{ flex: 1 }}>
+          {CardContent}
+        </TouchableOpacity>
+      );
+    }
+    
+    return <View style={{ flex: 1 }}>{CardContent}</View>;
+  };
 
   return (
     <LinearGradient
@@ -75,19 +87,22 @@ export const ProfileScreen = () => {
             icon="pricetag" 
             value={totalCoupons.toString()} 
             label="Coupons" 
-            color="#10b981" 
+            color="#10b981"
+            onPress={() => navigation.navigate('Home')}
           />
           <StatCard 
             icon="heart" 
             value={getFavoritesCount().toString()} 
             label="Favorites" 
-            color="#ef4444" 
+            color="#ef4444"
+            onPress={() => navigation.navigate('Favorites')}
           />
           <StatCard 
             icon="checkmark-circle" 
             value="12" 
             label="Used" 
-            color="#22c55e" 
+            color="#22c55e"
+            onPress={() => handleSettingPress('Used Coupons')}
           />
         </View>
 

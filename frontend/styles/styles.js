@@ -1144,7 +1144,7 @@ export const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
-    gap: 15,
+    gap: 10,
     marginBottom: 30,
   },
   statCard: {
