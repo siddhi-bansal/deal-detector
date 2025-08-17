@@ -73,7 +73,7 @@ export const CompanyOffersScreen = ({ route, navigation }) => {
                   </Text>
                 </View>
               )}
-              <Text style={styles.companyOffersCount}>
+              <Text style={[styles.companyOffersCount, { marginTop: 6 }]}>
                 {formatOfferCount(company.offers.length)}
               </Text>
             </View>

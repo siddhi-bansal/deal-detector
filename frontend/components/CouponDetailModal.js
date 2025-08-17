@@ -170,33 +170,21 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
               <Text style={styles.modalOfferTitle}>{coupon.offer_title}</Text>
               <Text style={styles.modalOfferDescription}>{coupon.offer_description}</Text>
               
-              {/* Discount Badge */}
-              {coupon.discount_amount && (
-                <View style={styles.modalDiscountContainer}>
-                  <LinearGradient
-                    colors={getOfferTypeColors(coupon.offer_type).gradient}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.modalDiscountBadge}
-                  >
-                    <Text style={styles.modalDiscountText}>{coupon.discount_amount}</Text>
-                  </LinearGradient>
-                  <View style={[
-                    styles.offerTypeTag,
-                    {
-                      backgroundColor: getOfferTypeColors(coupon.offer_type).background,
-                      borderColor: getOfferTypeColors(coupon.offer_type).border
-                    }
-                  ]}>
-                    <Text style={[
-                      styles.offerTypeText,
-                      { color: getOfferTypeColors(coupon.offer_type).text }
-                    ]}>
-                      {getOfferTypeLabel(coupon.offer_type)}
-                    </Text>
-                  </View>
-                </View>
-              )}
+              {/* Offer Type Tag */}
+              <View style={[
+                styles.offerTypeTag,
+                {
+                  backgroundColor: getOfferTypeColors(coupon.offer_type).background,
+                  borderColor: getOfferTypeColors(coupon.offer_type).border
+                }
+              ]}>
+                <Text style={[
+                  styles.offerTypeText,
+                  { color: getOfferTypeColors(coupon.offer_type).text }
+                ]}>
+                  {getOfferTypeLabel(coupon.offer_type)}
+                </Text>
+              </View>
             </View>
 
             {/* Coupon Code Section */}

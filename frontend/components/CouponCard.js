@@ -129,18 +129,11 @@ export const CouponCard = ({ coupon, onPress }) => {
           {coupon.offer_title || coupon.offer_description || 'Special Offer'}
         </Text>
         
-        {/* Discount Amount Badge */}
-        {coupon.discount_amount && (
-          <View style={styles.discountAmountContainer}>
-            <LinearGradient
-              colors={getOfferTypeColors(coupon.offer_type).gradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.discountBadge}
-            >
-              <Text style={styles.discountText}>{coupon.discount_amount}</Text>
-            </LinearGradient>
-          </View>
+        {/* Description Preview */}
+        {coupon.offer_description && (
+          <Text style={styles.descriptionPreview} numberOfLines={2}>
+            {coupon.offer_description}
+          </Text>
         )}
       </View>
 

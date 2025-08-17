@@ -78,7 +78,7 @@ export const CompanyCard = ({ company, onPress }) => {
               </Text>
             </View>
           )}
-          <Text style={styles.companyOfferCount}>
+          <Text style={[styles.companyOfferCount, { marginTop: 6 }]}>
             {formatOfferCount(company.offers.length)}
           </Text>
         </View>

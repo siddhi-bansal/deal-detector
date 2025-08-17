@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
   companyCard: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
-    marginHorizontal: 20,
+    marginHorizontal: 0,
     marginVertical: 8,
     padding: 16,
     shadowColor: '#10b981',
@@ -326,7 +326,7 @@ export const styles = StyleSheet.create({
   card: {
     backgroundColor: '#ffffff',
     borderRadius: 20,
-    padding: 20,
+    padding: 12,
     marginBottom: 16,
     shadowColor: '#10b981',
     shadowOffset: {
@@ -456,14 +456,20 @@ export const styles = StyleSheet.create({
     backgroundColor: '#e5e7eb',
   },
   cardContent: {
-    marginBottom: 16,
+    marginBottom: 8,
   },
   discountTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1f2937',
     lineHeight: 22,
-    marginBottom: 12,
+    marginBottom: 6,
+  },
+  descriptionPreview: {
+    fontSize: 14,
+    color: '#6b7280',
+    lineHeight: 20,
+    marginBottom: 4,
   },
   discountAmountContainer: {
     alignSelf: 'flex-start',
@@ -490,14 +496,10 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     letterSpacing: 0.3,
   },
-  cardFooterContainer: {
-    paddingTop: 8,
-  },
   cardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#f1f5f9',
   },
