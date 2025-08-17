@@ -134,17 +134,18 @@ export const styles = StyleSheet.create({
   companyCategoryTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f9fafb',
+    alignSelf: 'flex-start',
+    backgroundColor: '#eff6ff',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: '#3b82f6',
     gap: 4,
   },
   companyCategoryText: {
-    fontSize: 11,
-    color: '#6b7280',
+    fontSize: 12,
+    color: '#3b82f6',
     fontWeight: '500',
   },
   companyExpiryContainer: {
@@ -620,6 +621,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+  },
+  modalCompanyInfoContainer: {
+    flex: 1,
+    marginLeft: 16,
   },
   modalLogoContainer: {
     marginRight: 16,

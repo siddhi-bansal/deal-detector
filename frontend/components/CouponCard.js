@@ -118,15 +118,6 @@ export const CouponCard = ({ coupon, onPress }) => {
                 {getOfferTypeLabel(coupon.offer_type)}
               </Text>
             </View>
-            {/* Company Category Tag */}
-            {coupon.company_category && (
-              <View style={styles.companyCategoryTag}>
-                <Ionicons name="business-outline" size={10} color="#6b7280" />
-                <Text style={styles.companyCategoryText}>
-                  {coupon.company_category.charAt(0).toUpperCase() + coupon.company_category.slice(1)}
-                </Text>
-              </View>
-            )}
           </View>
         </View>
       </View>

@@ -134,7 +134,18 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                   </View>
                 )}
               </View>
-              <Text style={styles.modalTitle}>{coupon.email_sender_company || coupon.offer_brand || coupon.company}</Text>
+              <View style={styles.modalCompanyInfoContainer}>
+                <Text style={styles.modalTitle}>{coupon.email_sender_company || coupon.offer_brand || coupon.company}</Text>
+                {/* Company Category Tag */}
+                {coupon.company_category && (
+                  <View style={styles.companyCategoryTag}>
+                    <Ionicons name="business-outline" size={12} color="#3b82f6" />
+                    <Text style={styles.companyCategoryText}>
+                      {coupon.company_category.charAt(0).toUpperCase() + coupon.company_category.slice(1)}
+                    </Text>
+                  </View>
+                )}
+              </View>
             </View>
             <View style={styles.modalHeaderButtons}>
               <TouchableOpacity 
@@ -184,16 +195,6 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                       {getOfferTypeLabel(coupon.offer_type)}
                     </Text>
                   </View>
-                  
-                  {/* Company Category Tag */}
-                  {coupon.company_category && (
-                    <View style={styles.companyCategoryTag}>
-                      <Ionicons name="business-outline" size={12} color="#6b7280" />
-                      <Text style={styles.companyCategoryText}>
-                        {coupon.company_category.charAt(0).toUpperCase() + coupon.company_category.slice(1)}
-                      </Text>
-                    </View>
-                  )}
                 </View>
               )}
             </View>

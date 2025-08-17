@@ -64,6 +64,15 @@ export const CompanyOffersScreen = ({ route, navigation }) => {
               <Text style={styles.companyOffersName} numberOfLines={2}>
                 {company.name}
               </Text>
+              {/* Company Category Tag */}
+              {company.company_category && (
+                <View style={styles.companyCategoryTag}>
+                  <Ionicons name="business-outline" size={10} color="#3b82f6" />
+                  <Text style={styles.companyCategoryText}>
+                    {company.company_category.charAt(0).toUpperCase() + company.company_category.slice(1)}
+                  </Text>
+                </View>
+              )}
               <Text style={styles.companyOffersCount}>
                 {formatOfferCount(company.offers.length)}
               </Text>
