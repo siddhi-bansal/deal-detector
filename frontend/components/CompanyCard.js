@@ -6,6 +6,7 @@ import {
   Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { getOfferTypeColors, getOfferTypeLabel } from '../utils/offerTypeColors';
 import { styles } from '../styles/styles';
 
 export const CompanyCard = ({ company, onPress }) => {
@@ -40,18 +41,6 @@ export const CompanyCard = ({ company, onPress }) => {
   const getOfferTypesPreview = (offers) => {
     const types = [...new Set(offers.map(offer => offer.offer_type))];
     return types.slice(0, 3); // Show max 3 offer types
-  };
-
-  const getOfferTypeLabel = (type) => {
-    const typeMap = {
-      'discount': 'Discount',
-      'coupon': 'Coupon',
-      'free_shipping': 'Free Shipping',
-      'bogo': 'BOGO',
-      'free_gift': 'Free Gift',
-      'loyalty_points': 'Loyalty Points'
-    };
-    return typeMap[type] || type;
   };
 
   const offerTypesPreview = getOfferTypesPreview(company.offers);
@@ -92,13 +81,28 @@ export const CompanyCard = ({ company, onPress }) => {
       <View style={styles.companyCardDetails}>
         {/* Offer types preview */}
         <View style={styles.offerTypesContainer}>
-          {offerTypesPreview.map((type, index) => (
-            <View key={index} style={styles.offerTypeTag}>
-              <Text style={styles.offerTypeTagText}>
-                {getOfferTypeLabel(type)}
-              </Text>
-            </View>
-          ))}
+          {offerTypesPreview.map((type, index) => {
+            const colors = getOfferTypeColors(type);
+            return (
+              <View 
+                key={index} 
+                style={[
+                  styles.offerTypeTag,
+                  {
+                    backgroundColor: colors.background,
+                    borderColor: colors.border
+                  }
+                ]}
+              >
+                <Text style={[
+                  styles.offerTypeTagText,
+                  { color: colors.text }
+                ]}>
+                  {getOfferTypeLabel(type)}
+                </Text>
+              </View>
+            );
+          })}
           {company.offers.length > 3 && (
             <View style={styles.offerTypeTag}>
               <Text style={styles.offerTypeTagText}>

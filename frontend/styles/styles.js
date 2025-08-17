@@ -388,6 +388,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#10b981',
     alignSelf: 'flex-start',
   },
   discountTypeText: {

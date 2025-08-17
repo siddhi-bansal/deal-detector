@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useFavorites } from '../context/FavoritesContext';
+import { getOfferTypeColors, getOfferTypeLabel, getOfferTypeIcon } from '../utils/offerTypeColors';
 import { styles } from '../styles/styles';
 
 export const CouponDetailModal = ({ visible, coupon, onClose }) => {
@@ -12,25 +13,6 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
   const [emailHtml, setEmailHtml] = useState('');
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [logoError, setLogoError] = useState(false);
-
-  const getOfferTypeLabel = (offerType) => {
-    switch (offerType) {
-      case 'discount':
-        return 'Discount';
-      case 'coupon':
-        return 'Coupon';
-      case 'free_shipping':
-        return 'Free Ship';
-      case 'bogo':
-        return 'BOGO';
-      case 'free_gift':
-        return 'Free Gift';
-      case 'loyalty_points':
-        return 'Points';
-      default:
-        return offerType?.replace('_', ' ')?.toUpperCase() || 'OFFER';
-    }
-  };
 
   // Use logo and domain data directly from coupon response - no need to fetch
   const logoUrl = coupon?.company_logo_url;
@@ -181,15 +163,24 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
               {coupon.discount_amount && (
                 <View style={styles.modalDiscountContainer}>
                   <LinearGradient
-                    colors={['#ec4899', '#ef4444']}
+                    colors={getOfferTypeColors(coupon.offer_type).gradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.modalDiscountBadge}
                   >
                     <Text style={styles.modalDiscountText}>{coupon.discount_amount}</Text>
                   </LinearGradient>
-                  <View style={styles.offerTypeTag}>
-                    <Text style={styles.offerTypeText}>
+                  <View style={[
+                    styles.offerTypeTag,
+                    {
+                      backgroundColor: getOfferTypeColors(coupon.offer_type).background,
+                      borderColor: getOfferTypeColors(coupon.offer_type).border
+                    }
+                  ]}>
+                    <Text style={[
+                      styles.offerTypeText,
+                      { color: getOfferTypeColors(coupon.offer_type).text }
+                    ]}>
                       {getOfferTypeLabel(coupon.offer_type)}
                     </Text>
                   </View>

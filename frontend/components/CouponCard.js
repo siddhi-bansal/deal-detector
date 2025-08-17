@@ -3,71 +3,16 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useFavorites } from '../context/FavoritesContext';
+import { getOfferTypeColors, getOfferTypeLabel, getOfferTypeIcon } from '../utils/offerTypeColors';
 import { styles } from '../styles/styles';
 
 export const CouponCard = ({ coupon, onPress }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const [logoError, setLogoError] = useState(false);
 
-  const getOfferTypeLabel = (offerType) => {
-    switch (offerType) {
-      case 'discount':
-        return 'Discount';
-      case 'coupon':
-        return 'Coupon';
-      case 'free_shipping':
-        return 'Free Ship';
-      case 'bogo':
-        return 'BOGO';
-      case 'free_gift':
-        return 'Free Gift';
-      case 'loyalty_points':
-        return 'Points';
-      default:
-        return offerType?.replace('_', ' ')?.toUpperCase() || 'OFFER';
-    }
-  };
-
   // Use logo data directly from coupon response - no need to fetch
   const logoUrl = coupon.company_logo_url;
   const logoLoading = false; // No loading needed since data comes with coupon
-  const getDiscountGradient = (offerType) => {
-    switch (offerType) {
-      case 'discount':
-        return ['#22c55e', '#16a34a']; // Green gradient
-      case 'coupon':
-        return ['#3b82f6', '#1d4ed8']; // Blue gradient
-      case 'free_shipping':
-        return ['#f59e0b', '#d97706']; // Orange gradient
-      case 'bogo':
-        return ['#ec4899', '#dc2626']; // Pink gradient
-      case 'free_gift':
-        return ['#06b6d4', '#0891b2']; // Cyan gradient
-      case 'loyalty_points':
-        return ['#ef4444', '#dc2626']; // Red gradient
-      default:
-        return ['#10b981', '#059669']; // Emerald gradient
-    }
-  };
-
-  const getOfferTypeIcon = (offerType) => {
-    switch (offerType) {
-      case 'discount':
-        return 'pricetag';
-      case 'coupon':
-        return 'ticket';
-      case 'free_shipping':
-        return 'car';
-      case 'bogo':
-        return 'copy';
-      case 'free_gift':
-        return 'gift';
-      case 'loyalty_points':
-        return 'star';
-      default:
-        return 'pricetag';
-    }
-  };
 
   const isExpiringSoon = (expiryDate) => {
     if (!expiryDate) return false;
@@ -159,8 +104,17 @@ export const CouponCard = ({ coupon, onPress }) => {
               </Text>
             )}
             {/* Discount Type Tag */}
-            <View style={styles.discountTypeTag}>
-              <Text style={styles.discountTypeText}>
+            <View style={[
+              styles.discountTypeTag,
+              {
+                backgroundColor: getOfferTypeColors(coupon.offer_type).background,
+                borderColor: getOfferTypeColors(coupon.offer_type).border
+              }
+            ]}>
+              <Text style={[
+                styles.discountTypeText,
+                { color: getOfferTypeColors(coupon.offer_type).text }
+              ]}>
                 {getOfferTypeLabel(coupon.offer_type)}
               </Text>
             </View>
@@ -187,7 +141,7 @@ export const CouponCard = ({ coupon, onPress }) => {
         {coupon.discount_amount && (
           <View style={styles.discountAmountContainer}>
             <LinearGradient
-              colors={getDiscountGradient(coupon.offer_type)}
+              colors={getOfferTypeColors(coupon.offer_type).gradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.discountBadge}
