@@ -235,7 +235,7 @@ def get_emails_info():
         messages = results.get("messages", [])
         emails_info = {}
 
-        for message in messages[:2]:
+        for message in messages[:50]:
             message_id = message["id"]
 
             message_object = service.users().messages().get(userId="me", id=message_id).execute()

@@ -1,9 +1,89 @@
 {
   "all_coupons": [
     {
+      "company_category": "fashion",
       "company_logo_url": "https://logo.clearbit.com/lulus.com",
       "company_domain": "lulus.com",
+      "message_id": "198b89041668c949",
+      "sender": "Lulus <love@hello.lulus.com>",
+      "subject": "Your Next Order = 20% Off (29% Off in the App!)",
+      "timestamp": "2025-08-17T10:05:17",
+      "email_sender_company": "Lulus",
+      "offers": [
+        {
+          "offer_brand": "Lulus",
+          "offer_type": "coupon",
+          "discount_amount": "20%",
+          "coupon_code": "BDAYGIFT",
+          "expiry_date": "2025-08-18",
+          "expiry_inferred": false,
+          "offer_title": "20% Off Sitewide",
+          "offer_description": "Get 20% off sitewide on Lulus.com with code BDAYGIFT.",
+          "minimum_purchase": null,
+          "terms_conditions": "Valid only on purchases made on Lulus.com; not valid in the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion. Cannot be combined with any other coupon code.",
+          "call_to_action": "Shop Now",
+          "id": "198b89041668c949_0"
+        },
+        {
+          "offer_brand": "Lulus",
+          "offer_type": "coupon",
+          "discount_amount": "29%",
+          "coupon_code": "BDAYGIFTAPP",
+          "expiry_date": "2025-08-18",
+          "expiry_inferred": false,
+          "offer_title": "29% Off in the Lulus App",
+          "offer_description": "Get 29% off in the Lulus app with code BDAYGIFTAPP.",
+          "minimum_purchase": null,
+          "terms_conditions": "Valid only on purchases made via the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion. Coupon code valid in the U.S. only. Cannot be combined with any other coupon code.",
+          "call_to_action": "Download Now",
+          "id": "198b89041668c949_1"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/asics.com",
+      "company_domain": "asics.com",
+      "message_id": "198b83016c82516f",
+      "sender": "ASICS <asics@info.asics.com>",
+      "subject": "Something big is coming for members.",
+      "timestamp": "2025-08-17T08:20:14",
+      "email_sender_company": "ASICS",
+      "offers": [
+        {
+          "offer_brand": "ASICS",
+          "offer_type": "discount",
+          "discount_amount": "10%",
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "10% off your first purchase for new OneASICS members",
+          "offer_description": "New OneASICS members receive 10% off a single transaction.",
+          "minimum_purchase": null,
+          "terms_conditions": "Valid for one-time use from 8/9/21 onward. Valid for new OneASICS account sign-ups only. Not valid on gift cards, gift certificates, ASICS store locations, previous charges, applicable taxes or shipping and handling charges. Offer is non-transferable and not for cash or cash equivalent.",
+          "call_to_action": "Register",
+          "id": "198b83016c82516f_0"
+        },
+        {
+          "offer_brand": "ASICS",
+          "offer_type": "free_shipping",
+          "discount_amount": null,
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "Free standard shipping on orders $50+",
+          "offer_description": "Free standard shipping is available on all orders of $50 or more for OneASICS members.",
+          "minimum_purchase": "$50",
+          "terms_conditions": null,
+          "call_to_action": null,
+          "id": "198b83016c82516f_1"
+        }
+      ]
+    },
+    {
       "company_category": "fashion",
+      "company_logo_url": "https://logo.clearbit.com/lulus.com",
+      "company_domain": "lulus.com",
       "message_id": "198b555b99de86b4",
       "sender": "Lulus <love@hello.lulus.com>",
       "subject": "SSSSAAAALLLLEEEE",
@@ -11,7 +91,6 @@
       "email_sender_company": "Lulus",
       "offers": [
         {
-          "id": "198b555b99de86b4_0",
           "offer_brand": "Lulus",
           "offer_type": "coupon",
           "discount_amount": "20%",
@@ -22,10 +101,10 @@
           "offer_description": "Get 20% off sitewide on Lulus.com with code BDAYGIFT.",
           "minimum_purchase": null,
           "terms_conditions": "Valid only on purchases made on Lulus.com; not valid in the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code.",
-          "call_to_action": "Shop Now"
+          "call_to_action": "Shop Now",
+          "id": "198b555b99de86b4_0"
         },
         {
-          "id": "198b555b99de86b4_1",
           "offer_brand": "Lulus",
           "offer_type": "coupon",
           "discount_amount": "29%",
@@ -36,11 +115,368 @@
           "offer_description": "Get 29% off in the Lulus app with code BDAYGIFTAPP.",
           "minimum_purchase": null,
           "terms_conditions": "Valid only on purchases made via the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Coupon code valid in the U.S. only. Cannot be combined with any other coupon code.",
-          "call_to_action": "Shop Now"
+          "call_to_action": "Shop Now",
+          "id": "198b555b99de86b4_1"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/squaremktg.com",
+      "company_domain": "squaremktg.com",
+      "message_id": "198b3c4f9c9cfdd5",
+      "sender": "Van Leeuwen Ice Cream <messages+fr6zmqgp6cj1s@squaremktg.com>",
+      "subject": "🍦 $10 GIFT CARD BONUS. STOCK UP FOR SCHOOL 🎁",
+      "timestamp": "2025-08-16T11:44:46",
+      "email_sender_company": "Van Leeuwen Ice Cream",
+      "offers": [
+        {
+          "offer_brand": "Van Leeuwen Ice Cream",
+          "offer_type": "free_gift",
+          "discount_amount": null,
+          "coupon_code": null,
+          "expiry_date": "2025-09-01",
+          "expiry_inferred": false,
+          "offer_title": "$10 Gift Card Bonus",
+          "offer_description": "Buy $50 in gift cards and get a free $10 gift card.",
+          "minimum_purchase": "$50",
+          "terms_conditions": "Except at our kiosks.",
+          "call_to_action": "BUY ONLINE HERE",
+          "id": "198b3c4f9c9cfdd5_0"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/thanx.com",
+      "company_domain": "thanx.com",
+      "message_id": "198b3bd46800ee73",
+      "sender": "Velvet Taco <velvettaco@emails.thanx.com>",
+      "subject": "Thirsty? We Got You.",
+      "timestamp": "2025-08-16T11:36:22",
+      "email_sender_company": "Velvet Taco",
+      "offers": [
+        {
+          "offer_brand": "Velvet Taco",
+          "offer_type": "discount",
+          "discount_amount": "$5",
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": true,
+          "offer_title": "$5 Kick Ass Margaritas",
+          "offer_description": "$5 regular Kick Ass Margaritas available all day, every day, all summer long.",
+          "minimum_purchase": null,
+          "terms_conditions": "Offer valid for regular size only. Does not include Sangrita, Sangrita Swirl, Paloma or Ranch Water. Local alcohol restrictions and laws apply. Offer available for dine-in or to-go (where applicable) online or in restaurant.",
+          "call_to_action": "ORDER NOW",
+          "id": "198b3bd46800ee73_0"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/lyftmail.com",
+      "company_domain": "lyftmail.com",
+      "message_id": "198af827ef3adc17",
+      "sender": "Lyft <no-reply@marketing.lyftmail.com>",
+      "subject": "Reminder: Don't miss out on your $5 reward this month",
+      "timestamp": "2025-08-15T15:53:41",
+      "email_sender_company": "Lyft",
+      "offers": [
+        {
+          "offer_brand": "Lyft",
+          "offer_type": "loyalty_points",
+          "discount_amount": "$5",
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "$5 Lyft Credit",
+          "offer_description": "Receive a $5 Lyft credit when you take three eligible Lyft rides in a calendar month using your World Elite Mastercard linked to your account.",
+          "minimum_purchase": null,
+          "terms_conditions": "Requires taking and partially or fully paying for three (3) Eligible Rides in a calendar month. Eligible rides exclude business rides and bicycle and scooter rental rides. Valid only in the USA. Credits expire 30 days after application. Limit one Credit per calendar month per Lyft account.",
+          "call_to_action": "Take three Lyft rides",
+          "id": "198af827ef3adc17_0"
+        }
+      ]
+    },
+    {
+      "company_category": "fashion",
+      "company_logo_url": "https://logo.clearbit.com/lulus.com",
+      "company_domain": "lulus.com",
+      "message_id": "198ae421eb5e527f",
+      "sender": "Lulus <love@hello.lulus.com>",
+      "subject": "A Reason To Celebrate 🥳 20% Off",
+      "timestamp": "2025-08-15T10:03:45",
+      "email_sender_company": "Lulus",
+      "offers": [
+        {
+          "offer_brand": "Lulus",
+          "offer_type": "coupon",
+          "discount_amount": "20%",
+          "coupon_code": "BDAYGIFT",
+          "expiry_date": "2025-08-18",
+          "expiry_inferred": false,
+          "offer_title": "20% Off Sitewide",
+          "offer_description": "Get 20% off sitewide on Lulus.com with code BDAYGIFT.",
+          "minimum_purchase": null,
+          "terms_conditions": "Valid only on purchases made on Lulus.com; not valid in the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code.",
+          "call_to_action": "Shop Now",
+          "id": "198ae421eb5e527f_0"
+        },
+        {
+          "offer_brand": "Lulus",
+          "offer_type": "coupon",
+          "discount_amount": "29%",
+          "coupon_code": "BDAYGIFTAPP",
+          "expiry_date": "2025-08-18",
+          "expiry_inferred": false,
+          "offer_title": "29% Off in the Lulus App",
+          "offer_description": "Get 29% off in the Lulus app with code BDAYGIFTAPP.",
+          "minimum_purchase": null,
+          "terms_conditions": "Valid only on purchases made via the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Coupon code valid in the U.S. only. Cannot be combined with any other coupon code.",
+          "call_to_action": "Download Now",
+          "id": "198ae421eb5e527f_1"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/bloomberg.com",
+      "company_domain": "bloomberg.com",
+      "message_id": "198add39bd5d3c02",
+      "sender": "Bloomberg <subscriptions@message.bloomberg.com>",
+      "subject": "Drama with the US dollar",
+      "timestamp": "2025-08-15T08:03:02",
+      "email_sender_company": "Bloomberg",
+      "offers": [
+        {
+          "offer_brand": "Bloomberg",
+          "offer_type": "discount",
+          "discount_amount": "50%",
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "More than 50% off your first year",
+          "offer_description": "Take more than 50% off your first year subscription.",
+          "minimum_purchase": null,
+          "terms_conditions": "first year",
+          "call_to_action": "Read these stories and more",
+          "id": "198add39bd5d3c02_0"
+        },
+        {
+          "offer_brand": "Bloomberg",
+          "offer_type": "discount",
+          "discount_amount": null,
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "Limited-time subscription rate",
+          "offer_description": "Unlock the full experience; enjoy unlimited reading on Bloomberg.com and the Bloomberg app. Subscribe today for a limited-time rate.",
+          "minimum_purchase": null,
+          "terms_conditions": "first year",
+          "call_to_action": "Subscribe and save",
+          "id": "198add39bd5d3c02_1"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/ticketmaster.com",
+      "company_domain": "ticketmaster.com",
+      "message_id": "198a99addd6f56ad",
+      "sender": "NRG Park <nrgpark@engage.ticketmaster.com>",
+      "subject": " PRESALE ALERT: RYAN CASTRO SENDÉ WORLD TOUR 2025 AT NRG ARENA",
+      "timestamp": "2025-08-14T12:06:55",
+      "email_sender_company": "NRG Park",
+      "offers": [
+        {
+          "offer_brand": "NRG Park",
+          "offer_type": "coupon",
+          "discount_amount": null,
+          "coupon_code": "NRGPARK",
+          "expiry_date": "2025-08-14",
+          "expiry_inferred": false,
+          "offer_title": "Ryan Castro Sendé World Tour 2025 Presale",
+          "offer_description": "Presale access for Ryan Castro Sendé World Tour 2025 at NRG Arena.",
+          "minimum_purchase": null,
+          "terms_conditions": "Venue Presale runs August 14, 2025 @ 10AM through August 14, 2025 @ 10PM. Ticket limit of 8.",
+          "call_to_action": "USE CODE HERE",
+          "id": "198a99addd6f56ad_0"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/asics.com",
+      "company_domain": "asics.com",
+      "message_id": "198a925de8db96df",
+      "sender": "ASICS <asics@info.asics.com>",
+      "subject": "Shop GT-2000™ 13 for $109.95",
+      "timestamp": "2025-08-14T10:14:47",
+      "email_sender_company": "ASICS",
+      "offers": [
+        {
+          "offer_brand": "ASICS",
+          "offer_type": "discount",
+          "discount_amount": "10%",
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "10% off your first order",
+          "offer_description": "Sign up for OneASICS & trade; and get 10% off your first order.",
+          "minimum_purchase": null,
+          "terms_conditions": "New OneASICS&trade; members receive 10% off a single transaction available only at asics.com to U.S. residents. Offer valid for one-time use from 8/9/21 onward. Not valid for existing OneASICS&trade; accountholders. Not valid on gift cards, gift certificates, purchases at ASICS store locations, previous charges, applicable taxes or shipping and handling charges. Offer is non-transferable.",
+          "call_to_action": "Sign up for OneASICS",
+          "id": "198a925de8db96df_0"
+        },
+        {
+          "offer_brand": "ASICS",
+          "offer_type": "discount",
+          "discount_amount": null,
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "Shop GT-2000™ 13 for $109.95",
+          "offer_description": "Shop the GT-2000&trade; 13 shoe for $109.95",
+          "minimum_purchase": null,
+          "terms_conditions": null,
+          "call_to_action": "Shop Women's",
+          "id": "198a925de8db96df_1"
+        },
+        {
+          "offer_brand": "ASICS",
+          "offer_type": "discount",
+          "discount_amount": null,
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "Shop GT-2000™ 13 for $109.95",
+          "offer_description": "Shop the GT-2000&trade; 13 shoe for $109.95",
+          "minimum_purchase": null,
+          "terms_conditions": null,
+          "call_to_action": "Shop Men's",
+          "id": "198a925de8db96df_2"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/topgolf.com",
+      "company_domain": "topgolf.com",
+      "message_id": "198a8dd20ae79462",
+      "sender": "Topgolf <topgolf@email.topgolf.com>",
+      "subject": "Open & Save | 20% Off Online Gift Cards",
+      "timestamp": "2025-08-14T08:51:32",
+      "email_sender_company": "Topgolf",
+      "offers": [
+        {
+          "offer_brand": "Topgolf",
+          "offer_type": "discount",
+          "discount_amount": "20%",
+          "coupon_code": null,
+          "expiry_date": "2025-08-17",
+          "expiry_inferred": false,
+          "offer_title": "20% Off Online Gift Cards",
+          "offer_description": "Get 20% off Topgolf gift cards purchased online.",
+          "minimum_purchase": null,
+          "terms_conditions": "Offer valid for gift cards purchased online only at topgolf.com from August 14, 2025 – August 17, 2025. Maximum discount of $200 per person. Not valid for gift card purchases in-venue, on bulk orders, or from third-party websites.",
+          "call_to_action": "Buy Now",
+          "id": "198a8dd20ae79462_0"
+        },
+        {
+          "offer_brand": "Topgolf",
+          "offer_type": "discount",
+          "discount_amount": "50%",
+          "coupon_code": null,
+          "expiry_date": null,
+          "expiry_inferred": false,
+          "offer_title": "Half-Off Golf Monday-Thursday",
+          "offer_description": "Get half-off golf game play Monday through Thursday.",
+          "minimum_purchase": null,
+          "terms_conditions": "Valid Monday-Thursdays only. Requires $5 Lifetime Membership. Cannot be combined with any other coupon, offer, or promotion. Not valid for parties or events. Not valid at select locations. Excludes arcade games.",
+          "call_to_action": "Book Now",
+          "id": "198a8dd20ae79462_1"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/ticketmaster.com",
+      "company_domain": "ticketmaster.com",
+      "message_id": "198a514f4c679f31",
+      "sender": "NRG Park <nrgpark@engage.ticketmaster.com>",
+      "subject": "DISCOUNT OFFER INSIDE: Atif Aslam at NRG Arena This August!",
+      "timestamp": "2025-08-13T15:07:12",
+      "email_sender_company": "NRG Park",
+      "offers": [
+        {
+          "offer_brand": "NRG Park",
+          "offer_type": "discount",
+          "discount_amount": "20%",
+          "coupon_code": null,
+          "expiry_date": "2025-08-17",
+          "expiry_inferred": false,
+          "offer_title": "20% Off Floor Seats for Atif Aslam Concert",
+          "offer_description": "Get 20% off floor seats for the Atif Aslam concert at NRG Arena.",
+          "minimum_purchase": null,
+          "terms_conditions": "Standard fees and restrictions may apply.",
+          "call_to_action": "FIND TICKETS HERE",
+          "id": "198a514f4c679f31_0"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/overstock.com",
+      "company_domain": "overstock.com",
+      "message_id": "198a50918cd45ae0",
+      "sender": "Overstock <email@promotion.overstock.com>",
+      "subject": "Flash Price Drops on outdoor must-haves ⚡",
+      "timestamp": "2025-08-13T15:04:53",
+      "email_sender_company": "Overstock",
+      "offers": [
+        {
+          "offer_brand": "Overstock",
+          "offer_type": "discount",
+          "discount_amount": "20%",
+          "coupon_code": null,
+          "expiry_date": "2025-08-18",
+          "expiry_inferred": false,
+          "offer_title": "20% off Patio",
+          "offer_description": "Take an extra 20% off end-of-season patio items.",
+          "minimum_purchase": null,
+          "terms_conditions": "May only be used once and cannot be combined with any other offer nor past purchases. Discount applies only to products purchased in the Area Rugs category. Does not apply to items in current site promotions, Special Sales, Minimum Advertised Priced products. Total discount limited to $5,000.",
+          "call_to_action": "Save Now",
+          "id": "198a50918cd45ae0_0"
+        }
+      ]
+    },
+    {
+      "company_category": "general",
+      "company_logo_url": "https://logo.clearbit.com/southwest.com",
+      "company_domain": "southwest.com",
+      "message_id": "198a4d00efb65c87",
+      "sender": "Southwest Airlines Rapid Rewards <RapidRewards@iluv.southwest.com>",
+      "subject": "Because we ❤️ you: earn up to 6,000 bonus points.",
+      "timestamp": "2025-08-13T14:02:26",
+      "email_sender_company": "Southwest Airlines",
+      "offers": [
+        {
+          "offer_brand": "Southwest Airlines",
+          "offer_type": "loyalty_points",
+          "discount_amount": null,
+          "coupon_code": null,
+          "expiry_date": "2025-12-31",
+          "expiry_inferred": false,
+          "offer_title": "Earn up to 6,000 Bonus Points",
+          "offer_description": "Earn 5,000 bonus points for a leisure booking or 6,000 bonus points for a business booking after registering, booking, and flying one qualifying one-way flight within 90 days of registration.",
+          "minimum_purchase": null,
+          "terms_conditions": "Member must register between June 12, 2025 and December 31, 2025. Travel must be completed within 90 days of registration. Offer is nontransferable. Not combinable with other promotions. Charter flights, group travel, Companion Pass, Southwest Vacations packages, and travel booked entirely with Rapid Rewards points do not qualify.",
+          "call_to_action": "Register now",
+          "id": "198a4d00efb65c87_0"
         }
       ]
     }
   ],
-  "total_emails_processed": 2,
-  "emails_with_coupons": 1
+  "total_emails_processed": 50,
+  "emails_with_coupons": 14
 }
