@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,10 +16,12 @@ import { HomeScreen } from './screens/HomeScreen';
 import { AddCouponScreen } from './screens/AddCouponScreen';
 import { FavoritesScreen } from './screens/FavoritesScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
+import { CompanyOffersScreen } from './screens/CompanyOffersScreen';
 
 import { styles } from './styles/styles';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const CustomHeader = ({ routeName }) => {
   const getHeaderContent = (routeName) => {
@@ -61,6 +64,16 @@ const CustomHeader = ({ routeName }) => {
     </View>
   );
 };
+
+// Home Stack Navigator
+function HomeStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeMain" component={HomeScreen} />
+      <Stack.Screen name="CompanyOffers" component={CompanyOffersScreen} />
+    </Stack.Navigator>
+  );
+}
 
 function TabNavigator() {
   const [currentRoute, setCurrentRoute] = React.useState('Home');
@@ -112,7 +125,7 @@ function TabNavigator() {
       >
         <Tab.Screen 
           name="Home" 
-          component={HomeScreen}
+          component={HomeStack}
           options={{ title: 'Home' }}
           listeners={{
             focus: () => setCurrentRoute('Home'),

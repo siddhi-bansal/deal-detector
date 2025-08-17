@@ -9,16 +9,21 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import sampleData from '../assets/sample_api_output.json';
 import { CouponCard } from '../components/CouponCard';
+import { CompanyCard } from '../components/CompanyCard';
 import { CouponDetailModal } from '../components/CouponDetailModal';
 import { SearchModal } from '../components/SearchModal';
 import { TypeFilter } from '../components/TypeFilter';
 import { styles } from '../styles/styles';
 
 export const HomeScreen = () => {
+  const navigation = useNavigation();
   const [coupons, setCoupons] = useState([]);
+  const [companies, setCompanies] = useState([]);
   const [filteredCoupons, setFilteredCoupons] = useState([]);
+  const [filteredCompanies, setFilteredCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,14 +31,15 @@ export const HomeScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('company');
   const [selectedType, setSelectedType] = useState('all');
+  const [viewMode, setViewMode] = useState('companies'); // 'companies' or 'coupons'
 
   useEffect(() => {
     loadCoupons();
   }, []);
 
   useEffect(() => {
-    filterAndSortCoupons();
-  }, [coupons, searchQuery, sortBy, selectedType]);
+    filterAndSortData();
+  }, [coupons, companies, searchQuery, sortBy, selectedType, viewMode]);
 
   const loadCoupons = async () => {
     try {
@@ -60,6 +66,24 @@ export const HomeScreen = () => {
         });
       }
       setCoupons(allOffers);
+      
+      // Group offers by company
+      const companiesMap = {};
+      allOffers.forEach(offer => {
+        const companyName = offer.email_sender_company || offer.company || 'Unknown Company';
+        if (!companiesMap[companyName]) {
+          companiesMap[companyName] = {
+            name: companyName,
+            company_logo_url: offer.company_logo_url,
+            company_domain: offer.company_domain,
+            offers: []
+          };
+        }
+        companiesMap[companyName].offers.push(offer);
+      });
+      
+      const companiesArray = Object.values(companiesMap);
+      setCompanies(companiesArray);
     } catch (error) {
       console.error('Error loading coupons:', error);
       Alert.alert('Error', 'Failed to load coupons');
@@ -68,18 +92,19 @@ export const HomeScreen = () => {
     }
   };
 
-  const filterAndSortCoupons = () => {
-    let filtered = coupons;
+  const filterAndSortData = () => {
+    // Filter and sort coupons
+    let filteredCouponsData = coupons;
 
     // Apply type filter
     if (selectedType !== 'all') {
-      filtered = filtered.filter(coupon => coupon.offer_type === selectedType);
+      filteredCouponsData = filteredCouponsData.filter(coupon => coupon.offer_type === selectedType);
     }
 
-    // Apply search filter
+    // Apply search filter to coupons
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(coupon => 
+      filteredCouponsData = filteredCouponsData.filter(coupon => 
         (coupon.email_sender_company || coupon.company)?.toLowerCase().includes(query) ||
         coupon.offer_brand?.toLowerCase().includes(query) ||
         coupon.offer_title?.toLowerCase().includes(query) ||
@@ -95,8 +120,8 @@ export const HomeScreen = () => {
       );
     }
 
-    // Apply sorting
-    filtered.sort((a, b) => {
+    // Apply sorting to coupons
+    filteredCouponsData.sort((a, b) => {
       switch (sortBy) {
         case 'company':
           const companyA = a.email_sender_company || a.company || '';
@@ -126,7 +151,49 @@ export const HomeScreen = () => {
       }
     });
 
-    setFilteredCoupons(filtered);
+    setFilteredCoupons(filteredCouponsData);
+
+    // Filter and sort companies based on filtered coupons
+    let filteredCompaniesData = companies.map(company => ({
+      ...company,
+      offers: company.offers.filter(offer => 
+        filteredCouponsData.some(filteredOffer => 
+          filteredOffer.message_id === offer.message_id && 
+          filteredOffer.offer_title === offer.offer_title
+        )
+      )
+    })).filter(company => company.offers.length > 0);
+
+    // Sort companies
+    filteredCompaniesData.sort((a, b) => {
+      switch (sortBy) {
+        case 'company':
+          return a.name.localeCompare(b.name);
+        case 'discount':
+          // Sort by highest discount in company's offers
+          const getMaxDiscount = (company) => {
+            return Math.max(...company.offers.map(offer => {
+              const match = offer.discount_amount?.match(/(\d+)/);
+              return match ? parseInt(match[1]) : 0;
+            }));
+          };
+          return getMaxDiscount(b) - getMaxDiscount(a);
+        case 'expiry':
+          // Sort by earliest expiry in company's offers
+          const getEarliestExpiry = (company) => {
+            const dates = company.offers
+              .map(offer => offer.expiry_date)
+              .filter(date => date)
+              .map(date => new Date(date));
+            return dates.length > 0 ? Math.min(...dates) : new Date('2099-12-31');
+          };
+          return getEarliestExpiry(a) - getEarliestExpiry(b);
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
+
+    setFilteredCompanies(filteredCompaniesData);
   };
 
   const handleCardPress = (coupon) => {
@@ -134,8 +201,16 @@ export const HomeScreen = () => {
     setModalVisible(true);
   };
 
+  const handleCompanyPress = (company) => {
+    navigation.navigate('CompanyOffers', { company });
+  };
+
   const renderCouponCard = ({ item }) => (
     <CouponCard coupon={item} onPress={() => handleCardPress(item)} />
+  );
+
+  const renderCompanyCard = ({ item }) => (
+    <CompanyCard company={item} onPress={() => handleCompanyPress(item)} />
   );
 
   if (loading) {
@@ -173,24 +248,89 @@ export const HomeScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {filteredCoupons.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Ionicons name="receipt-outline" size={64} color="#ccc" />
-            <Text style={styles.emptyText}>
-              {searchQuery.trim() ? 'No coupons match your search' : 'No coupons available'}
+        {/* View Mode Toggle */}
+        <View style={styles.viewModeToggle}>
+          <TouchableOpacity 
+            style={[
+              styles.viewModeButton, 
+              viewMode === 'companies' && styles.viewModeButtonActive
+            ]}
+            onPress={() => setViewMode('companies')}
+          >
+            <Ionicons 
+              name="business" 
+              size={16} 
+              color={viewMode === 'companies' ? '#ffffff' : '#10b981'} 
+            />
+            <Text style={[
+              styles.viewModeButtonText,
+              viewMode === 'companies' && styles.viewModeButtonTextActive
+            ]}>
+              Companies
             </Text>
-            <Text style={styles.emptySubtext}>
-              {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[
+              styles.viewModeButton, 
+              viewMode === 'coupons' && styles.viewModeButtonActive
+            ]}
+            onPress={() => setViewMode('coupons')}
+          >
+            <Ionicons 
+              name="receipt" 
+              size={16} 
+              color={viewMode === 'coupons' ? '#ffffff' : '#10b981'} 
+            />
+            <Text style={[
+              styles.viewModeButtonText,
+              viewMode === 'coupons' && styles.viewModeButtonTextActive
+            ]}>
+              All Offers
             </Text>
-          </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Content based on view mode */}
+        {viewMode === 'companies' ? (
+          filteredCompanies.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Ionicons name="business-outline" size={64} color="#ccc" />
+              <Text style={styles.emptyText}>
+                {searchQuery.trim() ? 'No companies match your search' : 'No companies available'}
+              </Text>
+              <Text style={styles.emptySubtext}>
+                {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={filteredCompanies}
+              renderItem={renderCompanyCard}
+              keyExtractor={(item, index) => `company-${item.name}-${index}`}
+              contentContainerStyle={styles.cardList}
+              showsVerticalScrollIndicator={true}
+            />
+          )
         ) : (
-          <FlatList
-            data={filteredCoupons}
-            renderItem={renderCouponCard}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={styles.cardList}
-            showsVerticalScrollIndicator={true}
-          />
+          filteredCoupons.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Ionicons name="receipt-outline" size={64} color="#ccc" />
+              <Text style={styles.emptyText}>
+                {searchQuery.trim() ? 'No coupons match your search' : 'No coupons available'}
+              </Text>
+              <Text style={styles.emptySubtext}>
+                {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={filteredCoupons}
+              renderItem={renderCouponCard}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={styles.cardList}
+              showsVerticalScrollIndicator={true}
+            />
+          )
         )}
 
         <CouponDetailModal
@@ -206,7 +346,7 @@ export const HomeScreen = () => {
           setSearchQuery={setSearchQuery}
           sortBy={sortBy}
           setSortBy={setSortBy}
-          resultsCount={filteredCoupons.length}
+          resultsCount={viewMode === 'companies' ? filteredCompanies.length : filteredCoupons.length}
         />
       </View>
     </LinearGradient>

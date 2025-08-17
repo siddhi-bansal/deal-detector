@@ -49,6 +49,194 @@ export const styles = StyleSheet.create({
     color: '#374151',
     fontWeight: '500',
   },
+
+  // Company Card Styles
+  companyCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    marginHorizontal: 20,
+    marginVertical: 8,
+    padding: 16,
+    shadowColor: '#10b981',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  companyCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  companyLogoContainer: {
+    width: 50,
+    height: 50,
+    marginRight: 12,
+  },
+  companyLogo: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+  },
+  companyLogoPlaceholder: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#f3f4f6',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  companyInfoContainer: {
+    flex: 1,
+  },
+  companyName: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 2,
+  },
+  companyOfferCount: {
+    fontSize: 14,
+    color: '#6b7280',
+    fontWeight: '500',
+  },
+  companyCardArrow: {
+    marginLeft: 8,
+  },
+  companyCardDetails: {
+    gap: 8,
+  },
+  offerTypesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  offerTypeTag: {
+    backgroundColor: '#e6fffa',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#10b981',
+  },
+  offerTypeTagText: {
+    fontSize: 12,
+    color: '#10b981',
+    fontWeight: '500',
+  },
+  companyExpiryContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  companyExpiryText: {
+    fontSize: 12,
+    color: '#6b7280',
+    fontWeight: '500',
+  },
+
+  // Company Offers Screen Styles
+  companyOffersHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
+    marginBottom: 10,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  companyOffersHeaderInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  companyOffersLogoContainer: {
+    width: 60,
+    height: 60,
+    marginRight: 16,
+  },
+  companyOffersLogo: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 12,
+  },
+  companyOffersLogoPlaceholder: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#f3f4f6',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  companyOffersText: {
+    flex: 1,
+  },
+  companyOffersName: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  companyOffersCount: {
+    fontSize: 16,
+    color: '#6b7280',
+    fontWeight: '500',
+  },
+
+  // View Mode Toggle Styles
+  viewModeToggle: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginVertical: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 4,
+    shadowColor: '#10b981',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  viewModeButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    gap: 6,
+  },
+  viewModeButtonActive: {
+    backgroundColor: '#10b981',
+  },
+  viewModeButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#10b981',
+  },
+  viewModeButtonTextActive: {
+    color: '#ffffff',
+  },
   clearButton: {
     padding: 8,
     borderRadius: 20,
