@@ -79,6 +79,18 @@ export const CompanyCard = ({ company, onPress }) => {
       </View>
 
       <View style={styles.companyCardDetails}>
+        {/* Company Category */}
+        {company.company_category && (
+          <View style={styles.companyCategoryContainer}>
+            <View style={styles.companyCategoryTag}>
+              <Ionicons name="business-outline" size={12} color="#10b981" />
+              <Text style={styles.companyCategoryText}>
+                {company.company_category.charAt(0).toUpperCase() + company.company_category.slice(1)}
+              </Text>
+            </View>
+          </View>
+        )}
+        
         {/* Offer types preview */}
         <View style={styles.offerTypesContainer}>
           {offerTypesPreview.map((type, index) => {

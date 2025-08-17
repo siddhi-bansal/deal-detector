@@ -59,6 +59,7 @@ export const HomeScreen = () => {
                 company: couponGroup.company,
                 company_domain: couponGroup.company_domain,
                 company_logo_url: couponGroup.company_logo_url,
+                company_category: couponGroup.company_category,
                 isFavorite: false 
               });
             });
@@ -76,6 +77,7 @@ export const HomeScreen = () => {
             name: companyName,
             company_logo_url: offer.company_logo_url,
             company_domain: offer.company_domain,
+            company_category: offer.company_category,
             offers: []
           };
         }
@@ -113,7 +115,7 @@ export const HomeScreen = () => {
         coupon.offer_type?.toLowerCase().includes(query) ||
         coupon.terms_conditions?.toLowerCase().includes(query) ||
         coupon.coupon_code?.toLowerCase().includes(query) ||
-        coupon.product_category?.toLowerCase().includes(query) ||
+        coupon.company_category?.toLowerCase().includes(query) ||
         (coupon.additional_benefits && coupon.additional_benefits.some(benefit => 
           benefit.toLowerCase().includes(query)
         ))

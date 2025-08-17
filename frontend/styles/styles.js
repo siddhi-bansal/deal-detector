@@ -131,6 +131,22 @@ export const styles = StyleSheet.create({
     color: '#10b981',
     fontWeight: '500',
   },
+  companyCategoryTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f9fafb',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    gap: 4,
+  },
+  companyCategoryText: {
+    fontSize: 11,
+    color: '#6b7280',
+    fontWeight: '500',
+  },
   companyExpiryContainer: {
     flexDirection: 'row',
     alignItems: 'center',

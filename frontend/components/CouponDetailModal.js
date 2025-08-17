@@ -184,11 +184,13 @@ export const CouponDetailModal = ({ visible, coupon, onClose }) => {
                       {getOfferTypeLabel(coupon.offer_type)}
                     </Text>
                   </View>
-                  {/* Product Category Tag */}
-                  {coupon.product_category && (
-                    <View style={styles.productCategoryTag}>
-                      <Text style={styles.productCategoryText}>
-                        {coupon.product_category}
+                  
+                  {/* Company Category Tag */}
+                  {coupon.company_category && (
+                    <View style={styles.companyCategoryTag}>
+                      <Ionicons name="business-outline" size={12} color="#6b7280" />
+                      <Text style={styles.companyCategoryText}>
+                        {coupon.company_category.charAt(0).toUpperCase() + coupon.company_category.slice(1)}
                       </Text>
                     </View>
                   )}

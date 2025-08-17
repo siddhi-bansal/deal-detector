@@ -2,6 +2,7 @@ import os
 import json
 import google.generativeai as genai
 from dotenv import load_dotenv
+from company_categorization import get_company_category
 
 # Load environment variables
 load_dotenv()
@@ -51,17 +52,16 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         Each offer object must include:
         {{
             "offer_brand": "specific brand name, may be same as sender",
-            "offer_type": "discount|coupon|free_shipping|bogo|free_gift|loyalty_points", 
+            "offer_type": "discount|coupon|free_shipping|bogo|free_gift|loyalty_points",
             "discount_amount": "20%|$10|null",
             "coupon_code": "CODE123|null",
             "expiry_date": "2025-08-20|null",
             "expiry_inferred": true/false,
             "offer_title": "concise title",
-            "offer_description": "brief description", 
+            "offer_description": "brief description",
             "minimum_purchase": "$50|null",
             "terms_conditions": "key restrictions|null",
-            "call_to_action": "Shop Now|Use Code|etc",
-            "product_category": "clothing|electronics|all|etc"
+            "call_to_action": "Shop Now|Use Code|etc"
         }}
         """
         

@@ -7,6 +7,7 @@ import logging
 from get_emails_info import get_emails_info, get_html_from_message_id, run_authorization_server
 from get_coupon_info_from_email import get_coupon_info_from_email
 from get_company_logo import get_company_logo_info
+from company_categorization import get_company_category
 from googleapiclient.discovery import build
 
 # Configure logging
@@ -88,6 +89,18 @@ async def get_coupons():
                 # Get company logo and domain info
                 logo_info = get_company_logo_info(email_sender)
                 
+                # Get company category based on domain
+                company_domain = logo_info.get("domain")
+                if company_domain:
+                    company_category = get_company_category(company_domain)
+                else:
+                    # Fallback: extract domain from email sender
+                    if '@' in email_sender:
+                        sender_domain = email_sender.split('@')[-1].split('>')[0]
+                        company_category = get_company_category(sender_domain)
+                    else:
+                        company_category = 'general'
+                
                 # Add unique IDs to each offer
                 if "offers" in coupons_json:
                     for i, offer in enumerate(coupons_json["offers"]):
@@ -100,8 +113,9 @@ async def get_coupons():
                 coupons_json = {"subject": email_subject, **coupons_json}
                 coupons_json = {"sender": email_sender, **coupons_json}
                 coupons_json = {"message_id": id, **coupons_json}
-                coupons_json = {"company_domain": logo_info.get("domain"), **coupons_json}
+                coupons_json = {"company_domain": company_domain, **coupons_json}
                 coupons_json = {"company_logo_url": logo_info.get("logo_url"), **coupons_json}
+                coupons_json = {"company_category": company_category, **coupons_json}
 
                 # has_coupon will always be True, no need to include in backend JSON
                 coupons_json.pop("has_coupon", None) 

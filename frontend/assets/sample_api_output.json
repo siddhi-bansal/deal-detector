@@ -3,6 +3,7 @@
     {
       "company_logo_url": "https://logo.clearbit.com/lulus.com",
       "company_domain": "lulus.com",
+      "company_category": "fashion",
       "message_id": "198b555b99de86b4",
       "sender": "Lulus <love@hello.lulus.com>",
       "subject": "SSSSAAAALLLLEEEE",
@@ -12,7 +13,7 @@
         {
           "id": "198b555b99de86b4_0",
           "offer_brand": "Lulus",
-          "offer_type": "loyalty_points",
+          "offer_type": "coupon",
           "discount_amount": "20%",
           "coupon_code": "BDAYGIFT",
           "expiry_date": "2025-08-18",
@@ -21,8 +22,7 @@
           "offer_description": "Get 20% off sitewide on Lulus.com with code BDAYGIFT.",
           "minimum_purchase": null,
           "terms_conditions": "Valid only on purchases made on Lulus.com; not valid in the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code.",
-          "call_to_action": "Shop Now",
-          "product_category": "all"
+          "call_to_action": "Shop Now"
         },
         {
           "id": "198b555b99de86b4_1",
@@ -36,8 +36,7 @@
           "offer_description": "Get 29% off in the Lulus app with code BDAYGIFTAPP.",
           "minimum_purchase": null,
           "terms_conditions": "Valid only on purchases made via the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Coupon code valid in the U.S. only. Cannot be combined with any other coupon code.",
-          "call_to_action": "Shop Now",
-          "product_category": "all"
+          "call_to_action": "Shop Now"
         }
       ]
     }
