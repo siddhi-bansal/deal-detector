@@ -88,6 +88,13 @@ async def get_coupons():
                 # Get company logo and domain info
                 logo_info = get_company_logo_info(email_sender)
                 
+                # Add unique IDs to each offer
+                if "offers" in coupons_json:
+                    for i, offer in enumerate(coupons_json["offers"]):
+                        # Generate unique ID using message_id + offer index (guaranteed unique)
+                        unique_id = f"{id}_{i}"
+                        offer["id"] = unique_id
+                
                 # Insert timestamp, subject, sender, and message_id in dict
                 coupons_json = {"timestamp": email_timestamp, **coupons_json}
                 coupons_json = {"subject": email_subject, **coupons_json}

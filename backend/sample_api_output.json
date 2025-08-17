@@ -1,40 +1,16 @@
 {
   "all_coupons": [
     {
-      "company_logo_url": "https://logo.clearbit.com/lyftmail.com",
-      "company_domain": "lyftmail.com",
-      "message_id": "198af827ef3adc17",
-      "sender": "Lyft <no-reply@marketing.lyftmail.com>",
-      "subject": "Reminder: Don't miss out on your $5 reward this month",
-      "timestamp": "2025-08-15T15:53:41",
-      "email_sender_company": "Lyft",
-      "offers": [
-        {
-          "offer_brand": "Lyft",
-          "offer_type": "loyalty_points",
-          "discount_amount": "$5",
-          "coupon_code": null,
-          "expiry_date": null,
-          "expiry_inferred": false,
-          "offer_title": "Get $5 Lyft Credit",
-          "offer_description": "Take three Lyft rides this month using your linked World Elite Mastercard to receive a $5 Lyft credit.",
-          "minimum_purchase": null,
-          "terms_conditions": "Must use World or World Elite Mastercard. Excludes business rides and bicycle/scooter rentals. Limit one credit per calendar month. Credits expire 30 days after application.",
-          "call_to_action": "Take 3 rides",
-          "product_category": "all"
-        }
-      ]
-    },
-    {
       "company_logo_url": "https://logo.clearbit.com/lulus.com",
       "company_domain": "lulus.com",
-      "message_id": "198ae421eb5e527f",
+      "message_id": "198b555b99de86b4",
       "sender": "Lulus <love@hello.lulus.com>",
-      "subject": "A Reason To Celebrate 🥳 20% Off",
-      "timestamp": "2025-08-15T10:03:45",
+      "subject": "SSSSAAAALLLLEEEE",
+      "timestamp": "2025-08-16T19:02:29",
       "email_sender_company": "Lulus",
       "offers": [
         {
+          "id": "198b555b99de86b4_0",
           "offer_brand": "Lulus",
           "offer_type": "coupon",
           "discount_amount": "20%",
@@ -42,13 +18,14 @@
           "expiry_date": "2025-08-18",
           "expiry_inferred": false,
           "offer_title": "20% Off Sitewide",
-          "offer_description": "Get 20% off sitewide on Lulus.com.",
+          "offer_description": "Get 20% off sitewide on Lulus.com with code BDAYGIFT.",
           "minimum_purchase": null,
-          "terms_conditions": "Valid only on purchases made on Lulus.com; not valid in the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion. Cannot be combined with any other coupon code.",
+          "terms_conditions": "Valid only on purchases made on Lulus.com; not valid in the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Cannot be combined with any other coupon code.",
           "call_to_action": "Shop Now",
           "product_category": "all"
         },
         {
+          "id": "198b555b99de86b4_1",
           "offer_brand": "Lulus",
           "offer_type": "coupon",
           "discount_amount": "29%",
@@ -56,15 +33,15 @@
           "expiry_date": "2025-08-18",
           "expiry_inferred": false,
           "offer_title": "29% Off in the Lulus App",
-          "offer_description": "Get 29% off in the Lulus app.",
+          "offer_description": "Get 29% off in the Lulus app with code BDAYGIFTAPP.",
           "minimum_purchase": null,
-          "terms_conditions": "Valid only on purchases made via the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion. Coupon code valid in the U.S. only. Cannot be combined with any other coupon code.",
+          "terms_conditions": "Valid only on purchases made via the Lulus app. Not valid on gift cards or previous purchases. Discount applies to products only, not to applicable taxes or shipping and handling fees. Select items are final sale or excluded from promotion, see product page for details. Coupon code valid in the U.S. only. Cannot be combined with any other coupon code.",
           "call_to_action": "Shop Now",
           "product_category": "all"
         }
       ]
     }
   ],
-  "total_emails_processed": 10,
-  "emails_with_coupons": 2
+  "total_emails_processed": 2,
+  "emails_with_coupons": 1
 }
