@@ -74,7 +74,7 @@ def test_specific_email(message_id):
         
         # Test coupon classification
         print(f"\n=== TESTING COUPON CLASSIFICATION ===")
-        coupon_result = get_coupon_info_from_email(all_text, email_subject, email_sender)
+        coupon_result = get_coupon_info_from_email(all_text, email_subject, email_sender, email_timestamp)
         
         # Display results
         print(f"Has Coupon: {coupon_result.get('has_coupon', False)}")

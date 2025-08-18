@@ -7,7 +7,7 @@ from company_categorization import get_company_category
 # Load environment variables
 load_dotenv()
 
-def get_coupon_info_from_email(email_text, email_subject, email_sender):
+def get_coupon_info_from_email(email_text, email_subject, email_sender, email_timestamp):
     """
     Extracts comprehensive coupon information from email text using Gemini AI.
     """
@@ -23,6 +23,7 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         Extract actionable coupon offers from this email. ONLY classify as coupon if it provides immediate monetary savings.
 
         Email: {email_sender} | {email_subject}
+        Email Timestamp: {email_timestamp}
         Content: {email_text}
 
         STRICT CRITERIA FOR offer_type - Must have ALL required fields:
@@ -42,9 +43,16 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
         - Reward points/cashback with specific percentages or values
 
         EXPIRY DATE RULES:
+        - Use the email timestamp above to determine the current year and context
         - Explicit dates: extract exact date (YYYY-MM-DD)
-        - Infer from keywords: "Daily Deal"→today, "Weekly Sale"→end of week, "Flash Sale"→2 days, "Weekend Special"→Sunday
+        - For temporal expressions without specific dates:
+          • Convert time references to descriptive text (e.g., "all summer long" → "Summer 2025")
+          • For seasons, use "Season Year" format based on email timestamp year
+          • For indefinite terms, keep descriptive (e.g., "Limited Time", "While supplies last")
+        - Always look for temporal clues and convert them to user-friendly expiry descriptions
         - Mark inferred dates clearly for UI display
+        
+        IMPORTANT: When temporal language exists but no specific date is provided, always populate expiry_date with descriptive text rather than null.
 
         JSON Response Structure:
         {{"has_coupon": true/false, "email_sender_company": "Company Name", "offers": [...]}}
@@ -55,7 +63,7 @@ def get_coupon_info_from_email(email_text, email_subject, email_sender):
             "offer_type": "discount|coupon|free_shipping|bogo|free_gift|loyalty_points",
             "discount_amount": "20%|$10|null",
             "coupon_code": "CODE123|null",
-            "expiry_date": "2025-08-20|null",
+            "expiry_date": "2025-08-20|Summer 2025|Limited Time|null",
             "expiry_inferred": true/false,
             "offer_title": "concise title",
             "offer_description": "brief description",

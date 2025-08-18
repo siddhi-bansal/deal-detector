@@ -79,7 +79,7 @@ async def get_coupons():
             if not email_text or not email_text.strip():
                 continue
                 
-            coupons_json = get_coupon_info_from_email(email_text, email_subject, email_sender)
+            coupons_json = get_coupon_info_from_email(email_text, email_subject, email_sender, email_timestamp)
             
             if "error" in coupons_json:
                 logger.warning(f"Error processing email {i+1}: {coupons_json['error']}")
