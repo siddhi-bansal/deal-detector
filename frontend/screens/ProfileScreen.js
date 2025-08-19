@@ -88,7 +88,10 @@ export const ProfileScreen = ({ navigation }) => {
             value={totalCoupons.toString()} 
             label="Coupons" 
             color="#10b981"
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Home', { 
+              screen: 'HomeMain',
+              params: { initialViewMode: 'coupons' }
+            })}
           />
           <StatCard 
             icon="heart" 

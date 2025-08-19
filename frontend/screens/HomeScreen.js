@@ -18,7 +18,7 @@ import { SearchModal } from '../components/SearchModal';
 import { TypeFilter } from '../components/TypeFilter';
 import { styles } from '../styles/styles';
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
   const [coupons, setCoupons] = useState([]);
   const [companies, setCompanies] = useState([]);
@@ -32,6 +32,49 @@ export const HomeScreen = () => {
   const [sortBy, setSortBy] = useState('company');
   const [selectedType, setSelectedType] = useState('all');
   const [viewMode, setViewMode] = useState('companies'); // 'companies' or 'coupons'
+  const [hasNavigatedWithParams, setHasNavigatedWithParams] = useState(false);
+  
+  // Refs for FlatLists to control scroll position
+  const companiesListRef = React.useRef(null);
+  const couponsListRef = React.useRef(null);
+
+  // Handle navigation parameters to set initial view mode
+  useEffect(() => {
+    if (route?.params?.initialViewMode) {
+      setViewMode(route.params.initialViewMode);
+      setHasNavigatedWithParams(true);
+      // Clear the parameter to avoid it persisting
+      navigation.setParams({ initialViewMode: undefined });
+    }
+  }, [route?.params?.initialViewMode, navigation]);
+
+  // Listen for navigation focus to reset to companies view when coming from tab press
+  // but only if no specific view mode parameter was passed
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // Always reset scroll position when focusing on home screen
+      const resetScrollPosition = () => {
+        if (viewMode === 'companies' && companiesListRef.current) {
+          companiesListRef.current.scrollToOffset({ offset: 0, animated: true });
+        } else if (viewMode === 'coupons' && couponsListRef.current) {
+          couponsListRef.current.scrollToOffset({ offset: 0, animated: true });
+        }
+      };
+      
+      // Reset view mode only if we didn't just navigate with parameters
+      if (!hasNavigatedWithParams) {
+        setViewMode('companies');
+      }
+      
+      // Always reset scroll position after a short delay
+      setTimeout(resetScrollPosition, 100);
+      
+      // Reset the flag after handling
+      setHasNavigatedWithParams(false);
+    });
+
+    return unsubscribe;
+  }, [navigation, hasNavigatedWithParams, viewMode]);
 
   useEffect(() => {
     loadCoupons();
@@ -40,6 +83,21 @@ export const HomeScreen = () => {
   useEffect(() => {
     filterAndSortData();
   }, [coupons, companies, searchQuery, sortBy, selectedType, viewMode]);
+
+  // Reset scroll position when view mode changes
+  useEffect(() => {
+    const resetScrollPosition = () => {
+      if (viewMode === 'companies' && companiesListRef.current) {
+        companiesListRef.current.scrollToOffset({ offset: 0, animated: true });
+      } else if (viewMode === 'coupons' && couponsListRef.current) {
+        couponsListRef.current.scrollToOffset({ offset: 0, animated: true });
+      }
+    };
+
+    // Small delay to ensure the list has rendered
+    const timeoutId = setTimeout(resetScrollPosition, 100);
+    return () => clearTimeout(timeoutId);
+  }, [viewMode]);
 
   const loadCoupons = async () => {
     try {
@@ -306,6 +364,7 @@ export const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
+              ref={companiesListRef}
               data={filteredCompanies}
               renderItem={renderCompanyCard}
               keyExtractor={(item, index) => `company-${item.name}-${index}`}
@@ -326,6 +385,7 @@ export const HomeScreen = () => {
             </View>
           ) : (
             <FlatList
+              ref={couponsListRef}
               data={filteredCoupons}
               renderItem={renderCouponCard}
               keyExtractor={(item, index) => index.toString()}
