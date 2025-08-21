@@ -48,7 +48,7 @@ Gmail API → Email Text + Image OCR → Gemini AI Analysis → FastAPI → Reac
 ### Backend
 - **Python 3.13+**
 - **FastAPI** - Modern web framework with automatic API docs
-- **Google Gemini AI** - For OCR and text analysis
+- **Google Gemini AI** - For OCR and text analysis of email to extract coupon information in JSON format
 - **Gmail API** - For email access
 - **PIL/Pillow** - Image processing
 - **BeautifulSoup** - HTML parsing
