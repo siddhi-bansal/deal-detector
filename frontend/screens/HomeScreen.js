@@ -6,6 +6,8 @@ import {
   ActivityIndicator,
   Alert,
   TouchableOpacity,
+  Animated,
+  Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -37,6 +39,11 @@ export const HomeScreen = ({ route }) => {
   // Refs for FlatLists to control scroll position
   const companiesListRef = React.useRef(null);
   const couponsListRef = React.useRef(null);
+  
+  // Animated values for smooth transitions
+  const slideAnim = React.useRef(new Animated.Value(0)).current;
+  const buttonSlideAnim = React.useRef(new Animated.Value(0)).current;
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Handle navigation parameters to set initial view mode
   useEffect(() => {
@@ -46,7 +53,11 @@ export const HomeScreen = ({ route }) => {
       // Clear the parameter to avoid it persisting
       navigation.setParams({ initialViewMode: undefined });
     }
-  }, [route?.params?.initialViewMode, navigation]);
+    if (route?.params?.shouldRefresh) {
+      loadCoupons(); // Refresh the data
+      navigation.setParams({ shouldRefresh: undefined });
+    }
+  }, [route?.params?.initialViewMode, route?.params?.shouldRefresh, navigation]);
 
   // Listen for navigation focus to reset to companies view when coming from tab press
   // but only if no specific view mode parameter was passed
@@ -265,6 +276,37 @@ export const HomeScreen = ({ route }) => {
     navigation.navigate('CompanyOffers', { company });
   };
 
+  // Animated view mode change
+  const changeViewMode = (newViewMode) => {
+    if (newViewMode === viewMode || isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setViewMode(newViewMode); // Move this to the beginning for instant icon color change
+    
+    // Get screen width
+    const screenWidth = Dimensions.get('window').width;
+    
+    // Determine target position: 0 for companies, -screenWidth for coupons
+    const targetPosition = newViewMode === 'companies' ? 0 : -screenWidth;
+    const buttonTargetPosition = newViewMode === 'companies' ? 0 : 1;
+    
+    // Animate both content slide and button background
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: targetPosition,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonSlideAnim, {
+        toValue: buttonTargetPosition,
+        duration: 300,
+        useNativeDriver: false, // Can't use native driver for layout properties
+      })
+    ]).start(() => {
+      setIsTransitioning(false);
+    });
+  };
+
   const renderCouponCard = ({ item }) => (
     <CouponCard coupon={item} onPress={() => handleCardPress(item)} />
   );
@@ -310,90 +352,150 @@ export const HomeScreen = ({ route }) => {
 
         {/* View Mode Toggle */}
         <View style={styles.viewModeToggle}>
+          {/* Animated background slider */}
+          <Animated.View
+            style={[
+              {
+                position: 'absolute',
+                top: 2,
+                left: buttonSlideAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['1%', '51%'],
+                  extrapolate: 'clamp',
+                }),
+                right: buttonSlideAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['51%', '1%'],
+                  extrapolate: 'clamp',
+                }),
+                bottom: 2,
+                backgroundColor: '#10b981',
+                borderRadius: 8,
+              }
+            ]}
+          />
+          
           <TouchableOpacity 
             style={[
-              styles.viewModeButton, 
-              viewMode === 'companies' && styles.viewModeButtonActive
+              styles.viewModeButton,
+              { backgroundColor: 'transparent' }
             ]}
-            onPress={() => setViewMode('companies')}
+            onPress={() => changeViewMode('companies')}
+            disabled={isTransitioning}
           >
-            <Ionicons 
-              name="business" 
-              size={16} 
-              color={viewMode === 'companies' ? '#ffffff' : '#10b981'} 
-            />
-            <Text style={[
+            <Animated.View style={{ opacity: 1 }}>
+              <Ionicons 
+                name="business" 
+                size={16} 
+                color={viewMode === 'companies' ? '#ffffff' : '#10b981'} 
+              />
+            </Animated.View>
+            <Animated.Text style={[
               styles.viewModeButtonText,
-              viewMode === 'companies' && styles.viewModeButtonTextActive
+              { 
+                opacity: 1,
+                color: buttonSlideAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['#ffffff', '#10b981'],
+                  extrapolate: 'clamp',
+                })
+              }
             ]}>
               Companies
-            </Text>
+            </Animated.Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={[
-              styles.viewModeButton, 
-              viewMode === 'coupons' && styles.viewModeButtonActive
+              styles.viewModeButton,
+              { backgroundColor: 'transparent' }
             ]}
-            onPress={() => setViewMode('coupons')}
+            onPress={() => changeViewMode('coupons')}
+            disabled={isTransitioning}
           >
-            <Ionicons 
-              name="receipt" 
-              size={16} 
-              color={viewMode === 'coupons' ? '#ffffff' : '#10b981'} 
-            />
-            <Text style={[
+            <Animated.View style={{ opacity: 1 }}>
+              <Ionicons 
+                name="receipt" 
+                size={16} 
+                color={viewMode === 'coupons' ? '#ffffff' : '#10b981'} 
+              />
+            </Animated.View>
+            <Animated.Text style={[
               styles.viewModeButtonText,
-              viewMode === 'coupons' && styles.viewModeButtonTextActive
+              { 
+                opacity: 1,
+                color: buttonSlideAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['#10b981', '#ffffff'],
+                  extrapolate: 'clamp',
+                })
+              }
             ]}>
               All Offers
-            </Text>
+            </Animated.Text>
           </TouchableOpacity>
         </View>
 
         {/* Content based on view mode */}
-        {viewMode === 'companies' ? (
-          filteredCompanies.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <Ionicons name="business-outline" size={64} color="#ccc" />
-              <Text style={styles.emptyText}>
-                {searchQuery.trim() ? 'No companies match your search' : 'No companies available'}
-              </Text>
-              <Text style={styles.emptySubtext}>
-                {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
-              </Text>
+        <View style={{ flex: 1, overflow: 'hidden' }}>
+          <Animated.View 
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              width: '200%',
+              transform: [{
+                translateX: slideAnim
+              }]
+            }}
+          >
+            {/* Companies View (left side) */}
+            <View style={{ flex: 1, width: '50%' }}>
+              {filteredCompanies.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Ionicons name="business-outline" size={64} color="#ccc" />
+                  <Text style={styles.emptyText}>
+                    {searchQuery.trim() ? 'No companies match your search' : 'No companies available'}
+                  </Text>
+                  <Text style={styles.emptySubtext}>
+                    {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
+                  </Text>
+                </View>
+              ) : (
+                <FlatList
+                  ref={companiesListRef}
+                  data={filteredCompanies}
+                  renderItem={renderCompanyCard}
+                  keyExtractor={(item, index) => `company-${item.name}-${index}`}
+                  contentContainerStyle={styles.cardList}
+                  showsVerticalScrollIndicator={true}
+                />
+              )}
             </View>
-          ) : (
-            <FlatList
-              ref={companiesListRef}
-              data={filteredCompanies}
-              renderItem={renderCompanyCard}
-              keyExtractor={(item, index) => `company-${item.name}-${index}`}
-              contentContainerStyle={styles.cardList}
-              showsVerticalScrollIndicator={true}
-            />
-          )
-        ) : (
-          filteredCoupons.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <Ionicons name="receipt-outline" size={64} color="#ccc" />
-              <Text style={styles.emptyText}>
-                {searchQuery.trim() ? 'No coupons match your search' : 'No coupons available'}
-              </Text>
-              <Text style={styles.emptySubtext}>
-                {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
-              </Text>
+
+            {/* Coupons View (right side) */}
+            <View style={{ flex: 1, width: '50%' }}>
+              {filteredCoupons.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Ionicons name="receipt-outline" size={64} color="#ccc" />
+                  <Text style={styles.emptyText}>
+                    {searchQuery.trim() ? 'No coupons match your search' : 'No coupons available'}
+                  </Text>
+                  <Text style={styles.emptySubtext}>
+                    {searchQuery.trim() ? 'Try adjusting your search terms' : 'Check back later for new offers'}
+                  </Text>
+                </View>
+              ) : (
+                <FlatList
+                  ref={couponsListRef}
+                  data={filteredCoupons}
+                  renderItem={renderCouponCard}
+                  keyExtractor={(item, index) => index.toString()}
+                  contentContainerStyle={styles.cardList}
+                  showsVerticalScrollIndicator={true}
+                />
+              )}
             </View>
-          ) : (
-            <FlatList
-              ref={couponsListRef}
-              data={filteredCoupons}
-              renderItem={renderCouponCard}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={styles.cardList}
-              showsVerticalScrollIndicator={true}
-            />
-          )
-        )}
+          </Animated.View>
+        </View>
 
         <CouponDetailModal
           visible={modalVisible}
