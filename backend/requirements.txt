@@ -14,3 +14,10 @@ google-auth>=2.17.0
 google-auth-oauthlib>=1.0.0
 google-auth-httplib2>=0.1.0
 google-api-python-client>=2.88.0
+
+# Authentication and Database
+python-jose[cryptography]>=3.5.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.20
+sqlalchemy>=2.0.43
+alembic>=1.16.4

@@ -10,15 +10,22 @@ from get_company_logo import get_company_logo_info
 from company_categorization import get_company_category
 from googleapiclient.discovery import build
 
+# Import authentication
+from auth.routes import router as auth_router
+from database.connection import Base, engine
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
 # Create FastAPI app
 app = FastAPI(
-    title="Coupon Filtering API",
-    description="Extract and analyze coupon information from promotional emails",
-    version="1.0.0"
+    title="Deal Detector API",
+    description="Extract and analyze coupon information from promotional emails with user authentication",
+    version="2.0.0"
 )
 
 # Add CORS middleware for frontend access
@@ -29,6 +36,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include authentication routes
+app.include_router(auth_router)
 
 class CouponResponse(BaseModel):
     all_coupons: List[dict] = []
