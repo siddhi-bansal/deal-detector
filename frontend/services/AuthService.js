@@ -2,7 +2,7 @@
  * Authentication API service
  */
 
-const API_BASE_URL = 'http://localhost:8000'; // Your backend URL
+const API_BASE_URL = 'https://deal-detector-production.up.railway.app'; // Your backend URL
 
 class AuthService {
   
