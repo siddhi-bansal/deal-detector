@@ -10,6 +10,7 @@ import { useRoute } from '@react-navigation/native';
 
 // Import context
 import { FavoritesProvider } from './context/FavoritesContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Import screens
 import { HomeScreen } from './screens/HomeScreen';
@@ -17,6 +18,7 @@ import { AddCouponScreen } from './screens/AddCouponScreen';
 import { FavoritesScreen } from './screens/FavoritesScreen';
 import { ProfileScreen } from './screens/ProfileScreen';
 import { CompanyOffersScreen } from './screens/CompanyOffersScreen';
+import LoginScreen from './screens/LoginScreen';
 
 import { styles } from './styles/styles';
 
@@ -162,11 +164,44 @@ function TabNavigator() {
 
 export default function App() {
   return (
-    <FavoritesProvider>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
-    </FavoritesProvider>
+    <AuthProvider>
+      <FavoritesProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </FavoritesProvider>
+    </AuthProvider>
   );
+}
+
+// Create a component that uses auth context
+function AppNavigator() {
+  const { isAuthenticated, loading } = useAuth();
+
+  // Show loading screen while checking authentication
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <LinearGradient
+          colors={['#ecfdf5', '#d1fae5']}
+          style={styles.container}
+        >
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: 18, color: '#10b981', fontWeight: '600' }}>
+              Loading...
+            </Text>
+          </View>
+        </LinearGradient>
+      </SafeAreaView>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!isAuthenticated) {
+    return <LoginScreen />;
+  }
+
+  // Show main app if authenticated
+  return <TabNavigator />;
 }
 

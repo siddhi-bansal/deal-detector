@@ -9,14 +9,39 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useFavorites } from '../context/FavoritesContext';
+import { useAuth } from '../context/AuthContext';
 import { getTotalCouponsCount } from '../utils/couponUtils';
 import { styles } from '../styles/styles';
 
 export const ProfileScreen = ({ navigation }) => {
   const { getFavoritesCount } = useFavorites();
+  const { user, logout } = useAuth();
   const totalCoupons = getTotalCouponsCount();
+  
   const handleSettingPress = (setting) => {
     Alert.alert('Coming Soon', `${setting} feature will be available in future updates.`);
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            const success = await logout();
+            if (success) {
+              // Navigation will be handled by App.js when auth state changes
+            } else {
+              Alert.alert('Error', 'Failed to logout');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const ProfileOption = ({ icon, title, subtitle, onPress, showChevron = true }) => (
@@ -77,8 +102,27 @@ export const ProfileScreen = ({ navigation }) => {
           >
             <Ionicons name="person" size={40} color="white" />
           </LinearGradient>
-          <Text style={styles.profileName}>Coupon User</Text>
-          <Text style={styles.profileEmail}>user@example.com</Text>
+          <Text style={styles.profileName}>
+            {user?.first_name && user?.last_name 
+              ? `${user.first_name} ${user.last_name}` 
+              : user?.email || 'Coupon User'}
+          </Text>
+          <Text style={styles.profileEmail}>{user?.email || 'user@example.com'}</Text>
+          
+          {/* Gmail Connection Status */}
+          <View style={styles.gmailConnectionStatus}>
+            <Ionicons 
+              name={user?.gmail_connected ? "checkmark-circle" : "alert-circle"} 
+              size={16} 
+              color={user?.gmail_connected ? "#10b981" : "#f59e0b"} 
+            />
+            <Text style={[
+              styles.gmailStatusText,
+              { color: user?.gmail_connected ? "#10b981" : "#f59e0b" }
+            ]}>
+              Gmail {user?.gmail_connected ? 'Connected' : 'Not Connected'}
+            </Text>
+          </View>
         </View>
 
         {/* Stats Cards */}
@@ -112,6 +156,13 @@ export const ProfileScreen = ({ navigation }) => {
         {/* Profile Options */}
         <View style={styles.profileSection}>
           <Text style={styles.profileSectionTitle}>Account Settings</Text>
+          
+          <ProfileOption
+            icon="mail-outline"
+            title="Gmail Connection"
+            subtitle={user?.gmail_connected ? "Connected" : "Connect your Gmail account"}
+            onPress={() => handleSettingPress('Gmail Connection')}
+          />
           
           <ProfileOption
             icon="person-outline"
@@ -194,10 +245,7 @@ export const ProfileScreen = ({ navigation }) => {
         <View style={styles.profileSection}>
           <TouchableOpacity
             style={styles.logoutButton}
-            onPress={() => Alert.alert('Logout', 'Are you sure you want to logout?', [
-              { text: 'Cancel', style: 'cancel' },
-              { text: 'Logout', style: 'destructive' }
-            ])}
+            onPress={handleLogout}
           >
             <Ionicons name="log-out-outline" size={20} color="#ef4444" />
             <Text style={styles.logoutText}>Logout</Text>

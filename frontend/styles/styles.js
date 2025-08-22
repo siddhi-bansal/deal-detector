@@ -1141,6 +1141,20 @@ export const styles = StyleSheet.create({
     color: '#6b7280',
     fontWeight: '500',
   },
+  gmailConnectionStatus: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f3f4f6',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  gmailStatusText: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginLeft: 6,
+  },
   statsContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
