@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     # Google OAuth settings
     google_client_id: Optional[str] = None
     google_client_secret: Optional[str] = None
-    google_redirect_uri: str = "http://localhost:8000/auth/google/callback"
+    google_redirect_uri: str = "https://auth.expo.io/@anonymous/deal-detector"
     
     # Gmail API settings
     gmail_scopes: list = [

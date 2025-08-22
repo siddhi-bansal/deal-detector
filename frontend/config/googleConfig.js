@@ -37,5 +37,5 @@ export const DEV_CONFIG = {
   SCOPES: GOOGLE_CONFIG.SCOPES,
 };
 
-// Use dev config for now, switch to GOOGLE_CONFIG for production
-export default __DEV__ ? DEV_CONFIG : GOOGLE_CONFIG;
+// Use production config for OAuth to work properly
+export default GOOGLE_CONFIG;
