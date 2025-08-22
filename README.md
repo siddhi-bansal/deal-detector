@@ -170,18 +170,39 @@ Interactive API documentation (Swagger UI).
 
 #### Backend API
 ```bash
-# Run FastAPI server
+# Navigate to backend directory
+cd backend
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Run FastAPI server locally
 python api.py
 
-# Access API at http://localhost:8000
-# View docs at http://localhost:8000/docs
+# Or run with uvicorn for production
+uvicorn api:app --host 0.0.0.0 --port 8000
+
+# Access API at http://localhost:8000 (local) or https://deal-detector-production.up.railway.app (production)
+# View docs at http://localhost:8000/docs (local) or https://deal-detector-production.up.railway.app/docs (production)
 ```
 
 #### Frontend (React Native)
 ```bash
-cd ../frontend
+# Navigate to frontend directory
+cd frontend
+
+# Install Node.js dependencies
 npm install
-expo start
+
+# Start Expo development server
+npx expo start
+
+# Or use yarn
+yarn install
+yarn start
+
+# Follow the QR code to open on mobile device
+# Or press 'w' to open in web browser
 ```
 
 ## 🔧 Configuration
@@ -216,10 +237,36 @@ expo start
 ## 🚀 Deployment
 
 ### Backend (Railway)
+```bash
+# The backend is automatically deployed to Railway
+# Production URL: https://deal-detector-production.up.railway.app
+
+# To deploy updates:
+git add .
+git commit -m "Your commit message"
+git push origin main
+
+# Railway will automatically rebuild and redeploy
+```
+
 1. Connect GitHub repository to Railway
 2. Set environment variables in Railway dashboard
 3. Deploy automatically on git push
+4. Generated domain: `deal-detector-production.up.railway.app`
 
-### Frontend (App Stores)
+### Frontend (Expo/App Stores)
+```bash
+# For development
+npx expo start
+
+# For production build
+npx expo build:android
+npx expo build:ios
+
+# Or use EAS Build (recommended)
+npx eas build --platform android
+npx eas build --platform ios
+```
+
 1. Build production app with Expo
 2. Submit to App Store and Google Play Store
