@@ -7,13 +7,16 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import Flow
 import requests
+import json
 
 from database.connection import get_db
 from core.security import create_access_token, verify_token
 from .schemas import (
-    GoogleAuthRequest, TokenResponse, UserResponse, 
-    GoogleUserInfo, GmailConnectionStatus
+    GoogleAuthRequest, TokenResponse, UserResponse,
+    GoogleUserInfo, GmailConnectionStatus, GoogleCallbackRequest
 )
 from .crud import (
     get_user_by_google_id, create_user_from_google, 
@@ -56,6 +59,75 @@ async def get_current_user(
         )
     
     return UserResponse.from_orm(user)
+
+@router.post("/google/callback", response_model=TokenResponse)
+async def google_oauth_callback(
+    callback_request: GoogleCallbackRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Handle Google OAuth callback with authorization code
+    """
+    try:
+        # Exchange authorization code for tokens
+        token_url = "https://oauth2.googleapis.com/token"
+        token_data = {
+            "client_id": settings.google_client_id,
+            "client_secret": settings.google_client_secret,
+            "code": callback_request.code,
+            "grant_type": "authorization_code",
+            "redirect_uri": settings.google_redirect_uri,
+        }
+        
+        token_response = requests.post(token_url, data=token_data)
+        token_response.raise_for_status()
+        tokens = token_response.json()
+        
+        # Get user info using access token
+        user_info_url = f"https://www.googleapis.com/oauth2/v2/userinfo?access_token={tokens['access_token']}"
+        user_response = requests.get(user_info_url)
+        user_response.raise_for_status()
+        user_data = user_response.json()
+        
+        # Create GoogleUserInfo object
+        google_user = GoogleUserInfo(
+            id=user_data['id'],
+            email=user_data['email'],
+            given_name=user_data.get('given_name'),
+            family_name=user_data.get('family_name'),
+            picture=user_data.get('picture')
+        )
+        
+        # Check if user exists
+        user = get_user_by_google_id(db, google_user.id)
+        
+        if not user:
+            # Create new user
+            user = create_user_from_google(db, google_user)
+        else:
+            # Update last login
+            user = update_user_login(db, user)
+        
+        # Create JWT token
+        access_token = create_access_token(
+            data={"sub": str(user.id), "email": user.email}
+        )
+        
+        return TokenResponse(
+            access_token=access_token,
+            user=UserResponse.from_orm(user)
+        )
+        
+    except requests.RequestException as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Failed to exchange authorization code: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Authentication failed: {str(e)}"
+        )
 
 @router.post("/google", response_model=TokenResponse)
 async def google_auth(

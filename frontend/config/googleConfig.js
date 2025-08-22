@@ -12,7 +12,7 @@
 
 export const GOOGLE_CONFIG = {
   // Web Client ID (from Google Cloud Console)
-  WEB_CLIENT_ID: 'YOUR_WEB_CLIENT_ID_HERE.apps.googleusercontent.com',
+  WEB_CLIENT_ID: '989567471375-kp9f2vbn1qpvcif5uqq35a4uf4859vrl.apps.googleusercontent.com',
   
   // iOS Client ID (optional, for iOS app)
   IOS_CLIENT_ID: 'YOUR_IOS_CLIENT_ID_HERE.apps.googleusercontent.com',

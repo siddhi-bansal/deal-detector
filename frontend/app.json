@@ -1,12 +1,13 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "Deal Detector",
+    "slug": "deal-detector",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "scheme": "dealdetector",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",

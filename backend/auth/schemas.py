@@ -34,6 +34,9 @@ class UserResponse(UserBase):
 class GoogleAuthRequest(BaseModel):
     id_token: str
 
+class GoogleCallbackRequest(BaseModel):
+    code: str
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"

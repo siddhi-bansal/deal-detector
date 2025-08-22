@@ -7,6 +7,46 @@ const API_BASE_URL = 'http://localhost:8000'; // Your backend URL
 class AuthService {
   
   /**
+   * Authenticate user with Google authorization code
+   * @param {string} authCode - Google authorization code from OAuth flow
+   * @returns {Promise<{success: boolean, token?: string, user?: any, message?: string}>}
+   */
+  async googleAuth(authCode) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/google/callback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          code: authCode,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {
+          success: true,
+          token: data.access_token,
+          user: data.user,
+        };
+      } else {
+        return {
+          success: false,
+          message: data.detail || 'Google authentication failed',
+        };
+      }
+    } catch (error) {
+      console.error('Google auth error:', error);
+      return {
+        success: false,
+        message: 'Network error. Please check your connection.',
+      };
+    }
+  }
+
+  /**
    * Authenticate user with Google ID token
    * @param {string} idToken - Google ID token from Google Sign-In
    * @returns {Promise<{success: boolean, data?: any, error?: string}>}

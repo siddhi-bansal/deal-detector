@@ -15,6 +15,7 @@ import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import { useAuth } from '../context/AuthContext';
 import AuthService from '../services/AuthService';
+import { GOOGLE_CONFIG } from '../config/googleConfig';
 
 // Configure WebBrowser for OAuth
 WebBrowser.maybeCompleteAuthSession();
@@ -23,22 +24,92 @@ const LoginScreen = ({ navigation }) => {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // For now, we'll use a custom button instead of the native Google button
-  // This works better with Expo's managed workflow
+  // Google OAuth configuration
+  // Force use of Expo auth proxy for OAuth redirect
+  const redirectUri = 'https://auth.expo.io/@anonymous/deal-detector';
+  
+  console.log('OAuth Redirect URI:', redirectUri); // Debug log
+  
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId: GOOGLE_CONFIG.WEB_CLIENT_ID,
+      scopes: GOOGLE_CONFIG.SCOPES,
+      redirectUri: redirectUri,
+      prompt: AuthSession.Prompt.SelectAccount, // Force account selection
+      additionalParameters: {
+        prompt: 'select_account', // Additional parameter for Google
+      },
+    },
+    {
+      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+    }
+  );
+
+  // Handle OAuth response
+  useEffect(() => {
+    if (response?.type === 'success') {
+      console.log('OAuth Success Response:', response);
+      if (response.params?.code) {
+        handleGoogleAuthSuccess(response.params.code);
+      } else {
+        console.error('No authorization code in response:', response);
+        Alert.alert('Error', 'No authorization code received');
+        setLoading(false);
+      }
+    } else if (response?.type === 'error') {
+      console.error('Google OAuth error:', response.error);
+      Alert.alert('Error', `Google Sign-In failed: ${response.error?.message || response.error}`);
+      setLoading(false);
+    } else if (response?.type === 'cancel') {
+      console.log('Google OAuth cancelled by user');
+      setLoading(false);
+    }
+  }, [response]);
+
+  const handleGoogleAuthSuccess = async (authCode) => {
+    try {
+      // Send the auth code to your backend to exchange for tokens
+      const result = await AuthService.googleAuth(authCode);
+      
+      if (result.success) {
+        const loginSuccess = await login(result.token, result.user);
+        if (loginSuccess) {
+          Alert.alert('Success', 'Signed in successfully!');
+        } else {
+          Alert.alert('Error', 'Failed to save login data');
+        }
+      } else {
+        Alert.alert('Error', result.message || 'Google Sign-In failed');
+      }
+    } catch (error) {
+      console.error('Google auth error:', error);
+      Alert.alert('Error', 'Failed to authenticate with Google');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleGoogleSignIn = async () => {
     setLoading(true);
     
+    // Set a timeout to reset loading state if OAuth takes too long
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      console.log('OAuth timeout - resetting loading state');
+    }, 30000); // 30 seconds timeout
+    
     try {
-      // For development, show that we need to set up Google OAuth
-      Alert.alert(
-        'Google Sign-In Setup Required',
-        'To enable Google Sign-In:\n\n1. Set up Google Cloud Console\n2. Configure OAuth credentials\n3. Add web client ID to config\n\nFor now, use "Test Login" button.',
-        [{ text: 'OK' }]
-      );
+      const result = await promptAsync();
+      clearTimeout(timeout);
+      
+      // If user cancelled or dismissed, reset loading
+      if (result.type === 'cancel' || result.type === 'dismiss') {
+        setLoading(false);
+      }
     } catch (error) {
+      clearTimeout(timeout);
       console.error('Google Sign-In error:', error);
-      Alert.alert('Error', 'Google Sign-In setup required');
-    } finally {
+      Alert.alert('Error', 'Failed to start Google Sign-In');
       setLoading(false);
     }
   };
