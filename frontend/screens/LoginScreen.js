@@ -24,8 +24,8 @@ const LoginScreen = ({ navigation }) => {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // Google OAuth configuration
-  // Force use of Expo auth proxy for OAuth redirect
+  // TODO: Debug OAuth flow - currently getting "Something went wrong" with @siddhibansal redirect
+  // Next steps: Check Railway env vars and Google Cloud Console redirect URIs
   const redirectUri = 'https://auth.expo.io/@siddhibansal/deal-detector';
   
   console.log('OAuth Redirect URI:', redirectUri); // Debug log
