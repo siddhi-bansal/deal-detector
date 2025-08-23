@@ -26,7 +26,7 @@ const LoginScreen = ({ navigation }) => {
 
   // Google OAuth configuration
   // Force use of Expo auth proxy for OAuth redirect
-  const redirectUri = 'https://auth.expo.io/@anonymous/deal-detector';
+  const redirectUri = 'https://auth.expo.io/@siddhibansal/deal-detector';
   
   console.log('OAuth Redirect URI:', redirectUri); // Debug log
   
