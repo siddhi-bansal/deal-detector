@@ -83,6 +83,7 @@ const LoginScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Google auth error:', error);
+      console.error('Error details:', JSON.stringify(error, null, 2)); // Better debugging
       Alert.alert('Error', 'Failed to authenticate with Google');
     } finally {
       setLoading(false);
