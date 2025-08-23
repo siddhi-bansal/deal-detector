@@ -20,6 +20,16 @@ This is an enhanced version of the coupon filtering system that automatically ex
 - **Enhanced Search & Filter**: Search by company, offer type, product category, and more
 - **Persistent Favorites**: Save and manage favorite coupons with local storage
 
+## 🚧 Current Status
+
+- ✅ **Authentication System**: JWT-based auth with Google OAuth integration implemented
+- ✅ **Backend Deployment**: Railway hosting with production API endpoints active
+- ✅ **Frontend Development**: React Native app with Expo, authentication UI complete
+- ✅ **Database Setup**: SQLite with user management and authentication tables
+- 🔄 **OAuth Flow**: Debugging Expo auth proxy with @siddhibansal namespace
+- 🔄 **Gmail Integration**: Pending OAuth resolution for individual user connections
+- 📝 **Next Steps**: Complete OAuth debugging, implement per-user Gmail access
+
 ## 🏗️ Architecture
 
 ```
