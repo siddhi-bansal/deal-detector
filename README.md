@@ -28,7 +28,7 @@ This is an enhanced version of the coupon filtering system that automatically ex
 - ✅ **Database Setup**: SQLite with user management and authentication tables
 - 🔄 **OAuth Flow**: Debugging Expo auth proxy with @siddhibansal namespace
 - 🔄 **Gmail Integration**: Pending OAuth resolution for individual user connections
-- 📝 **Next Steps**: Complete OAuth debugging, implement per-user Gmail access
+- 📝 **Next Steps**: Complete OAuth debugging, implement per-user Gmail access, need to see if Clearbit is actually working because there is no API key in .env
 
 ## 🏗️ Architecture
 
