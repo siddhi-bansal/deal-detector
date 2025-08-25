@@ -103,6 +103,7 @@ async def google_oauth_callback_redirect(
         
         token_response = requests.post(token_url, data=token_data)
         logger.info(f"Token response status: {token_response.status_code}")
+        logger.info(f"Token response content: {token_response.text}")
         
         if not token_response.ok:
             logger.error(f"Token exchange failed: {token_response.text}")
@@ -110,6 +111,11 @@ async def google_oauth_callback_redirect(
         token_response.raise_for_status()
         tokens = token_response.json()
         logger.info("Token exchange successful")
+        logger.info(f"Tokens received: {list(tokens.keys()) if tokens else 'None'}")
+        
+        if not tokens or 'access_token' not in tokens:
+            logger.error(f"No access token in response: {tokens}")
+            raise Exception("No access token received from Google")
         
         # Get user info using access token
         logger.info("Step 2: Getting user info from Google")
