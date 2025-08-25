@@ -2,8 +2,10 @@
 Authentication routes for Google OAuth and JWT tokens
 """
 from typing import Optional
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
@@ -11,6 +13,12 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import Flow
 import requests
 import json
+import logging
+from urllib.parse import urlencode, quote
+
+# Set up logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 from database.connection import get_db
 from core.security import create_access_token, verify_token
@@ -60,34 +68,61 @@ async def get_current_user(
     
     return UserResponse.from_orm(user)
 
-@router.post("/google/callback", response_model=TokenResponse)
-async def google_oauth_callback(
-    callback_request: GoogleCallbackRequest,
+@router.get("/google/test")
+async def test_oauth_callback():
+    """
+    Test endpoint to verify OAuth callback route is working
+    """
+    logger.info("=== OAUTH TEST ENDPOINT HIT ===")
+    return {"message": "OAuth callback route is working", "timestamp": str(datetime.now())}
+
+@router.get("/google/callback")
+async def google_oauth_callback_redirect(
+    code: str,
     db: Session = Depends(get_db)
 ):
     """
-    Handle Google OAuth callback with authorization code
+    Handle Google OAuth callback and redirect to mobile app
     """
+    logger.info("=== GOOGLE OAUTH CALLBACK STARTED ===")
+    logger.info(f"Received authorization code: {code[:20]}...")  # Log first 20 chars for security
+    
     try:
         # Exchange authorization code for tokens
+        logger.info("Step 1: Exchanging authorization code for tokens")
         token_url = "https://oauth2.googleapis.com/token"
         token_data = {
             "client_id": settings.google_client_id,
             "client_secret": settings.google_client_secret,
-            "code": callback_request.code,
+            "code": code,
             "grant_type": "authorization_code",
             "redirect_uri": settings.google_redirect_uri,
         }
         
+        logger.info(f"Token request data: client_id={settings.google_client_id[:20]}..., redirect_uri={settings.google_redirect_uri}")
+        
         token_response = requests.post(token_url, data=token_data)
+        logger.info(f"Token response status: {token_response.status_code}")
+        
+        if not token_response.ok:
+            logger.error(f"Token exchange failed: {token_response.text}")
+            
         token_response.raise_for_status()
         tokens = token_response.json()
+        logger.info("Token exchange successful")
         
         # Get user info using access token
+        logger.info("Step 2: Getting user info from Google")
         user_info_url = f"https://www.googleapis.com/oauth2/v2/userinfo?access_token={tokens['access_token']}"
         user_response = requests.get(user_info_url)
+        logger.info(f"User info response status: {user_response.status_code}")
+        
+        if not user_response.ok:
+            logger.error(f"User info request failed: {user_response.text}")
+            
         user_response.raise_for_status()
         user_data = user_response.json()
+        logger.info(f"User info received for email: {user_data.get('email')}")
         
         # Create GoogleUserInfo object
         google_user = GoogleUserInfo(
@@ -98,36 +133,55 @@ async def google_oauth_callback(
             picture=user_data.get('picture')
         )
         
+        logger.info("Step 3: Processing user in database")
         # Check if user exists
         user = get_user_by_google_id(db, google_user.id)
         
         if not user:
-            # Create new user
+            logger.info("Creating new user")
             user = create_user_from_google(db, google_user)
         else:
-            # Update last login
+            logger.info(f"Updating existing user: {user.email}")
             user = update_user_login(db, user)
         
         # Create JWT token
+        logger.info("Step 4: Creating JWT token")
         access_token = create_access_token(
             data={"sub": str(user.id), "email": user.email}
         )
+        logger.info("JWT token created successfully")
         
-        return TokenResponse(
-            access_token=access_token,
-            user=UserResponse.from_orm(user)
-        )
+        # Create user data for mobile app
+        user_data_for_mobile = {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "profile_picture": user.profile_picture,
+            "gmail_connected": user.gmail_connected,
+            "created_at": user.created_at.isoformat(),
+            "last_login": user.last_login.isoformat() if user.last_login else None
+        }
+        
+        # Redirect back to mobile app with auth data
+        redirect_url = f"dealdetector://auth?token={access_token}&user={quote(json.dumps(user_data_for_mobile))}"
+        logger.info(f"Step 5: Redirecting to mobile app: {redirect_url[:50]}...")
+        
+        # Return redirect response
+        return RedirectResponse(url=redirect_url)
         
     except requests.RequestException as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Failed to exchange authorization code: {str(e)}"
-        )
+        logger.error(f"Request error in OAuth callback: {str(e)}")
+        # Redirect to app with error
+        error_url = f"dealdetector://auth?error={quote(str(e))}"
+        logger.info(f"Redirecting with error: {error_url}")
+        return RedirectResponse(url=error_url)
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Authentication failed: {str(e)}"
-        )
+        logger.error(f"Unexpected error in OAuth callback: {str(e)}")
+        # Redirect to app with error
+        error_url = f"dealdetector://auth?error={quote(f'Authentication failed: {str(e)}')}"
+        logger.info(f"Redirecting with error: {error_url}")
+        return RedirectResponse(url=error_url)
 
 @router.post("/google", response_model=TokenResponse)
 async def google_auth(
