@@ -87,6 +87,26 @@ async def google_oauth_callback_redirect(
     logger.info("=== GOOGLE OAUTH CALLBACK STARTED ===")
     logger.info(f"Received authorization code: {code[:20]}...")  # Log first 20 chars for security
     
+    # Debug settings values
+    logger.info(f"Settings debug - client_id: {settings.google_client_id is not None}")
+    logger.info(f"Settings debug - client_secret: {settings.google_client_secret is not None}")
+    logger.info(f"Settings debug - redirect_uri: {settings.google_redirect_uri}")
+    
+    if not settings.google_client_id:
+        logger.error("GOOGLE_CLIENT_ID is None or empty!")
+        error_url = f"dealdetector://auth?error={quote('Missing Google Client ID configuration')}"
+        return RedirectResponse(url=error_url)
+        
+    if not settings.google_client_secret:
+        logger.error("GOOGLE_CLIENT_SECRET is None or empty!")
+        error_url = f"dealdetector://auth?error={quote('Missing Google Client Secret configuration')}"
+        return RedirectResponse(url=error_url)
+        
+    if not settings.google_redirect_uri:
+        logger.error("GOOGLE_REDIRECT_URI is None or empty!")
+        error_url = f"dealdetector://auth?error={quote('Missing Google Redirect URI configuration')}"
+        return RedirectResponse(url=error_url)
+    
     try:
         # Exchange authorization code for tokens
         logger.info("Step 1: Exchanging authorization code for tokens")

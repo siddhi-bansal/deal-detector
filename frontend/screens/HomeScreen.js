@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../context/AuthContext';
 import sampleData from '../assets/sample_api_output.json';
 import { CouponCard } from '../components/CouponCard';
 import { CompanyCard } from '../components/CompanyCard';
@@ -22,6 +23,7 @@ import { styles } from '../styles/styles';
 
 export const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { user, token } = useAuth(); // Get user info from auth context
   const [coupons, setCoupons] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [filteredCoupons, setFilteredCoupons] = useState([]);
@@ -333,6 +335,45 @@ export const HomeScreen = ({ route }) => {
       style={styles.container}
     >
       <View style={{ flex: 1 }}>
+        {/* User Info Display (Development Only) */}
+        <View style={{
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          padding: 12,
+          margin: 10,
+          borderRadius: 8,
+          borderWidth: 1,
+          borderColor: 'rgba(16, 185, 129, 0.3)'
+        }}>
+          <Text style={{
+            fontSize: 14,
+            fontWeight: '600',
+            color: '#10b981',
+            marginBottom: 4
+          }}>
+            🔐 Authentication Status (Dev Mode)
+          </Text>
+          <Text style={{
+            fontSize: 12,
+            color: '#374151',
+            marginBottom: 2
+          }}>
+            User: {user?.first_name} {user?.last_name} ({user?.email})
+          </Text>
+          <Text style={{
+            fontSize: 12,
+            color: '#374151',
+            marginBottom: 2
+          }}>
+            Gmail Connected: {user?.gmail_connected ? '✅ Yes' : '❌ No'}
+          </Text>
+          <Text style={{
+            fontSize: 12,
+            color: '#374151'
+          }}>
+            Token: {token ? '✅ Present' : '❌ Missing'}
+          </Text>
+        </View>
+
         {/* Filter and Search Row */}
         <View style={styles.filterSearchRow}>
           <View style={styles.typeFilterWrapper}>

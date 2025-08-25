@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import { useAuth } from '../context/AuthContext';
 import AuthService from '../services/AuthService';
@@ -24,95 +23,90 @@ const LoginScreen = ({ navigation }) => {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // TODO: Debug OAuth flow - currently getting "Something went wrong" with @siddhibansal redirect
-  // Next steps: Check Railway env vars and Google Cloud Console redirect URIs
-  const redirectUri = 'https://auth.expo.io/@siddhibansal/deal-detector';
-  
-  console.log('OAuth Redirect URI:', redirectUri); // Debug log
-  
-  const [request, response, promptAsync] = AuthSession.useAuthRequest(
-    {
-      clientId: GOOGLE_CONFIG.WEB_CLIENT_ID,
-      scopes: GOOGLE_CONFIG.SCOPES,
-      redirectUri: redirectUri,
-      prompt: AuthSession.Prompt.SelectAccount, // Force account selection
-      additionalParameters: {
-        prompt: 'select_account', // Additional parameter for Google
-      },
-    },
-    {
-      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
-    }
-  );
-
-  // Handle OAuth response
-  useEffect(() => {
-    if (response?.type === 'success') {
-      console.log('OAuth Success Response:', response);
-      if (response.params?.code) {
-        handleGoogleAuthSuccess(response.params.code);
-      } else {
-        console.error('No authorization code in response:', response);
-        Alert.alert('Error', 'No authorization code received');
-        setLoading(false);
-      }
-    } else if (response?.type === 'error') {
-      console.error('Google OAuth error:', response.error);
-      Alert.alert('Error', `Google Sign-In failed: ${response.error?.message || response.error}`);
-      setLoading(false);
-    } else if (response?.type === 'cancel') {
-      console.log('Google OAuth cancelled by user');
-      setLoading(false);
-    }
-  }, [response]);
-
-  const handleGoogleAuthSuccess = async (authCode) => {
+  // Handle successful authentication with JWT token
+  const handleAuthSuccess = async (token) => {
     try {
-      // Send the auth code to your backend to exchange for tokens
-      const result = await AuthService.googleAuth(authCode);
+      // Get user data using the JWT token
+      const userResult = await AuthService.getCurrentUser(token);
       
-      if (result.success) {
-        const loginSuccess = await login(result.token, result.user);
+      if (userResult.success) {
+        const loginSuccess = await login(token, userResult.data);
+        
         if (loginSuccess) {
           Alert.alert('Success', 'Signed in successfully!');
+          // Navigation will happen automatically due to isAuthenticated state change
         } else {
           Alert.alert('Error', 'Failed to save login data');
         }
       } else {
-        Alert.alert('Error', result.message || 'Google Sign-In failed');
+        Alert.alert('Error', userResult.error || 'Failed to get user information');
       }
     } catch (error) {
-      console.error('Google auth error:', error);
-      console.error('Error details:', JSON.stringify(error, null, 2)); // Better debugging
-      Alert.alert('Error', 'Failed to authenticate with Google');
+      console.error('Auth success error:', error);
+      Alert.alert('Error', 'Failed to complete authentication');
+    }
+  };
+
+  // Using Railway backend OAuth flow instead of Expo proxy
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    
+    try {
+      // Create OAuth URL that goes through our Railway backend
+      const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+        `client_id=${GOOGLE_CONFIG.WEB_CLIENT_ID}&` +
+        `redirect_uri=https://deal-detector-production.up.railway.app/auth/google/callback&` +
+        `response_type=code&` +
+        `scope=${encodeURIComponent(GOOGLE_CONFIG.SCOPES.join(' '))}&` +
+        `access_type=offline&` +
+        `prompt=select_account`;
+      
+      console.log('Opening OAuth URL:', googleAuthUrl);
+      
+      // Open OAuth flow in browser - it will redirect back to our app via deep link
+      const result = await WebBrowser.openAuthSessionAsync(
+        googleAuthUrl,
+        'dealdetector://' // Our app will receive dealdetector://auth?token=...
+      );
+      
+      console.log('WebBrowser result:', result);
+      
+      if (result.type === 'success' && result.url) {
+        // Parse the deep link URL to extract the token
+        const url = new URL(result.url);
+        const token = url.searchParams.get('token');
+        const error = url.searchParams.get('error');
+        
+        if (error) {
+          Alert.alert('Error', decodeURIComponent(error));
+        } else if (token) {
+          // Token received! Complete the login
+          await handleAuthSuccess(token);
+        } else {
+          Alert.alert('Error', 'No token received from authentication');
+        }
+      } else if (result.type === 'cancel') {
+        console.log('User cancelled OAuth');
+      } else {
+        console.log('OAuth flow completed with type:', result.type);
+      }
+    } catch (error) {
+      console.error('OAuth error:', error);
+      Alert.alert('Error', 'Failed to start authentication');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setLoading(true);
-    
-    // Set a timeout to reset loading state if OAuth takes too long
-    const timeout = setTimeout(() => {
-      setLoading(false);
-      console.log('OAuth timeout - resetting loading state');
-    }, 30000); // 30 seconds timeout
-    
-    try {
-      const result = await promptAsync();
-      clearTimeout(timeout);
-      
-      // If user cancelled or dismissed, reset loading
-      if (result.type === 'cancel' || result.type === 'dismiss') {
-        setLoading(false);
-      }
-    } catch (error) {
-      clearTimeout(timeout);
-      console.error('Google Sign-In error:', error);
-      Alert.alert('Error', 'Failed to start Google Sign-In');
-      setLoading(false);
-    }
+  // Handle OAuth response
+  useEffect(() => {
+    // This useEffect is no longer needed with Railway backend approach
+    // Keeping it here but it won't be triggered
+  }, []);
+
+  const handleGoogleAuthSuccess = async (authCode) => {
+    // This function is no longer needed with Railway backend approach
+    // The backend now handles the full OAuth flow
   };
 
   const handleTestLogin = async () => {
