@@ -183,6 +183,16 @@ async def google_oauth_callback_redirect(
             
             if not user:
                 logger.error(f"User not found for Gmail connection: {user_id_from_state}")
+                logger.error(f"Available user IDs in database:")
+                # Debug: List some users to see what's in the database
+                try:
+                    from .models import User
+                    sample_users = db.query(User).limit(5).all()
+                    for u in sample_users:
+                        logger.error(f"  User ID: {u.id}, Email: {u.email}")
+                except Exception as e:
+                    logger.error(f"Error querying users: {e}")
+                    
                 error_url = f"dealdetector://auth?error={quote('User not found for Gmail connection')}"
                 return RedirectResponse(url=error_url)
             
@@ -355,11 +365,16 @@ async def logout(current_user: UserResponse = Depends(get_current_user)):
 async def connect_gmail(current_user: UserResponse = Depends(get_current_user)):
     """Start Gmail OAuth flow"""
     try:
+        logger.info(f"Gmail connect request from user ID: {current_user.id}, email: {current_user.email}")
+        
         # Create OAuth URL specifically for Gmail connection
         gmail_scopes = [
             'https://www.googleapis.com/auth/gmail.readonly',
             'https://www.googleapis.com/auth/gmail.modify'
         ]
+        
+        state_param = f"gmail_connect_{current_user.id}"
+        logger.info(f"Creating state parameter: {state_param}")
         
         oauth_url = (
             f"https://accounts.google.com/o/oauth2/v2/auth?"
@@ -369,8 +384,10 @@ async def connect_gmail(current_user: UserResponse = Depends(get_current_user)):
             f"scope={quote(' '.join(gmail_scopes))}&"
             f"access_type=offline&"
             f"prompt=consent&"
-            f"state=gmail_connect_{current_user.id}"  # Include user ID in state
+            f"state={state_param}"  # Include user ID in state
         )
+        
+        logger.info(f"Generated OAuth URL: {oauth_url}")
         
         return {
             "oauth_url": oauth_url,

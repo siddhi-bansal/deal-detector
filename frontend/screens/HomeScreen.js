@@ -364,7 +364,7 @@ export const HomeScreen = ({ route }) => {
             color: '#374151',
             marginBottom: 2
           }}>
-            Gmail Connected: {user?.gmail_connected ? '✅ Yes' : '❌ No'}
+            Gmail Connected: {user?.gmail_connected ? '✅ Yes' : '❌ No - Go to Profile to connect'}
           </Text>
           <Text style={{
             fontSize: 12,
@@ -372,6 +372,16 @@ export const HomeScreen = ({ route }) => {
           }}>
             Token: {token ? '✅ Present' : '❌ Missing'}
           </Text>
+          {!user?.gmail_connected && (
+            <Text style={{
+              fontSize: 11,
+              color: '#f59e0b',
+              marginTop: 4,
+              fontStyle: 'italic'
+            }}>
+              💡 Connect Gmail in Profile tab to get real coupon data
+            </Text>
+          )}
         </View>
 
         {/* Filter and Search Row */}

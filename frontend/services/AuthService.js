@@ -163,6 +163,80 @@ class AuthService {
   }
 
   /**
+   * Get Gmail connection URL
+   * @param {string} token - JWT token
+   * @returns {Promise<{success: boolean, data?: any, error?: string}>}
+   */
+  async getGmailConnectionUrl(token) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/gmail/connect`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {
+          success: true,
+          data: data,
+        };
+      } else {
+        return {
+          success: false,
+          error: data.detail || 'Failed to get Gmail connection URL',
+        };
+      }
+    } catch (error) {
+      console.error('Gmail connection URL error:', error);
+      return {
+        success: false,
+        error: 'Network error. Please check your connection.',
+      };
+    }
+  }
+
+  /**
+   * Disconnect Gmail account
+   * @param {string} token - JWT token
+   * @returns {Promise<{success: boolean, data?: any, error?: string}>}
+   */
+  async disconnectGmail(token) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/gmail/disconnect`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {
+          success: true,
+          data: data,
+        };
+      } else {
+        return {
+          success: false,
+          error: data.detail || 'Failed to disconnect Gmail',
+        };
+      }
+    } catch (error) {
+      console.error('Gmail disconnect error:', error);
+      return {
+        success: false,
+        error: 'Network error. Please check your connection.',
+      };
+    }
+  }
+
+  /**
    * Logout user
    * @param {string} token - JWT token
    * @returns {Promise<{success: boolean, error?: string}>}
