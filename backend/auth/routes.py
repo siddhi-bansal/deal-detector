@@ -27,8 +27,8 @@ from .schemas import (
     GoogleUserInfo, GmailConnectionStatus, GoogleCallbackRequest
 )
 from .crud import (
-    get_user_by_google_id, create_user_from_google, 
-    update_user_login, get_user_by_id
+    get_user_by_google_id, create_user_from_google,
+    update_user_login, update_gmail_tokens, get_user_by_id, disconnect_gmail
 )
 from core.config import settings
 
@@ -79,6 +79,7 @@ async def test_oauth_callback():
 @router.get("/google/callback")
 async def google_oauth_callback_redirect(
     code: str,
+    state: str = None,
     db: Session = Depends(get_db)
 ):
     """
@@ -86,6 +87,20 @@ async def google_oauth_callback_redirect(
     """
     logger.info("=== GOOGLE OAUTH CALLBACK STARTED ===")
     logger.info(f"Received authorization code: {code[:20]}...")  # Log first 20 chars for security
+    logger.info(f"State parameter: {state}")  # Log state for debugging
+    
+    # Check if this is a Gmail connection request
+    is_gmail_connect = state and state.startswith("gmail_connect_")
+    user_id_from_state = None
+    
+    if is_gmail_connect:
+        try:
+            user_id_from_state = int(state.split("gmail_connect_")[1])
+            logger.info(f"Gmail connection request for user ID: {user_id_from_state}")
+        except (IndexError, ValueError):
+            logger.error(f"Invalid state format for Gmail connection: {state}")
+            error_url = f"dealdetector://auth?error={quote('Invalid Gmail connection request')}"
+            return RedirectResponse(url=error_url)
     
     # Debug settings values
     logger.info(f"Settings debug - client_id: {settings.google_client_id is not None}")
@@ -160,37 +175,80 @@ async def google_oauth_callback_redirect(
         )
         
         logger.info("Step 3: Processing user in database")
-        # Check if user exists
-        user = get_user_by_google_id(db, google_user.id)
         
-        if not user:
-            logger.info("Creating new user")
-            user = create_user_from_google(db, google_user)
+        if is_gmail_connect:
+            # This is a Gmail connection request for an existing user
+            logger.info(f"Processing Gmail connection for user ID: {user_id_from_state}")
+            user = get_user_by_id(db, user_id_from_state)
+            
+            if not user:
+                logger.error(f"User not found for Gmail connection: {user_id_from_state}")
+                error_url = f"dealdetector://auth?error={quote('User not found for Gmail connection')}"
+                return RedirectResponse(url=error_url)
+            
+            # Verify the Google account matches the user's email
+            if user.email != google_user.email:
+                logger.error(f"Email mismatch: user {user.email} vs Google {google_user.email}")
+                error_url = f"dealdetector://auth?error={quote('Email mismatch - please use the same Google account')}"
+                return RedirectResponse(url=error_url)
+                
         else:
-            logger.info(f"Updating existing user: {user.email}")
-            user = update_user_login(db, user)
+            # This is a regular OAuth login/signup
+            user = get_user_by_google_id(db, google_user.id)
+            
+            if not user:
+                logger.info("Creating new user")
+                user = create_user_from_google(db, google_user)
+            else:
+                logger.info(f"Updating existing user: {user.email}")
+                user = update_user_login(db, user)
         
-        # Create JWT token
-        logger.info("Step 4: Creating JWT token")
-        access_token = create_access_token(
-            data={"sub": str(user.id), "email": user.email}
+        # Store Gmail tokens since we have Gmail scopes
+        logger.info("Step 3.5: Storing Gmail tokens")
+        from datetime import datetime, timedelta
+        
+        # Calculate token expiry (Google tokens typically expire in 1 hour)
+        expires_in_seconds = tokens.get('expires_in', 3600)
+        expires_at = datetime.utcnow() + timedelta(seconds=expires_in_seconds)
+        
+        # Store the Gmail tokens
+        user = update_gmail_tokens(
+            db=db,
+            user=user,
+            access_token=tokens['access_token'],
+            refresh_token=tokens.get('refresh_token'),  # Only provided on first auth
+            expires_at=expires_at
         )
-        logger.info("JWT token created successfully")
+        logger.info("Gmail tokens stored successfully")
         
-        # Create user data for mobile app
-        user_data_for_mobile = {
-            "id": user.id,
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "profile_picture": user.profile_picture,
-            "gmail_connected": user.gmail_connected,
-            "created_at": user.created_at.isoformat(),
-            "last_login": user.last_login.isoformat() if user.last_login else None
-        }
+        # Step 5: Handle redirect based on request type
+        if is_gmail_connect:
+            # For Gmail connection, redirect with success message
+            logger.info("Step 5: Gmail connection successful, redirecting")
+            redirect_url = f"dealdetector://gmail?connected=true&message={quote('Gmail connected successfully')}"
+        else:
+            # For regular auth, redirect with JWT token and user data
+            logger.info("Step 4: Creating JWT token")
+            access_token = create_access_token(
+                data={"sub": str(user.id), "email": user.email}
+            )
+            logger.info("JWT token created successfully")
+            
+            # Create user data for mobile app
+            user_data_for_mobile = {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "profile_picture": user.profile_picture,
+                "gmail_connected": user.gmail_connected,
+                "created_at": user.created_at.isoformat(),
+                "last_login": user.last_login.isoformat() if user.last_login else None
+            }
+            
+            # Redirect back to mobile app with auth data
+            redirect_url = f"dealdetector://auth?token={access_token}&user={quote(json.dumps(user_data_for_mobile))}"
         
-        # Redirect back to mobile app with auth data
-        redirect_url = f"dealdetector://auth?token={access_token}&user={quote(json.dumps(user_data_for_mobile))}"
         logger.info(f"Step 5: Redirecting to mobile app: {redirect_url[:50]}...")
         
         # Return redirect response
@@ -292,18 +350,56 @@ async def logout(current_user: UserResponse = Depends(get_current_user)):
     """
     return {"message": "Successfully logged out"}
 
-# Gmail OAuth flow endpoints will be added in next phase
+# Gmail connection endpoints
 @router.get("/gmail/connect")
 async def connect_gmail(current_user: UserResponse = Depends(get_current_user)):
     """Start Gmail OAuth flow"""
-    # TODO: Implement Gmail OAuth flow
-    return {"message": "Gmail OAuth flow not implemented yet"}
+    try:
+        # Create OAuth URL specifically for Gmail connection
+        gmail_scopes = [
+            'https://www.googleapis.com/auth/gmail.readonly',
+            'https://www.googleapis.com/auth/gmail.modify'
+        ]
+        
+        oauth_url = (
+            f"https://accounts.google.com/o/oauth2/v2/auth?"
+            f"client_id={settings.google_client_id}&"
+            f"redirect_uri={settings.google_redirect_uri}&"
+            f"response_type=code&"
+            f"scope={quote(' '.join(gmail_scopes))}&"
+            f"access_type=offline&"
+            f"prompt=consent&"
+            f"state=gmail_connect_{current_user.id}"  # Include user ID in state
+        )
+        
+        return {
+            "oauth_url": oauth_url,
+            "instructions": "Open this URL to connect your Gmail account"
+        }
+    except Exception as e:
+        logger.error(f"Error creating Gmail connection URL: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to create Gmail connection URL"
+        )
 
 @router.post("/gmail/disconnect")
-async def disconnect_gmail(
+async def disconnect_gmail_endpoint(
     current_user: UserResponse = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Disconnect Gmail account"""
-    # TODO: Implement Gmail disconnection
-    return {"message": "Gmail disconnection not implemented yet"}
+    try:
+        user = get_user_by_id(db, current_user.id)
+        user = disconnect_gmail(db, user)
+        
+        return {
+            "message": "Gmail disconnected successfully",
+            "connected": user.gmail_connected
+        }
+    except Exception as e:
+        logger.error(f"Error disconnecting Gmail: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to disconnect Gmail"
+        )
