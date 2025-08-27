@@ -1,6 +1,6 @@
 # Coupon Filtering System - Extended Version
 
-This is an enhanced version of the coupon filtering system that automatically extracts and analyzes promotional offers from Gmail emails using AI.
+A coupon filtering system that automatically extracts and analyzes promotional offers from Gmail emails using AI and shows them to the user on one platform so they don't have to scramble looking for offers at the store/online.
 
 ## 🚀 Features
 
