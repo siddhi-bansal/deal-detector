@@ -180,22 +180,7 @@ Interactive API documentation (Swagger UI).
 ### Running the Application
 
 #### Backend API
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Run FastAPI server locally
-python api.py
-
-# Or run with uvicorn for production
-uvicorn api:app --host 0.0.0.0 --port 8000
-
-# Access API at http://localhost:8000 (local) or https://deal-detector-production.up.railway.app (production)
-# View docs at http://localhost:8000/docs (local) or https://deal-detector-production.up.railway.app/docs (production)
-```
+Running on https://deal-detector-production.up.railway.app/.
 
 #### Frontend (React Native)
 ```bash
