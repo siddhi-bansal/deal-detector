@@ -245,10 +245,7 @@ git push origin main
 # Railway will automatically rebuild and redeploy
 ```
 
-1. Connect GitHub repository to Railway
-2. Set environment variables in Railway dashboard
-3. Deploy automatically on git push
-4. Generated domain: `deal-detector-production.up.railway.app`
+If any new environment variables are added, make sure to set them up in the Railway dashboard.
 
 ### Frontend (Expo/App Stores)
 ```bash
