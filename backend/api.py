@@ -43,7 +43,7 @@ app.add_middleware(
 )
 
 # Include authentication routes
-app.include_router(auth_router, prefix="/auth", tags=["authentication"])
+app.include_router(auth_router, tags=["authentication"])
 
 def create_gmail_service_for_user(user: UserResponse):
     """Create a Gmail service using the user's stored tokens"""
