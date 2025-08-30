@@ -248,6 +248,22 @@ async def health_check():
         "message": "Coupon Filtering API is running"
     }
 
+@app.get("/api/debug")
+async def debug_info():
+    """Debug endpoint to check what routes are loaded"""
+    routes = []
+    for route in app.routes:
+        if hasattr(route, 'path') and hasattr(route, 'methods'):
+            routes.append({
+                "path": route.path,
+                "methods": list(route.methods) if route.methods else []
+            })
+    return {
+        "total_routes": len(routes),
+        "routes": routes[:10],  # First 10 routes
+        "auth_routes_loaded": any("/auth" in route["path"] for route in routes)
+    }
+
 @app.get("/api/test-auth")
 async def test_auth(current_user: UserResponse = Depends(get_current_user)):
     """Test endpoint to verify authentication works"""
