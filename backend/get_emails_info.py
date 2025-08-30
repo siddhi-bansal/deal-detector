@@ -221,16 +221,12 @@ def get_email_timestamp(message):
         return datetime.fromtimestamp(int(timestamp_ms) / 1000)
     return ""
 
-def get_emails_info():
-    """Reads first email from Gmail and extracts text and from plain text and images."""
-
-    creds = run_authorization_server()
-
+def get_emails_info_for_user(gmail_service):
+    """Reads emails using a provided Gmail service (user-specific credentials)."""
     try:
-        # Call the Gmail API
-        service = build("gmail", "v1", credentials=creds)
+        # Call the Gmail API using the provided service
         results = (
-            service.users().messages().list(userId="me", labelIds=["CATEGORY_PROMOTIONS"]).execute()
+            gmail_service.users().messages().list(userId="me", labelIds=["CATEGORY_PROMOTIONS"]).execute()
         )
         messages = results.get("messages", [])
         emails_info = {}
@@ -238,7 +234,7 @@ def get_emails_info():
         for message in messages[:1]:
             message_id = message["id"]
 
-            message_object = service.users().messages().get(userId="me", id=message_id).execute()
+            message_object = gmail_service.users().messages().get(userId="me", id=message_id).execute()
 
             # Get both plain text and html
             plain_text, html_text = get_email_text_and_html(message_object)
@@ -264,6 +260,20 @@ def get_emails_info():
             emails_info[message_id] = {"email_text": all_text, "email_sender": email_sender, "email_subject": email_subject, "email_timestamp": email_timestamp}
 
         return emails_info
+
+    except Exception as error:
+        print(f"An error occurred: {error}")
+        return {}
+
+def get_emails_info():
+    """Reads first email from Gmail and extracts text and from plain text and images."""
+
+    creds = run_authorization_server()
+
+    try:
+        # Call the Gmail API
+        service = build("gmail", "v1", credentials=creds)
+        return get_emails_info_for_user(service)
 
     except Exception as error:
         print(f"An error occurred: {error}")

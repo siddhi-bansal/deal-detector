@@ -1,18 +1,23 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
+from sqlalchemy.orm import Session
 import logging
+import os
 
-from get_emails_info import get_emails_info, get_html_from_message_id, run_authorization_server
+from get_emails_info import get_emails_info_for_user, get_html_from_message_id
 from get_coupon_info_from_email import get_coupon_info_from_email
 from get_company_logo import get_company_logo_info
 from company_categorization import get_company_category
 from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
 
 # Import authentication
-from auth.routes import router as auth_router
-from database.connection import Base, engine
+from auth.routes import router as auth_router, get_current_user
+from auth.schemas import UserResponse
+from auth.crud import get_user_by_id
+from database.connection import Base, engine, get_db
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -38,7 +43,26 @@ app.add_middleware(
 )
 
 # Include authentication routes
-app.include_router(auth_router)
+app.include_router(auth_router, prefix="/auth", tags=["authentication"])
+
+def create_gmail_service_for_user(user: UserResponse):
+    """Create a Gmail service using the user's stored tokens"""
+    if not user.gmail_access_token:
+        raise HTTPException(status_code=400, detail="No Gmail access token found")
+    
+    user_creds = Credentials(
+        token=user.gmail_access_token,
+        refresh_token=user.gmail_refresh_token,
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=os.getenv("GOOGLE_CLIENT_ID"),
+        client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+        scopes=[
+            'https://www.googleapis.com/auth/gmail.readonly',
+            'https://www.googleapis.com/auth/gmail.modify'
+        ]
+    )
+    
+    return build('gmail', 'v1', credentials=user_creds)
 
 class CouponResponse(BaseModel):
     all_coupons: List[dict] = []
@@ -52,21 +76,36 @@ class EmailHtmlResponse(BaseModel):
     error: Optional[str] = None
 
 @app.get("/api/coupons", response_model=CouponResponse)
-async def get_coupons():
+async def get_coupons(
+    current_user: UserResponse = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """
-    Extract coupon information from promotional emails.
+    Extract coupon information from promotional emails for the authenticated user.
     
-    This endpoint does exactly what main.py does:
-    1. Fetches emails from Gmail
+    This endpoint:
+    1. Fetches emails from the USER'S Gmail account (not static files!)
     2. Extracts text content (including OCR from images) for each email
     3. Analyzes each email for coupon/promotional offers using AI
     4. Returns a list of all coupons found
     """
     try:
-        logger.info("Starting email processing...")
+        logger.info(f"Starting email processing for user: {current_user.email}")
         
-        # Get email texts (same as main.py)
-        emails_info = get_emails_info()
+        # Check if user has Gmail connected
+        user = get_user_by_id(db, current_user.id)
+        if not user or not user.gmail_connected or not user.gmail_access_token:
+            raise HTTPException(
+                status_code=400, 
+                detail="Gmail not connected. Please connect your Gmail account first."
+            )
+        
+        # Create Gmail service using USER'S tokens (not static files!)
+        gmail_service = create_gmail_service_for_user(current_user)
+        logger.info(f"Created Gmail service for user {current_user.email}")
+        
+        # Get email texts using USER'S Gmail service
+        emails_info = get_emails_info_for_user(gmail_service)
         
         if not emails_info:
             raise HTTPException(
@@ -74,7 +113,7 @@ async def get_coupons():
                 detail="No email content found"
             )
         
-        logger.info(f"Processing {len(emails_info)} emails")
+        logger.info(f"Processing {len(emails_info)} emails for user {current_user.email}")
         
         # Process each email (same as main.py)
         all_coupons = []
@@ -134,28 +173,7 @@ async def get_coupons():
                 
                 logger.info(f"Found coupons in email {i+1}")
         
-        logger.info(f"Total coupons found: {len(all_coupons)} out of {len(emails_info)} emails")
-        
-        # Save response to file immediately
-        response_data = {
-            "all_coupons": all_coupons,
-            "total_num_coupons": len(all_coupons),
-            "total_emails_processed": len(emails_info),
-            "emails_with_coupons": len(all_coupons)
-        }
-        
-        # Save to file with timestamp
-        import datetime
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"api_response_{timestamp}.json"
-        
-        try:
-            import json
-            with open(filename, 'w') as f:
-                json.dump(response_data, f, indent=2, default=str)
-            logger.info(f"Response saved to {filename}")
-        except Exception as e:
-            logger.warning(f"Failed to save response to file: {e}")
+        logger.info(f"Total coupons found: {len(all_coupons)} out of {len(emails_info)} emails for user {current_user.email}")
         
         return CouponResponse(
             all_coupons=all_coupons,
@@ -167,26 +185,37 @@ async def get_coupons():
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
+        logger.error(f"Unexpected error for user {current_user.email}: {str(e)}")
         raise HTTPException(
             status_code=500,
             detail=f"Internal server error: {str(e)}"
         )
 
 @app.get("/api/email_html/{message_id}", response_model=EmailHtmlResponse)
-async def get_email_html(message_id: str):
+async def get_email_html(
+    message_id: str,
+    current_user: UserResponse = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """
-    Get HTML content from a specific Gmail message by message ID.
+    Get HTML content from a specific Gmail message by message ID for the authenticated user.
     """
     try:
-        logger.info(f"Fetching HTML content for message ID: {message_id}")
+        logger.info(f"Fetching HTML content for message ID: {message_id} for user: {current_user.email}")
         
-        # Get Gmail service credentials
-        creds = run_authorization_server()
-        service = build("gmail", "v1", credentials=creds)
+        # Check if user has Gmail connected
+        user = get_user_by_id(db, current_user.id)
+        if not user or not user.gmail_connected or not user.gmail_access_token:
+            raise HTTPException(
+                status_code=400, 
+                detail="Gmail not connected. Please connect your Gmail account first."
+            )
+        
+        # Create Gmail service using USER'S tokens
+        gmail_service = create_gmail_service_for_user(current_user)
         
         # Get HTML content using the existing function
-        html_content = get_html_from_message_id(service, message_id)
+        html_content = get_html_from_message_id(gmail_service, message_id)
         
         if not html_content:
             raise HTTPException(
@@ -217,6 +246,16 @@ async def health_check():
     return {
         "status": "healthy",
         "message": "Coupon Filtering API is running"
+    }
+
+@app.get("/api/test-auth")
+async def test_auth(current_user: UserResponse = Depends(get_current_user)):
+    """Test endpoint to verify authentication works"""
+    return {
+        "message": "Authentication working!",
+        "user_email": current_user.email,
+        "gmail_connected": current_user.gmail_connected,
+        "has_gmail_tokens": bool(current_user.gmail_access_token)
     }
 
 if __name__ == "__main__":
