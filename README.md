@@ -180,7 +180,7 @@ Interactive API documentation (Swagger UI).
 ### Running the Application
 
 #### Backend API
-Running on https://deal-detector-production.up.railway.app/.
+Running on https://deal-detector-production.up.railway.app/ - does not need to be run locally.
 
 #### Frontend (React Native)
 ```bash
