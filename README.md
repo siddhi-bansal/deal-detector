@@ -2,7 +2,7 @@
 
 A coupon filtering system that extracts and analyzes promotional offers from Gmail emails using AI and shows them to the user on one streamlined platform.
 
-## 🚀 Features
+## 🚀 App Features
 
 - **Gmail Integration**: Automatically fetches promotional emails using Gmail API
 - **OCR Processing**: Extracts text from images in emails using Google Gemini
