@@ -41,8 +41,8 @@ Gmail API → Email Text + Image OCR → Gemini AI Analysis → FastAPI → Reac
 
 1. **Email Fetching**: Uses Gmail API to retrieve promotional emails from CATEGORY_PROMOTIONS
 2. **Text Extraction**: Extracts plain text and HTML content from emails
-3. **Image OCR**: Uses Gemini AI to extract text from images within emails
-4. **Advanced AI Classification**: Gemini AI analyzes emails and extracts:
+3. **Image OCR**: Uses Gemini to extract text from images within emails
+4. **Advanced AI Classification**: Gemini analyzes emails and extracts:
    - **Email sender company** vs **offer brand** (handles aggregator emails)
    - **Offer type** from 15 specific categories (discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other)
    - **Smart expiry date inference** from temporal keywords and email context
