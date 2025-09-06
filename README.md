@@ -5,8 +5,8 @@ A coupon filtering system that extracts and analyzes promotional offers from Gma
 ## 🚀 App Features
 
 - **Gmail Integration**: Automatically fetches promotional emails using Gmail API
-- **OCR Processing**: Extracts text from images in emails using Google Gemini
-- **Advanced AI Analysis**: Uses Gemini AI to classify and extract detailed coupon information including:
+- **OCR Processing**: Extracts text from images in emails using Google Gemini (since Gemini is currently leading model for OCR)
+- **Advanced AI Analysis**: Uses Gemini to classify and extract detailed coupon information including:
   - **Smart Company Detection**: Distinguishes between email sender and offer brand (useful for aggregators)
   - **15 Offer Type Classifications**: Precise categorization (discount, sale, coupon, free_shipping, bogo, bundle, cashback, loyalty_points, free_gift, subscription, clearance, flash_sale, new_customer, event, other)
   - **Intelligent Expiry Date Inference**: Automatically infers expiry dates from temporal keywords ("Weekly Sale" → end of week, "Flash Sale" → 24-48 hours, etc.)
