@@ -264,6 +264,31 @@ async def debug_info():
         "auth_routes_loaded": any("/auth" in route["path"] for route in routes)
     }
 
+@app.get("/api/debug/users")
+async def debug_users(db: Session = Depends(get_db)):
+    """Debug endpoint to check users in database"""
+    try:
+        from auth.models import User
+        users = db.query(User).all()
+        user_info = []
+        for user in users:
+            user_info.append({
+                "id": user.id,
+                "email": user.email,
+                "gmail_connected": user.gmail_connected,
+                "created_at": user.created_at.isoformat() if user.created_at else None
+            })
+        return {
+            "total_users": len(users),
+            "users": user_info
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "total_users": 0,
+            "users": []
+        }
+
 @app.get("/api/test-auth")
 async def test_auth(current_user: UserResponse = Depends(get_current_user)):
     """Test endpoint to verify authentication works"""
