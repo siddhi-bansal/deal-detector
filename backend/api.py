@@ -264,6 +264,32 @@ async def debug_info():
         "auth_routes_loaded": any("/auth" in route["path"] for route in routes)
     }
 
+@app.get("/api/debug/database")
+async def debug_database():
+    """Debug endpoint to check database configuration and tables"""
+    try:
+        from database.connection import engine
+        from sqlalchemy import inspect
+        
+        inspector = inspect(engine)
+        tables = inspector.get_table_names()
+        
+        # Also check the database URL
+        db_url = str(engine.url)
+        
+        return {
+            "database_url": db_url,
+            "tables_found": tables,
+            "total_tables": len(tables)
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "database_url": None,
+            "tables_found": [],
+            "total_tables": 0
+        }
+
 @app.get("/api/debug/users")
 async def debug_users(db: Session = Depends(get_db)):
     """Debug endpoint to check users in database"""
