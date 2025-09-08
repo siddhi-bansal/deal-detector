@@ -19,6 +19,9 @@ from auth.schemas import UserResponse
 from auth.crud import get_user_by_id
 from database.connection import Base, engine, get_db
 
+# Import Gmail webhooks
+from gmail_webhooks import router as gmail_webhook_router
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -44,6 +47,9 @@ app.add_middleware(
 
 # Include authentication routes
 app.include_router(auth_router, tags=["authentication"])
+
+# Include Gmail webhook routes
+app.include_router(gmail_webhook_router, tags=["gmail-webhooks"])
 
 def create_gmail_service_for_user(current_user: UserResponse, db: Session):
     """Create a Gmail service using the user's stored tokens"""
@@ -108,12 +114,17 @@ async def get_coupons(
         logger.info(f"Created Gmail service for user {current_user.email}")
         
         # Get email texts using USER'S Gmail service
+        logger.info(f"Fetching emails for user {current_user.email}...")
         emails_info = get_emails_info_for_user(gmail_service)
+        logger.info(f"Retrieved {len(emails_info) if emails_info else 0} emails for user {current_user.email}")
         
         if not emails_info:
-            raise HTTPException(
-                status_code=404,
-                detail="No email content found"
+            logger.info(f"No promotional emails found for user {current_user.email}")
+            # Return empty result instead of error
+            return CouponResponse(
+                all_coupons=[],
+                total_emails_processed=0,
+                emails_with_coupons=0
             )
         
         logger.info(f"Processing {len(emails_info)} emails for user {current_user.email}")
