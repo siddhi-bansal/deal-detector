@@ -45,9 +45,12 @@ app.add_middleware(
 # Include authentication routes
 app.include_router(auth_router, tags=["authentication"])
 
-def create_gmail_service_for_user(user: UserResponse):
+def create_gmail_service_for_user(current_user: UserResponse, db: Session):
     """Create a Gmail service using the user's stored tokens"""
-    if not user.gmail_access_token:
+    # Get full user object to access Gmail tokens (UserResponse excludes sensitive fields)
+    user = get_user_by_id(db, current_user.id)
+    
+    if not user or not user.gmail_access_token:
         raise HTTPException(status_code=400, detail="No Gmail access token found")
     
     user_creds = Credentials(
@@ -101,7 +104,7 @@ async def get_coupons(
             )
         
         # Create Gmail service using USER'S tokens (not static files!)
-        gmail_service = create_gmail_service_for_user(current_user)
+        gmail_service = create_gmail_service_for_user(current_user, db)
         logger.info(f"Created Gmail service for user {current_user.email}")
         
         # Get email texts using USER'S Gmail service
@@ -212,7 +215,7 @@ async def get_email_html(
             )
         
         # Create Gmail service using USER'S tokens
-        gmail_service = create_gmail_service_for_user(current_user)
+        gmail_service = create_gmail_service_for_user(current_user, db)
         
         # Get HTML content using the existing function
         html_content = get_html_from_message_id(gmail_service, message_id)
@@ -384,13 +387,19 @@ async def generate_test_token():
     }
 
 @app.get("/api/test-auth")
-async def test_auth(current_user: UserResponse = Depends(get_current_user)):
+async def test_auth(
+    current_user: UserResponse = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """Test endpoint to verify authentication works"""
+    # Get full user object to check Gmail tokens (UserResponse excludes sensitive fields)
+    user = get_user_by_id(db, current_user.id)
+    
     return {
         "message": "Authentication working!",
         "user_email": current_user.email,
         "gmail_connected": current_user.gmail_connected,
-        "has_gmail_tokens": bool(current_user.gmail_access_token)
+        "has_gmail_tokens": bool(user.gmail_access_token if user else False)
     }
 
 if __name__ == "__main__":

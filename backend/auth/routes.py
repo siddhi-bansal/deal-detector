@@ -402,6 +402,78 @@ async def get_current_user_info(
     """Get current user information"""
     return current_user
 
+@router.get("/debug/user-response-test")
+async def debug_user_response_creation(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db)
+):
+    """Debug endpoint to test UserResponse creation step by step"""
+    try:
+        token = credentials.credentials
+        logger.info(f"Debug: Verifying token: {token[:20]}...")
+        
+        payload = verify_token(token)
+        if payload is None:
+            return {"error": "Token verification failed", "step": "token_verification"}
+        
+        user_id = payload.get("sub")
+        if user_id is None:
+            return {"error": "No user_id in token", "step": "token_payload"}
+        
+        logger.info(f"Debug: Looking up user with ID: {user_id}")
+        user = get_user_by_id(db, user_id=int(user_id))
+        
+        if user is None:
+            return {"error": f"User not found: {user_id}", "step": "database_lookup"}
+        
+        # Test field access
+        debug_info = {
+            "user_found": True,
+            "user_id": user.id,
+            "email": user.email,
+            "google_id": getattr(user, 'google_id', 'MISSING'),
+            "first_name": getattr(user, 'first_name', 'MISSING'),
+            "last_name": getattr(user, 'last_name', 'MISSING'),
+            "profile_picture": getattr(user, 'profile_picture', 'MISSING'),
+            "gmail_connected": getattr(user, 'gmail_connected', 'MISSING'),
+            "created_at": str(getattr(user, 'created_at', 'MISSING')),
+            "updated_at": str(getattr(user, 'updated_at', 'MISSING')),
+            "last_login": str(getattr(user, 'last_login', 'MISSING')),
+            "all_attributes": [attr for attr in dir(user) if not attr.startswith('_')][:20]
+        }
+        
+        # Try to create UserResponse
+        try:
+            user_response = UserResponse(
+                id=user.id,
+                email=user.email,
+                google_id=user.google_id,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                profile_picture=user.profile_picture,
+                gmail_connected=user.gmail_connected,
+                created_at=user.created_at,
+                updated_at=user.updated_at,
+                last_login=user.last_login
+            )
+            
+            debug_info["user_response_creation"] = "SUCCESS"
+            debug_info["user_response_data"] = user_response.dict()
+            
+        except Exception as response_error:
+            debug_info["user_response_creation"] = "FAILED"
+            debug_info["user_response_error"] = str(response_error)
+            debug_info["error_type"] = type(response_error).__name__
+        
+        return debug_info
+        
+    except Exception as e:
+        return {
+            "error": str(e),
+            "error_type": type(e).__name__,
+            "step": "unexpected_error"
+        }
+
 @router.get("/gmail/status", response_model=GmailConnectionStatus)
 async def get_gmail_status(
     current_user: UserResponse = Depends(get_current_user),
