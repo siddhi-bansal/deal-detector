@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     
     # Database
     database_url: str = "sqlite:///./deal_detector.db"  # Default for local development
+    # Note: Railway will override this with PostgreSQL DATABASE_URL automatically
     
     # JWT settings
     secret_key: str = "your-secret-key-change-this-in-production"
