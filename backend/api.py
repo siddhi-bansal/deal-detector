@@ -323,6 +323,19 @@ async def create_test_user(db: Session = Depends(get_db)):
             "message": "Failed to create test user"
         }
 
+@app.get("/api/debug/env")
+async def debug_env():
+    """Debug endpoint to check environment variables"""
+    import os
+    from core.config import settings
+    
+    return {
+        "database_url_from_settings": settings.database_url,
+        "database_url_from_env": os.getenv("DATABASE_URL", "NOT_SET"),
+        "database_public_url_from_env": os.getenv("DATABASE_PUBLIC_URL", "NOT_SET"),
+        "env_keys": [k for k in os.environ.keys() if "DATABASE" in k.upper()]
+    }
+
 @app.get("/api/debug/users")
 async def debug_users(db: Session = Depends(get_db)):
     """Debug endpoint to check users in database"""
