@@ -80,20 +80,33 @@ async def get_current_user(
         logger.info(f"User authentication successful: {user.email}")
         
         # Create UserResponse manually to avoid ORM serialization issues with sensitive fields
-        user_response = UserResponse(
-            id=user.id,
-            email=user.email,
-            google_id=user.google_id,
-            first_name=user.first_name,
-            last_name=user.last_name,
-            profile_picture=user.profile_picture,
-            gmail_connected=user.gmail_connected,
-            created_at=user.created_at,
-            updated_at=user.updated_at,
-            last_login=user.last_login
-        )
-        
-        return user_response
+        try:
+            logger.info(f"Creating UserResponse for user: {user.id}")
+            logger.info(f"User fields: id={user.id}, email={user.email}, gmail_connected={user.gmail_connected}")
+            
+            user_response = UserResponse(
+                id=user.id,
+                email=user.email,
+                google_id=user.google_id,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                profile_picture=user.profile_picture,
+                gmail_connected=user.gmail_connected,
+                created_at=user.created_at,
+                updated_at=user.updated_at,
+                last_login=user.last_login
+            )
+            
+            logger.info("UserResponse created successfully")
+            return user_response
+            
+        except Exception as response_error:
+            logger.error(f"Error creating UserResponse: {str(response_error)}")
+            logger.error(f"Response error type: {type(response_error).__name__}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"User response creation error: {str(response_error)}"
+            )
         
     except HTTPException:
         raise

@@ -368,30 +368,20 @@ async def test_simple_auth(db: Session = Depends(get_db)):
             "error_type": type(e).__name__
         }
 
-@app.get("/api/debug/users")
-async def debug_users(db: Session = Depends(get_db)):
-    """Debug endpoint to check users in database"""
-    try:
-        from auth.models import User
-        users = db.query(User).all()
-        user_info = []
-        for user in users:
-            user_info.append({
-                "id": user.id,
-                "email": user.email,
-                "gmail_connected": user.gmail_connected,
-                "created_at": user.created_at.isoformat() if user.created_at else None
-            })
-        return {
-            "total_users": len(users),
-            "users": user_info
-        }
-    except Exception as e:
-        return {
-            "error": str(e),
-            "total_users": 0,
-            "users": []
-        }
+@app.get("/api/debug/generate-token")
+async def generate_test_token():
+    """Generate a valid JWT token for local testing"""
+    from core.security import create_access_token
+    
+    # Create token for user ID 1 (test user we created)
+    access_token = create_access_token(
+        data={"sub": "1", "email": "test@example.com"}
+    )
+    
+    return {
+        "access_token": access_token,
+        "instructions": "Use this token for local testing"
+    }
 
 @app.get("/api/test-auth")
 async def test_auth(current_user: UserResponse = Depends(get_current_user)):
