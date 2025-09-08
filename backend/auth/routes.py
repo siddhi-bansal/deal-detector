@@ -78,7 +78,22 @@ async def get_current_user(
             )
         
         logger.info(f"User authentication successful: {user.email}")
-        return UserResponse.from_orm(user)
+        
+        # Create UserResponse manually to avoid ORM serialization issues with sensitive fields
+        user_response = UserResponse(
+            id=user.id,
+            email=user.email,
+            google_id=user.google_id,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            profile_picture=user.profile_picture,
+            gmail_connected=user.gmail_connected,
+            created_at=user.created_at,
+            updated_at=user.updated_at,
+            last_login=user.last_login
+        )
+        
+        return user_response
         
     except HTTPException:
         raise
