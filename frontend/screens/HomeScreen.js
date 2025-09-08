@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
+import CouponService from '../services/CouponService';
 import sampleData from '../assets/sample_api_output.json';
 import { CouponCard } from '../components/CouponCard';
 import { CompanyCard } from '../components/CompanyCard';
@@ -23,7 +24,7 @@ import { styles } from '../styles/styles';
 
 export const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { user, token } = useAuth(); // Get user info from auth context
+  const { user, token, logout } = useAuth(); // Get user info from auth context
   const [coupons, setCoupons] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [filteredCoupons, setFilteredCoupons] = useState([]);
@@ -114,6 +115,158 @@ export const HomeScreen = ({ route }) => {
 
   const loadCoupons = async () => {
     try {
+      setLoading(true);
+
+      // Check if user is authenticated and has Gmail connected
+      if (!token) {
+        console.log('No authentication token available');
+        Alert.alert('Authentication Required', 'Please log in to view your coupons.');
+        return;
+      }
+
+      if (!user?.gmail_connected) {
+        console.log('Gmail not connected, using sample data');
+        // Use sample data as fallback
+        loadSampleData();
+        return;
+      }
+
+      console.log('Fetching real coupon data from API...');
+      console.log('Token preview:', token ? `${token.substring(0, 20)}...` : 'null');
+      console.log('User info:', { email: user?.email, gmail_connected: user?.gmail_connected });
+      
+      // First test authentication
+      console.log('Testing authentication...');
+      const authTest = await CouponService.testAuth(token);
+      console.log('Auth test result:', authTest);
+      
+      if (!authTest.success) {
+        console.error('Authentication test failed:', authTest.error);
+        
+        // Check if it's an expiry issue
+        if (authTest.error.includes('expired')) {
+          Alert.alert(
+            'Session Expired', 
+            'Your session has expired. Please log in again.',
+            [
+              { text: 'Use Sample Data', onPress: () => loadSampleData() },
+              { text: 'Log Out & Retry', onPress: () => {
+                logout();
+                navigation.navigate('Profile');
+              }}
+            ]
+          );
+        } else {
+          Alert.alert(
+            'Authentication Error', 
+            `Authentication failed: ${authTest.error}. Please try logging out and back in.`,
+            [
+              { text: 'Use Sample Data', onPress: () => loadSampleData() },
+              { text: 'Go to Profile', onPress: () => navigation.navigate('Profile') }
+            ]
+          );
+        }
+        return;
+      }
+      
+      console.log('Authentication successful, fetching coupons...');
+      
+      // Call the real API
+      const result = await CouponService.getCoupons(token);
+      
+      if (result.success && result.data) {
+        console.log('Successfully fetched real coupon data:', result.data);
+        
+        // Process the real API data
+        const allOffers = [];
+        if (result.data.all_coupons) {
+          result.data.all_coupons.forEach((couponGroup) => {
+            if (couponGroup.offers) {
+              couponGroup.offers.forEach((offer, index) => {
+                allOffers.push({ 
+                  ...offer, 
+                  message_id: couponGroup.message_id,
+                  email_sender: couponGroup.sender,
+                  email_subject: couponGroup.subject,
+                  email_timestamp: couponGroup.timestamp,
+                  email_sender_company: couponGroup.email_sender_company,
+                  company: couponGroup.company,
+                  company_domain: couponGroup.company_domain,
+                  company_logo_url: couponGroup.company_logo_url,
+                  company_category: couponGroup.company_category,
+                  isFavorite: false 
+                });
+              });
+            }
+          });
+        }
+        
+        setCoupons(allOffers);
+        
+        // Group offers by company
+        const companiesMap = {};
+        allOffers.forEach(offer => {
+          const companyName = offer.email_sender_company || offer.company || 'Unknown Company';
+          if (!companiesMap[companyName]) {
+            companiesMap[companyName] = {
+              name: companyName,
+              company_logo_url: offer.company_logo_url,
+              company_domain: offer.company_domain,
+              company_category: offer.company_category,
+              offers: []
+            };
+          }
+          companiesMap[companyName].offers.push(offer);
+        });
+        
+        const companiesArray = Object.values(companiesMap);
+        setCompanies(companiesArray);
+        
+        console.log(`Loaded ${allOffers.length} offers from ${companiesArray.length} companies`);
+        
+      } else {
+        console.error('Failed to fetch coupon data:', result.error);
+        
+        // Check if it's a Gmail connection issue
+        if (result.error && result.error.includes('Gmail not connected')) {
+          Alert.alert(
+            'Gmail Not Connected', 
+            'Please connect your Gmail account in the Profile tab to view your coupons.',
+            [
+              { text: 'Use Sample Data', onPress: () => loadSampleData() },
+              { text: 'Go to Profile', onPress: () => navigation.navigate('Profile') }
+            ]
+          );
+        } else {
+          Alert.alert(
+            'Error Loading Coupons', 
+            result.error || 'Failed to load coupons from server.',
+            [
+              { text: 'Use Sample Data', onPress: () => loadSampleData() },
+              { text: 'Retry', onPress: () => loadCoupons() }
+            ]
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Error loading coupons:', error);
+      Alert.alert(
+        'Connection Error', 
+        'Unable to connect to server. Would you like to use sample data?',
+        [
+          { text: 'Use Sample Data', onPress: () => loadSampleData() },
+          { text: 'Retry', onPress: () => loadCoupons() }
+        ]
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadSampleData = () => {
+    try {
+      console.log('Loading sample data...');
+      
       // Flatten all offers from the sample data structure
       const allOffers = [];
       if (sampleData?.all_coupons) {
@@ -157,11 +310,11 @@ export const HomeScreen = ({ route }) => {
       
       const companiesArray = Object.values(companiesMap);
       setCompanies(companiesArray);
+      
+      console.log(`Loaded ${allOffers.length} sample offers from ${companiesArray.length} companies`);
     } catch (error) {
-      console.error('Error loading coupons:', error);
-      Alert.alert('Error', 'Failed to load coupons');
-    } finally {
-      setLoading(false);
+      console.error('Error loading sample data:', error);
+      Alert.alert('Error', 'Failed to load sample data');
     }
   };
 
@@ -368,9 +521,17 @@ export const HomeScreen = ({ route }) => {
           </Text>
           <Text style={{
             fontSize: 12,
-            color: '#374151'
+            color: '#374151',
+            marginBottom: 2
           }}>
             Token: {token ? '✅ Present' : '❌ Missing'}
+          </Text>
+          <Text style={{
+            fontSize: 12,
+            color: user?.gmail_connected ? '#10b981' : '#f59e0b',
+            fontWeight: '600'
+          }}>
+            Data Source: {user?.gmail_connected ? '🌐 Real Gmail API' : '📄 Sample Data'}
           </Text>
           {!user?.gmail_connected && (
             <Text style={{
@@ -379,7 +540,7 @@ export const HomeScreen = ({ route }) => {
               marginTop: 4,
               fontStyle: 'italic'
             }}>
-              💡 Connect Gmail in Profile tab to get real coupon data
+              💡 Connect Gmail in Profile tab to get real coupon data from your emails
             </Text>
           )}
         </View>

@@ -35,5 +35,12 @@ def verify_token(token: str) -> Optional[dict]:
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         return payload
-    except JWTError:
+    except JWTError as e:
+        # Log the JWT error for debugging
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"JWT verification error: {str(e)}")
+        logger.error(f"Token: {token[:20]}...")
+        logger.error(f"Secret key available: {bool(settings.secret_key)}")
+        logger.error(f"Algorithm: {settings.algorithm}")
         return None

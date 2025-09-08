@@ -40,33 +40,54 @@ async def get_current_user(
     db: Session = Depends(get_db)
 ) -> UserResponse:
     """Get current authenticated user"""
-    token = credentials.credentials
-    payload = verify_token(token)
-    
-    if payload is None:
+    try:
+        token = credentials.credentials
+        logger.info(f"Verifying token: {token[:20]}...")
+        
+        payload = verify_token(token)
+        logger.info(f"Token verification result: {payload is not None}")
+        
+        if payload is None:
+            logger.warning("Token verification failed - invalid token")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        user_id: str = payload.get("sub")
+        logger.info(f"Extracted user_id from token: {user_id}")
+        
+        if user_id is None:
+            logger.warning("No user_id in token payload")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        logger.info(f"Looking up user with ID: {user_id}")
+        user = get_user_by_id(db, user_id=int(user_id))
+        
+        if user is None:
+            logger.warning(f"User not found in database: {user_id}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="User not found",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        logger.info(f"User authentication successful: {user.email}")
+        return UserResponse.from_orm(user)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Unexpected error in get_current_user: {str(e)}")
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Authentication error: {str(e)}"
         )
-    
-    user_id: str = payload.get("sub")
-    if user_id is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    user = get_user_by_id(db, user_id=int(user_id))
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    return UserResponse.from_orm(user)
 
 @router.get("/google/test")
 async def test_oauth_callback():
