@@ -290,6 +290,39 @@ async def debug_database():
             "total_tables": 0
         }
 
+@app.post("/api/debug/create-test-user")
+async def create_test_user(db: Session = Depends(get_db)):
+    """Create a test user to verify database writes work"""
+    try:
+        from auth.models import User
+        from auth.schemas import GoogleUserInfo
+        from auth.crud import create_user_from_google
+        
+        # Create a test Google user
+        test_google_user = GoogleUserInfo(
+            id="test_google_id_123",
+            email="test@example.com",
+            given_name="Test",
+            family_name="User",
+            picture=None
+        )
+        
+        # Try to create the user
+        user = create_user_from_google(db, test_google_user)
+        
+        return {
+            "success": True,
+            "user_id": user.id,
+            "email": user.email,
+            "message": "Test user created successfully"
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "message": "Failed to create test user"
+        }
+
 @app.get("/api/debug/users")
 async def debug_users(db: Session = Depends(get_db)):
     """Debug endpoint to check users in database"""
