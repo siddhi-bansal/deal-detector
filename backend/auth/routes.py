@@ -79,23 +79,36 @@ async def get_current_user(
         
         logger.info(f"User authentication successful: {user.email}")
         
-        # Create UserResponse manually to avoid ORM serialization issues with sensitive fields
+        # Create UserResponse with explicit field checking
         try:
             logger.info(f"Creating UserResponse for user: {user.id}")
-            logger.info(f"User fields: id={user.id}, email={user.email}, gmail_connected={user.gmail_connected}")
+            logger.info(f"User fields available: {[attr for attr in dir(user) if not attr.startswith('_')]}")
             
-            user_response = UserResponse(
-                id=user.id,
-                email=user.email,
-                google_id=user.google_id,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                profile_picture=user.profile_picture,
-                gmail_connected=user.gmail_connected,
-                created_at=user.created_at,
-                updated_at=user.updated_at,
-                last_login=user.last_login
-            )
+            # Check each field explicitly before creating the response
+            user_data = {}
+            
+            # Required fields
+            user_data['id'] = getattr(user, 'id', None)
+            user_data['email'] = getattr(user, 'email', None)
+            user_data['google_id'] = getattr(user, 'google_id', None)
+            user_data['gmail_connected'] = getattr(user, 'gmail_connected', False)
+            user_data['created_at'] = getattr(user, 'created_at', None)
+            
+            # Optional fields with defaults
+            user_data['first_name'] = getattr(user, 'first_name', None)
+            user_data['last_name'] = getattr(user, 'last_name', None)
+            user_data['profile_picture'] = getattr(user, 'profile_picture', None)
+            user_data['updated_at'] = getattr(user, 'updated_at', user_data['created_at'])
+            user_data['last_login'] = getattr(user, 'last_login', None)
+            
+            logger.info(f"User data prepared: {user_data}")
+            
+            # Verify required fields are not None
+            if not user_data['id'] or not user_data['email'] or not user_data['google_id']:
+                logger.error(f"Missing required fields: id={user_data['id']}, email={user_data['email']}, google_id={user_data['google_id']}")
+                raise ValueError("Missing required user fields")
+            
+            user_response = UserResponse(**user_data)
             
             logger.info("UserResponse created successfully")
             return user_response
