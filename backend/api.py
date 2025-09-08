@@ -336,6 +336,38 @@ async def debug_env():
         "env_keys": [k for k in os.environ.keys() if "DATABASE" in k.upper()]
     }
 
+@app.get("/api/debug/test-simple-auth")
+async def test_simple_auth(db: Session = Depends(get_db)):
+    """Test simple database lookup without complex auth"""
+    try:
+        from auth.models import User
+        from auth.crud import get_user_by_id
+        
+        # Try to get user ID 1 directly
+        user = get_user_by_id(db, 1)
+        
+        if user:
+            return {
+                "success": True,
+                "user_found": True,
+                "user_id": user.id,
+                "user_email": user.email,
+                "gmail_connected": user.gmail_connected,
+                "user_attrs": dir(user)[:10]  # First 10 attributes for debugging
+            }
+        else:
+            return {
+                "success": True,
+                "user_found": False,
+                "message": "User ID 1 not found"
+            }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
+
 @app.get("/api/debug/users")
 async def debug_users(db: Session = Depends(get_db)):
     """Debug endpoint to check users in database"""
