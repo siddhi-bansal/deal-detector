@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     debug: bool = False
     
     # Database
-    database_url: str = "sqlite:///./deal_detector.db"
+    database_url: str = "sqlite:///./deal_detector.db"  # Default for local development
     
     # JWT settings
     secret_key: str = "your-secret-key-change-this-in-production"
