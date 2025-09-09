@@ -212,23 +212,39 @@ async def process_single_email(gmail_service, message_id: str, user, db: Session
 # Helper functions (you'll need to implement these)
 def get_user_by_email(db: Session, email: str):
     """Get user by email address"""
-    # TODO: Implement this in your auth/crud.py
-    pass
+    from auth.models import User
+    return db.query(User).filter(User.email == email).first()
 
 def get_last_processed_history_id(db: Session, user_id: int) -> str:
     """Get the last processed Gmail history ID for a user"""
-    # TODO: Implement this - store in database
-    pass
+    from auth.models import User
+    user = db.query(User).filter(User.id == user_id).first()
+    return user.gmail_history_id if user else None
 
 def update_last_processed_history_id(db: Session, user_id: int, history_id: str):
     """Update the last processed Gmail history ID for a user"""
-    # TODO: Implement this - store in database
-    pass
+    from auth.models import User
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        user.gmail_history_id = history_id
+        db.commit()
 
 async def store_new_coupon(db: Session, user_id: int, coupon_data: dict):
     """Store new coupon in database"""
-    # TODO: Implement this - store in your existing UserCoupon table
-    pass
+    import json
+    from auth.models import UserCoupon
+    
+    # Create new coupon record
+    coupon_record = UserCoupon(
+        user_id=user_id,
+        email_id=coupon_data.get("message_id", ""),
+        coupon_data=json.dumps(coupon_data),
+        is_favorite=False
+    )
+    
+    db.add(coupon_record)
+    db.commit()
+    logger.info(f"Stored new coupon for user {user_id}: {coupon_data.get('sender')}")
 
 async def send_push_notification_to_user(user, coupon_data: dict):
     """Send push notification to user's mobile device"""

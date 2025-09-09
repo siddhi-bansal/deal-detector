@@ -20,6 +20,8 @@ class User(Base):
     gmail_access_token = Column(Text, nullable=True)  # Encrypted
     gmail_refresh_token = Column(Text, nullable=True)  # Encrypted
     gmail_token_expiry = Column(DateTime, nullable=True)
+    gmail_history_id = Column(String, nullable=True)  # Last processed Gmail history ID
+    gmail_watch_expiration = Column(DateTime, nullable=True)  # When Gmail watch expires
     
     # Timestamps
     created_at = Column(DateTime, server_default=func.now())
