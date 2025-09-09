@@ -19,6 +19,7 @@ A coupon filtering system that extracts and analyzes promotional offers from Gma
 - **Multi-Email Processing**: Analyzes 100+ emails efficiently with structured output
 - **Enhanced Search & Filter**: Search by company, offer type, product category, and more
 - **Persistent Favorites**: Save and manage favorite coupons with local storage
+- **Realtime Updates**: (Need to implement) Update every time new coupon email comes in + notification to user with new coupon
 
 ## 🚧 Current Status
 
