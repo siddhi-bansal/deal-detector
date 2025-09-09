@@ -1,24 +1,23 @@
 """
-Gmail Push Notifications Setup
-Scripts to configure Gmail push notifications for promotional emails
+Real-time Gmail Notifications Setup
+This script sets up Google Cloud Pub/Sub for real-time Gmail notifications
 """
 import os
 import json
+from google.cloud import pubsub_v1
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
-from google.cloud import pubsub_v1
+
+# Your Google Cloud Project details
+PROJECT_ID = "deal-detector-468200"  # Your actual project ID!
+TOPIC_NAME = "gmail-notifications"
+SUBSCRIPTION_NAME = "gmail-notifications-sub"
+WEBHOOK_URL = "https://deal-detector-production.up.railway.app/webhooks/gmail"
 
 def setup_gmail_push_notifications():
     """
-    Set up Gmail push notifications for promotional emails
-    This needs to be run once per user to enable real-time notifications
+    Set up the Google Cloud Pub/Sub infrastructure for Gmail notifications
     """
-    
-    # You'll need to set these environment variables
-    PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT_ID")  # Your Google Cloud Project ID
-    TOPIC_NAME = os.getenv("GMAIL_TOPIC_NAME", "gmail-notifications")  # Pub/Sub topic name
-    WEBHOOK_URL = os.getenv("GMAIL_WEBHOOK_URL", "https://deal-detector-production.up.railway.app/webhooks/gmail")
-    
     print("Setting up Gmail Push Notifications...")
     print(f"Project ID: {PROJECT_ID}")
     print(f"Topic Name: {TOPIC_NAME}")
@@ -63,10 +62,6 @@ def setup_user_gmail_watch(user_email: str, gmail_access_token: str, gmail_refre
     Set up Gmail watch for a specific user's promotional emails
     Call this when a user connects their Gmail account
     """
-    
-    PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT_ID")
-    TOPIC_NAME = os.getenv("GMAIL_TOPIC_NAME", "gmail-notifications")
-    
     try:
         # Create Gmail service for this user
         user_creds = Credentials(
@@ -98,8 +93,8 @@ def setup_user_gmail_watch(user_email: str, gmail_access_token: str, gmail_refre
         
         return result
         
-    except Exception as e:
-        print(f"Error setting up Gmail watch for {user_email}: {e}")
+    except Exception as error:
+        print(f"Error setting up Gmail watch for {user_email}: {error}")
         return None
 
 def stop_user_gmail_watch(gmail_access_token: str, gmail_refresh_token: str):
@@ -125,8 +120,8 @@ def stop_user_gmail_watch(gmail_access_token: str, gmail_refresh_token: str):
         gmail_service.users().stop(userId='me').execute()
         print("Stopped watching Gmail")
         
-    except Exception as e:
-        print(f"Error stopping Gmail watch: {e}")
+    except Exception as error:
+        print(f"Error stopping Gmail watch: {error}")
 
 if __name__ == "__main__":
     # Run this script to set up the Pub/Sub infrastructure

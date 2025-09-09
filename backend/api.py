@@ -51,6 +51,9 @@ app.include_router(auth_router, tags=["authentication"])
 # Include Gmail webhook routes
 app.include_router(gmail_webhook_router, tags=["gmail-webhooks"])
 
+# Include Gmail webhook routes
+app.include_router(gmail_webhook_router, tags=["gmail-webhooks"])
+
 def create_gmail_service_for_user(current_user: UserResponse, db: Session):
     """Create a Gmail service using the user's stored tokens"""
     # Get full user object to access Gmail tokens (UserResponse excludes sensitive fields)

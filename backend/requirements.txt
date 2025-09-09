@@ -17,6 +17,9 @@ google-auth-oauthlib>=1.0.0
 google-auth-httplib2>=0.1.0
 google-api-python-client>=2.88.0
 
+# Google Cloud dependencies for real-time notifications
+google-cloud-pubsub>=2.20.1
+
 # Authentication and Database
 python-jose[cryptography]>=3.5.0
 passlib[bcrypt]>=1.7.4
