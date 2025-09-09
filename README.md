@@ -4,7 +4,7 @@ A coupon filtering system that extracts and analyzes promotional offers from Gma
 
 ## 🚀 App Features
 
-- **Gmail Integration**: Automatically fetches promotional emails using Gmail API
+- **Gmail Integration**: Fetches promotional emails using Gmail API
 - **OCR Processing**: Extracts text from images in emails using Google Gemini (since Gemini is currently leading model for OCR)
 - **Advanced AI Analysis**: Uses Gemini to classify and extract detailed coupon information including:
   - **Smart Company Detection**: Distinguishes between email sender and offer brand (useful for aggregators)
