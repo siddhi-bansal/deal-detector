@@ -293,6 +293,25 @@ async def google_oauth_callback_redirect(
         )
         logger.info("Gmail tokens stored successfully")
         
+        # Set up Gmail watch for real-time notifications
+        try:
+            from setup_gmail_notifications import setup_user_gmail_watch
+            watch_result = setup_user_gmail_watch(
+                user_email=user.email,
+                gmail_access_token=tokens['access_token'],
+                gmail_refresh_token=tokens.get('refresh_token', user.gmail_refresh_token)
+            )
+            if watch_result:
+                logger.info(f"Gmail watch enabled for {user.email}")
+                # Store the history ID for tracking changes
+                user.gmail_history_id = watch_result.get('historyId')
+                db.commit()
+            else:
+                logger.warning(f"Failed to enable Gmail watch for {user.email}")
+        except Exception as e:
+            logger.error(f"Error setting up Gmail watch for {user.email}: {e}")
+            # Don't fail the auth process if watch setup fails
+        
         # Step 5: Handle redirect based on request type
         if is_gmail_connect:
             # For Gmail connection, redirect with success message
