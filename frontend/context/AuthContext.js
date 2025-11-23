@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDevMode, setIsDevMode] = useState(false);
 
   // Computed property for authentication state
   const isAuthenticated = !!(user && token);
@@ -28,10 +29,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const storedToken = await AsyncStorage.getItem('authToken');
       const storedUser = await AsyncStorage.getItem('user');
+      const storedDevMode = await AsyncStorage.getItem('isDevMode');
       
       if (storedToken && storedUser) {
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
+        setIsDevMode(storedDevMode ? JSON.parse(storedDevMode) : false);
       }
     } catch (error) {
       console.error('Error checking auth state:', error);
@@ -40,15 +43,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (authToken, userData) => {
+  const login = async (authToken, userData, devMode = false) => {
     try {
       // Store auth data
       await AsyncStorage.setItem('authToken', authToken);
       await AsyncStorage.setItem('user', JSON.stringify(userData));
+      await AsyncStorage.setItem('isDevMode', JSON.stringify(devMode));
       
       // Update state
       setToken(authToken);
       setUser(userData);
+      setIsDevMode(devMode);
       
       return true;
     } catch (error) {
@@ -59,13 +64,15 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Clear stored data
+      // Clear stored auth data
       await AsyncStorage.removeItem('authToken');
       await AsyncStorage.removeItem('user');
+      await AsyncStorage.removeItem('isDevMode');
       
       // Clear state
       setToken(null);
       setUser(null);
+      setIsDevMode(false);
       
       console.log('Logout successful - auth data cleared');
       return true;

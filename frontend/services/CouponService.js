@@ -40,11 +40,16 @@ class CouponService {
   /**
    * Get coupons from user's Gmail
    * @param {string} token - JWT token
+   * @param {boolean} refresh - Force refresh from Gmail instead of using cache
    * @returns {Promise<{success: boolean, data?: any, error?: string}>}
    */
-  async getCoupons(token) {
+  async getCoupons(token, refresh = false) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/coupons`, {
+      const url = refresh 
+        ? `${API_BASE_URL}/api/coupons?refresh=true`
+        : `${API_BASE_URL}/api/coupons`;
+      
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -127,7 +127,7 @@ const LoginScreen = ({ navigation }) => {
       
       const mockToken = 'mock-jwt-token-for-testing';
       
-      const loginSuccess = await login(mockToken, mockUser);
+      const loginSuccess = await login(mockToken, mockUser, true); // true = dev mode
       
       if (loginSuccess) {
         Alert.alert('Success', 'Test login successful!');

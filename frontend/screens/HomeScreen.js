@@ -25,7 +25,7 @@ import { styles } from '../styles/styles';
 
 export const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { user, token, logout } = useAuth(); // Get user info from auth context
+  const { user, token, logout, isDevMode } = useAuth(); // Get user info and dev mode flag from auth context
   const [coupons, setCoupons] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [filteredCoupons, setFilteredCoupons] = useState([]);
@@ -40,6 +40,7 @@ export const HomeScreen = ({ route }) => {
   const [viewMode, setViewMode] = useState('companies'); // 'companies' or 'coupons'
   const [hasNavigatedWithParams, setHasNavigatedWithParams] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
   
   // Refs for FlatLists to control scroll position
   const companiesListRef = React.useRef(null);
@@ -116,9 +117,24 @@ export const HomeScreen = ({ route }) => {
   }, [viewMode]);
 
   const onRefresh = async () => {
-    setRefreshing(true);
-    await loadCoupons(true); // Force refresh when pulling
-    setRefreshing(false);
+    Alert.alert(
+      'Refresh Coupons?',
+      'This will fetch the latest emails from your inbox. It may take a few minutes.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Refresh',
+          onPress: async () => {
+            setRefreshing(true);
+            await loadCoupons(true); // Force refresh when pulling
+            setRefreshing(false);
+          },
+        },
+      ]
+    );
   };
 
   const loadCoupons = async (forceRefresh = false) => {
@@ -229,6 +245,7 @@ export const HomeScreen = ({ route }) => {
         
         const companiesArray = Object.values(companiesMap);
         setCompanies(companiesArray);
+        setLastUpdated(new Date());
         
         console.log(`Loaded ${allOffers.length} offers from ${companiesArray.length} companies`);
         
@@ -497,22 +514,23 @@ export const HomeScreen = ({ route }) => {
     >
       <View style={{ flex: 1 }}>
         {/* User Info Display (Development Only) */}
-        <View style={{
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          padding: 12,
-          margin: 10,
-          borderRadius: 8,
-          borderWidth: 1,
-          borderColor: 'rgba(16, 185, 129, 0.3)'
-        }}>
-          <Text style={{
-            fontSize: 14,
-            fontWeight: '600',
-            color: '#10b981',
-            marginBottom: 4
+        {isDevMode && (
+          <View style={{
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            padding: 12,
+            margin: 10,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: 'rgba(16, 185, 129, 0.3)'
           }}>
-            🔐 Authentication Status (Dev Mode)
-          </Text>
+            <Text style={{
+              fontSize: 14,
+              fontWeight: '600',
+              color: '#10b981',
+              marginBottom: 4
+            }}>
+              🔐 Authentication Status (Dev Mode)
+            </Text>
           <Text style={{
             fontSize: 12,
             color: '#374151',
@@ -551,7 +569,8 @@ export const HomeScreen = ({ route }) => {
               💡 Connect Gmail in Profile tab to get real coupon data from your emails
             </Text>
           )}
-        </View>
+          </View>
+        )}
 
         {/* Filter and Search Row */}
         <View style={styles.filterSearchRow}>
@@ -654,6 +673,19 @@ export const HomeScreen = ({ route }) => {
             </Animated.Text>
           </TouchableOpacity>
         </View>
+
+        {/* Last Updated timestamp - below toggle */}
+        {lastUpdated && (
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 10,
+            color: '#9ca3af',
+            marginTop: 6,
+            marginBottom: 4,
+          }}>
+            Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </Text>
+        )}
 
         {/* Content based on view mode */}
         <View style={{ flex: 1, overflow: 'hidden' }}>
