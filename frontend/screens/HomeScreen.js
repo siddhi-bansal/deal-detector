@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Animated,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -38,6 +39,7 @@ export const HomeScreen = ({ route }) => {
   const [selectedType, setSelectedType] = useState('all');
   const [viewMode, setViewMode] = useState('companies'); // 'companies' or 'coupons'
   const [hasNavigatedWithParams, setHasNavigatedWithParams] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   
   // Refs for FlatLists to control scroll position
   const companiesListRef = React.useRef(null);
@@ -113,7 +115,13 @@ export const HomeScreen = ({ route }) => {
     return () => clearTimeout(timeoutId);
   }, [viewMode]);
 
-  const loadCoupons = async () => {
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadCoupons(true); // Force refresh when pulling
+    setRefreshing(false);
+  };
+
+  const loadCoupons = async (forceRefresh = false) => {
     try {
       setLoading(true);
 
@@ -172,7 +180,7 @@ export const HomeScreen = ({ route }) => {
       console.log('Authentication successful, fetching coupons...');
       
       // Call the real API
-      const result = await CouponService.getCoupons(token);
+      const result = await CouponService.getCoupons(token, forceRefresh);
       
       if (result.success && result.data) {
         console.log('Successfully fetched real coupon data:', result.data);
@@ -679,6 +687,14 @@ export const HomeScreen = ({ route }) => {
                   keyExtractor={(item, index) => `company-${item.name}-${index}`}
                   contentContainerStyle={styles.cardList}
                   showsVerticalScrollIndicator={true}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      tintColor="#7C3AED"
+                      colors={['#7C3AED']}
+                    />
+                  }
                 />
               )}
             </View>
@@ -703,6 +719,14 @@ export const HomeScreen = ({ route }) => {
                   keyExtractor={(item, index) => index.toString()}
                   contentContainerStyle={styles.cardList}
                   showsVerticalScrollIndicator={true}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                      tintColor="#7C3AED"
+                      colors={['#7C3AED']}
+                    />
+                  }
                 />
               )}
             </View>
