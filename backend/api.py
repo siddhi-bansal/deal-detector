@@ -196,9 +196,9 @@ async def get_coupons(
                 
                 # Add unique IDs to each offer
                 if "offers" in coupons_json:
-                    for i, offer in enumerate(coupons_json["offers"]):
+                    for offer_idx, offer in enumerate(coupons_json["offers"]):
                         # Generate unique ID using message_id + offer index (guaranteed unique)
-                        unique_id = f"{id}_{i}"
+                        unique_id = f"{id}_{offer_idx}"
                         offer["id"] = unique_id
                 
                 # Insert timestamp, subject, sender, and message_id in dict
