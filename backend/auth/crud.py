@@ -123,3 +123,29 @@ def toggle_coupon_favorite(db: Session, user_id: int, coupon_id: int) -> Optiona
         db.refresh(coupon)
     
     return coupon
+
+def get_all_user_coupons(db: Session, user_id: int):
+    """Get all coupons for a user"""
+    return db.query(UserCoupon).filter(UserCoupon.user_id == user_id).all()
+
+def save_user_coupons_batch(db: Session, user_id: int, coupons_list: list):
+    """Save multiple coupons at once for a user"""
+    coupon_records = []
+    for coupon_data in coupons_list:
+        email_id = coupon_data.get("message_id", "")
+        coupon_record = UserCoupon(
+            user_id=user_id,
+            email_id=email_id,
+            coupon_data=json.dumps(coupon_data),
+            is_favorite=False
+        )
+        coupon_records.append(coupon_record)
+    
+    db.add_all(coupon_records)
+    db.commit()
+    return coupon_records
+
+def delete_all_user_coupons(db: Session, user_id: int):
+    """Delete all coupons for a user (for refresh)"""
+    db.query(UserCoupon).filter(UserCoupon.user_id == user_id).delete()
+    db.commit()

@@ -5,6 +5,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 import logging
 import os
+import json
 
 from get_emails_info import get_emails_info_for_user, get_html_from_message_id
 from get_coupon_info_from_email import get_coupon_info_from_email
@@ -89,6 +90,7 @@ class EmailHtmlResponse(BaseModel):
 
 @app.get("/api/coupons", response_model=CouponResponse)
 async def get_coupons(
+    refresh: bool = False,  # Add refresh parameter
     current_user: UserResponse = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -96,13 +98,16 @@ async def get_coupons(
     Extract coupon information from promotional emails for the authenticated user.
     
     This endpoint:
-    1. Fetches emails from the USER'S Gmail account (not static files!)
-    2. Extracts text content (including OCR from images) for each email
-    3. Analyzes each email for coupon/promotional offers using AI
-    4. Returns a list of all coupons found
+    1. First checks the database for cached coupons
+    2. If no cached data or refresh=True, fetches from Gmail
+    3. Processes emails and caches results in database
+    4. Returns list of all coupons found
+    
+    Parameters:
+    - refresh: If True, clears cache and re-fetches from Gmail
     """
     try:
-        logger.info(f"Starting email processing for user: {current_user.email}")
+        logger.info(f"Starting coupon retrieval for user: {current_user.email} (refresh={refresh})")
         
         # Check if user has Gmail connected
         user = get_user_by_id(db, current_user.id)
@@ -111,6 +116,28 @@ async def get_coupons(
                 status_code=400, 
                 detail="Gmail not connected. Please connect your Gmail account first."
             )
+        
+        # Import CRUD functions
+        from auth.crud import get_all_user_coupons, save_user_coupons_batch, delete_all_user_coupons
+        
+        # Check if we have cached coupons and refresh is not requested
+        if not refresh:
+            cached_coupons = get_all_user_coupons(db, current_user.id)
+            if cached_coupons:
+                logger.info(f"Returning {len(cached_coupons)} cached coupons for user {current_user.email}")
+                # Parse coupon data from JSON strings
+                all_coupons = [json.loads(coupon.coupon_data) for coupon in cached_coupons]
+                return CouponResponse(
+                    all_coupons=all_coupons,
+                    total_emails_processed=len(cached_coupons),
+                    emails_with_coupons=len(all_coupons)
+                )
+            else:
+                logger.info(f"No cached coupons found for user {current_user.email}, fetching from Gmail")
+        else:
+            logger.info(f"Refresh requested for user {current_user.email}, clearing cache and fetching from Gmail")
+            # Clear existing coupons
+            delete_all_user_coupons(db, current_user.id)
         
         # Create Gmail service using USER'S tokens (not static files!)
         gmail_service = create_gmail_service_for_user(current_user, db)
@@ -192,9 +219,14 @@ async def get_coupons(
         
         logger.info(f"Total coupons found: {len(all_coupons)} out of {len(emails_info)} emails for user {current_user.email}")
         
+        # Save coupons to database for caching
+        if all_coupons:
+            logger.info(f"Saving {len(all_coupons)} coupons to database for user {current_user.email}")
+            save_user_coupons_batch(db, current_user.id, all_coupons)
+            logger.info("Coupons saved successfully")
+        
         return CouponResponse(
             all_coupons=all_coupons,
-            total_num_coupons=len(all_coupons),
             total_emails_processed=len(emails_info),
             emails_with_coupons=len(all_coupons)
         )
