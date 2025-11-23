@@ -202,7 +202,7 @@ async def get_coupons(
                         offer["id"] = unique_id
                 
                 # Insert timestamp, subject, sender, and message_id in dict
-                coupons_json = {"timestamp": email_timestamp, **coupons_json}
+                coupons_json = {"timestamp": email_timestamp.isoformat() if hasattr(email_timestamp, 'isoformat') else str(email_timestamp), **coupons_json}
                 coupons_json = {"subject": email_subject, **coupons_json}
                 coupons_json = {"sender": email_sender, **coupons_json}
                 coupons_json = {"message_id": id, **coupons_json}
