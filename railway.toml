@@ -3,7 +3,7 @@ builder = "nixpacks"
 buildCommand = "cd backend && pip install -r requirements.txt"
 
 [deploy]
-startCommand = "cd backend && python api.py"
+startCommand = "cd backend && python init_db.py && python api.py"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
