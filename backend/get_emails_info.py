@@ -231,7 +231,7 @@ def get_emails_info_for_user(gmail_service):
         messages = results.get("messages", [])
         emails_info = {}
 
-        for message in messages[:1]:
+        for message in messages[:50]:
             message_id = message["id"]
 
             message_object = gmail_service.users().messages().get(userId="me", id=message_id).execute()
