@@ -25,6 +25,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2fc3a8f0-2b4e-4d73-bc06-0a8538bf1b99"
+      }
+    },
+    "owner": "siddhibansal",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2fc3a8f0-2b4e-4d73-bc06-0a8538bf1b99"
     }
   }
 }
